@@ -119,6 +119,41 @@
     values.forEach((value) => observer.observe(value));
   }
 
+
+  function initAthletesCarousel() {
+    const track = document.querySelector('[data-athletes-track]');
+    const prev = document.querySelector('[data-athletes-prev]');
+    const next = document.querySelector('[data-athletes-next]');
+    if (!track || !prev || !next) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function cardStep() {
+      const card = track.querySelector('.athlete-card');
+      if (!card) return track.clientWidth;
+      const gap = Number.parseFloat(getComputedStyle(track).gap) || 0;
+      return card.getBoundingClientRect().width + gap;
+    }
+
+    function updateControls() {
+      const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= maxScroll - 2;
+    }
+
+    prev.addEventListener('click', () => {
+      track.scrollBy({ left: -cardStep(), behavior: reducedMotion ? 'auto' : 'smooth' });
+    });
+
+    next.addEventListener('click', () => {
+      track.scrollBy({ left: cardStep(), behavior: reducedMotion ? 'auto' : 'smooth' });
+    });
+
+    track.addEventListener('scroll', updateControls, { passive: true });
+    window.addEventListener('resize', updateControls);
+    updateControls();
+  }
+
   document.addEventListener('DOMContentLoaded', async () => {
     await Promise.all([
       mount('site-header', '/components/header.html'),
@@ -127,5 +162,6 @@
     initMenu();
     initCountdown();
     initAchievements();
+    initAthletesCarousel();
   });
 })();
