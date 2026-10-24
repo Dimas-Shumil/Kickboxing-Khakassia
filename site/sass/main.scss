@@ -1,0 +1,443 @@
+@use "./base/base";
+@use "./base/variables" as v;
+@use "./components/header";
+@use "./components/footer";
+
+// Главная страница. Уникальные стили Hero — только здесь.
+.hero {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: v.$color-background;
+  color: v.$color-navy;
+
+  > .container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: inherit;
+    padding-top: clamp(144px, 17vh, 210px);
+    padding-bottom: clamp(42px, 6vh, 86px);
+  }
+
+  &__content {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    width: 51%;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 16px;
+    color: v.$color-muted;
+    font-size: clamp(10px, 0.85vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: v.$font-display;
+    font-size: clamp(48px, 5.15vw, 94px);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    text-transform: uppercase;
+
+    span {
+      display: block;
+    }
+  }
+
+  &__title-red {
+    color: v.$color-red;
+  }
+
+  &__title-small {
+    margin-top: 7px;
+    font-size: 0.56em;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+  }
+
+  &__description {
+    margin: 26px 0 27px;
+    color: #525a68;
+    font-size: clamp(13px, 1.05vw, 16px);
+    line-height: 1.5;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    min-height: 50px;
+    padding: 13px 24px;
+    border: 2px solid transparent;
+    border-radius: 0;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.035em;
+    text-align: center;
+    text-transform: uppercase;
+    transition: background v.$duration-normal v.$ease-smooth,
+      color v.$duration-normal v.$ease-smooth,
+      border-color v.$duration-normal v.$ease-smooth,
+      transform v.$duration-normal v.$ease-smooth;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    &--red {
+      background: v.$color-red;
+      color: v.$color-white;
+
+      &:hover {
+        background: v.$color-red-hover;
+      }
+    }
+
+    &--outline {
+      border-color: #9ca5b2;
+      background: rgba(255, 255, 255, 0.92);
+      color: v.$color-navy-soft;
+
+      &:hover {
+        border-color: v.$color-navy;
+        background: v.$color-navy;
+        color: v.$color-white;
+      }
+    }
+  }
+
+  &__button-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    stroke: currentColor;
+    stroke-width: 2.6;
+  }
+
+  &__image {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    height: min(86vh, 980px);
+    min-height: 620px;
+    background-image: url("/site/img/main-hero.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    pointer-events: none;
+
+    &::before {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        v.$color-background 0%,
+        rgba(251, 250, 248, 0.98) 22%,
+        rgba(251, 250, 248, 0.88) 38%,
+        rgba(251, 250, 248, 0.42) 51%,
+        rgba(251, 250, 248, 0) 64%
+      );
+      content: "";
+    }
+
+    &::after {
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      left: 0;
+      height: 19%;
+      background: linear-gradient(0deg, v.$color-background 0%, rgba(251, 250, 248, 0) 100%);
+      content: "";
+    }
+  }
+
+  &__event {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 28px;
+    width: min(850px, 100%);
+    margin-top: auto;
+    padding: 24px 28px;
+    background: rgba(241, 241, 240, 0.96);
+    box-shadow: 0 10px 35px rgba(17, 29, 55, 0.035);
+  }
+
+  &__event-label {
+    display: block;
+    font-family: v.$font-display;
+    font-size: clamp(15px, 1.15vw, 18px);
+    font-weight: 600;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  &__event-name {
+    margin: 5px 0 16px;
+    color: v.$color-muted;
+    font-size: 12px;
+  }
+
+  &__timer {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  &__timer-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 12px;
+    border-right: 1px solid v.$color-border;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      border-right: 0;
+    }
+
+    > span {
+      font-family: v.$font-display;
+      font-size: clamp(31px, 2.4vw, 40px);
+      font-weight: 600;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    small {
+      margin-top: 6px;
+      font-size: 11px;
+    }
+  }
+
+  &__event-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  &__event-detail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #4f5869;
+  }
+
+  &__event-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: v.$color-red;
+    stroke-width: 1.8;
+  }
+
+  &__event-link {
+    align-self: flex-start;
+    width: fit-content;
+    margin-top: 5px;
+    color: v.$color-navy-soft;
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color v.$duration-normal ease;
+
+    &:hover {
+      color: v.$color-red;
+    }
+  }
+
+  @media (max-width: v.$breakpoint-desktop) {
+    &__content {
+      width: 56%;
+    }
+
+    &__title {
+      font-size: clamp(47px, 5.3vw, 70px);
+    }
+
+    &__image {
+      background-position: 54% top;
+    }
+  }
+
+  @media (max-width: v.$breakpoint-tablet) {
+    > .container {
+      padding-top: 148px;
+    }
+
+    &__content {
+      width: 60%;
+    }
+
+    &__image {
+      height: min(75vh, 770px);
+      min-height: 530px;
+      background-position: 58% top;
+    }
+
+    &__title {
+      font-size: clamp(46px, 5.5vw, 62px);
+    }
+
+    &__event {
+      margin-top: max(65px, 9vh);
+    }
+  }
+
+  @media (max-width: v.$breakpoint-mobile) {
+    min-height: 100svh;
+
+    > .container {
+      min-height: 100svh;
+      padding-top: 124px;
+      padding-bottom: 30px;
+    }
+
+    &__content {
+      width: 100%;
+      max-width: 570px;
+    }
+
+    &__title {
+      font-size: clamp(41px, 9.2vw, 68px);
+      line-height: 1.07;
+    }
+
+    &__title-small {
+      margin-top: 7px;
+      font-size: 0.50em;
+      white-space: normal;
+    }
+
+    &__description {
+      margin: 22px 0 24px;
+      font-size: 14px;
+    }
+
+    &__buttons {
+      gap: 9px;
+    }
+
+    &__button {
+      gap: 13px;
+      min-height: 46px;
+      padding: 12px 15px;
+      font-size: 10px;
+    }
+
+    &__image {
+      position: relative;
+      z-index: 0;
+      top: auto;
+      right: auto;
+      left: auto;
+      transform: none;
+      width: calc(100% + 64px);
+      height: clamp(235px, 58vw, 350px);
+      min-height: 0;
+      margin: 15px -32px 0;
+      background-position: 68% center;
+      background-size: cover;
+
+      &::before {
+        background: none;
+      }
+
+      &::after {
+        height: 20%;
+      }
+    }
+
+    &__event {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      width: 100%;
+      margin-top: 0;
+      padding: 20px;
+    }
+
+    &__event-details {
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    &__image {
+      width: calc(100% + 44px);
+      margin-inline: -22px;
+    }
+
+    &__title {
+      font-size: clamp(36px, 9.4vw, 41px);
+    }
+
+    &__button {
+      padding-inline: 12px;
+      font-size: 9px;
+    }
+
+    &__timer-item {
+      padding-inline: 7px;
+
+      > span {
+        font-size: 30px;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__button,
+    &__event-link {
+      transition: none;
+    }
+  }
+}
+
+
+/* Наши достижения */
+.achievements{position:relative;padding:72px 0 85px;background:#fbfaf8;color:#111d37}
+.achievements__heading{margin-bottom:34px}
+.achievements__eyebrow{display:block;margin-bottom:9px;color:#626b7a;font-size:11px;font-weight:700;letter-spacing:.085em;text-transform:uppercase}
+.achievements__title{position:relative;width:fit-content;margin:0;font-family:"Oswald","Arial Narrow",sans-serif;font-size:clamp(30px,3vw,45px);font-weight:700;line-height:1.12;text-transform:uppercase}
+.achievements__title:after{content:"";display:block;width:60px;height:3px;margin-top:12px;background:#bc202b}
+.achievements__note{margin:13px 0 0;color:#697182;font-size:12px}
+.achievements__grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid #e4e5e8;border-bottom:1px solid #e4e5e8}
+.achievements__item{display:flex;min-width:0;flex-direction:column;align-items:flex-start;justify-content:center;min-height:185px;padding:23px clamp(14px,2vw,32px);border-right:1px solid #e4e5e8}
+.achievements__item:first-child{padding-left:8px}
+.achievements__item:last-child{border-right:0}
+.achievements__icon{width:26px;height:26px;margin-bottom:16px;color:#687284}
+.achievements__value{display:block;font-family:"Oswald","Arial Narrow",sans-serif;font-size:clamp(37px,3.8vw,58px);font-weight:600;line-height:1.07;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.achievements__name{display:block;margin-top:7px;font-size:11px;font-weight:700;line-height:1.35;text-transform:uppercase}
+@media(max-width:1050px){.achievements__grid{grid-template-columns:repeat(3,minmax(0,1fr))}.achievements__item:nth-child(3){border-right:0}.achievements__item:nth-child(-n+3){border-bottom:1px solid #e4e5e8}.achievements__item:nth-child(4){padding-left:8px}}
+@media(max-width:600px){.achievements{padding:54px 0 65px}.achievements__grid{grid-template-columns:repeat(2,minmax(0,1fr))}.achievements__item{min-height:152px;padding:20px 12px;border-right:1px solid #e4e5e8;border-bottom:1px solid #e4e5e8}.achievements__item:nth-child(odd){padding-left:4px}.achievements__item:nth-child(even){border-right:0}.achievements__item:nth-child(3){border-right:1px solid #e4e5e8}.achievements__item:nth-child(4){padding-left:12px}.achievements__item:nth-last-child(-n+2){border-bottom:0}.achievements__icon{width:24px;height:24px;margin-bottom:10px}.achievements__value{font-size:43px}.achievements__name{font-size:10px}}

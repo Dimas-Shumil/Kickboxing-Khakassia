@@ -1,0 +1,99 @@
+@use "./variables" as v;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: v.$color-background;
+  color: v.$color-text;
+  font-family: v.$font-body;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-top: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img,
+svg,
+picture,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: v.$color-red;
+  color: v.$color-white;
+}
+
+:focus-visible {
+  outline: 3px solid v.$color-red;
+  outline-offset: 4px;
+}
+
+.container {
+  width: 100%;
+  max-width: v.$container-width;
+  margin-inline: auto;
+  padding-inline: clamp(v.$gutter-mobile, 4.6vw, v.$gutter-desktop);
+}
+
+.main {
+  min-width: 0;
+}
+
+@media (max-width: v.$breakpoint-mobile) {
+  .container {
+    padding-inline: v.$gutter-mobile;
+  }
+}
+
+@media (max-width: 380px) {
+  .container {
+    padding-inline: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

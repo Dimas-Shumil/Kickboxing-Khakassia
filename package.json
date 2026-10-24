@@ -1,0 +1,17 @@
+{
+  "name": "kickboxing-federation",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build:css": "sass site/sass/main.scss site/css/main.css --no-source-map --style=expanded && sass site/sass/main.scss site/css/main.min.css --no-source-map --style=compressed",
+    "watch:css": "sass --watch site/sass/main.scss:site/css/main.min.css --no-source-map --style=compressed"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "sass": "^1.93.0"
+  }
+}

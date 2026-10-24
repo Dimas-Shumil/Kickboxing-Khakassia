@@ -1,0 +1,28 @@
+// ShumDev / Федерация кикбоксинга Республики Хакасия
+// Базовые токены оформления. Стили конкретных секций находятся в main.scss.
+
+$color-background: #fbfaf8;
+$color-surface: #f1f1f0;
+$color-white: #ffffff;
+$color-navy: #111d37;
+$color-navy-soft: #233b60;
+$color-red: #bc202b;
+$color-red-hover: #9e1722;
+$color-text: #17243c;
+$color-muted: #616977;
+$color-border: #d3d7dd;
+
+$font-body: "Arial", "Helvetica Neue", sans-serif;
+$font-display: "Oswald", "Roboto Condensed", "Arial Narrow", "Liberation Sans Narrow", "Impact", sans-serif;
+
+$container-width: 1720px;
+$gutter-desktop: 80px;
+$gutter-mobile: 32px;
+$header-height: 88px;
+
+$duration-normal: 0.45s;
+$ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+
+$breakpoint-desktop: 1280px;
+$breakpoint-tablet: 1024px;
+$breakpoint-mobile: 767px;

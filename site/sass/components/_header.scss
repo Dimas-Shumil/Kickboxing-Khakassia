@@ -1,0 +1,219 @@
+@use "../base/variables" as v;
+
+.header {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: v.$color-navy;
+  background: rgba(251, 250, 248, 0.84);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    max-width: v.$container-width;
+    min-height: v.$header-height;
+    margin: 0 auto;
+    padding-inline: clamp(v.$gutter-mobile, 4.6vw, v.$gutter-desktop);
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 11px;
+    max-width: 310px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  &__mark {
+    display: grid;
+    place-items: center;
+    flex: 0 0 47px;
+    width: 47px;
+    height: 47px;
+    border: 2px solid v.$color-red;
+    border-radius: 50%;
+    color: v.$color-red;
+    font-family: v.$font-display;
+    font-size: 23px;
+    font-weight: 700;
+    transform: rotate(-10deg);
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1;
+    gap: clamp(12px, 1.65vw, 30px);
+  }
+
+  &__link {
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    text-transform: uppercase;
+    transition: color v.$duration-normal v.$ease-smooth;
+
+    &:hover {
+      color: v.$color-red;
+    }
+  }
+
+  &__account {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: 40px;
+    padding: 0 19px;
+    background: v.$color-navy;
+    color: v.$color-white;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    text-transform: uppercase;
+    transition: background v.$duration-normal v.$ease-smooth;
+
+    &:hover {
+      background: v.$color-red;
+    }
+  }
+
+  &__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    width: 44px;
+    height: 44px;
+    margin-left: auto;
+    padding: 0;
+    border: 1px solid v.$color-border;
+    background: v.$color-white;
+
+    span {
+      display: block;
+      width: 21px;
+      height: 2px;
+      background: v.$color-navy;
+      transition: transform 0.4s v.$ease-smooth, opacity 0.3s ease;
+    }
+
+    &[aria-expanded="true"] {
+      span:first-child {
+        transform: translateY(8px) rotate(45deg);
+      }
+      span:nth-child(2) {
+        opacity: 0;
+      }
+      span:last-child {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+    }
+  }
+
+  @media (max-width: 1250px) {
+    &__inner {
+      gap: 15px;
+    }
+
+    &__brand {
+      font-size: 10px;
+    }
+
+    &__nav {
+      gap: 13px;
+    }
+
+    &__link {
+      font-size: 10px;
+    }
+  }
+
+  @media (max-width: 1050px) {
+    &__inner {
+      min-height: 78px;
+    }
+
+    &__toggle {
+      display: flex;
+    }
+
+    &__nav {
+      position: absolute;
+      z-index: 19;
+      top: 78px;
+      right: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 0;
+      max-height: calc(100dvh - 78px);
+      padding: 14px clamp(v.$gutter-mobile, 4.6vw, v.$gutter-desktop) 24px;
+      overflow-y: auto;
+      background: rgba(251, 250, 248, 0.98);
+      box-shadow: 0 20px 32px rgba(17, 29, 55, 0.10);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-12px);
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s v.$ease-smooth, visibility 0.4s;
+
+      &.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+    }
+
+    &__link {
+      padding: 13px 0;
+      border-bottom: 1px solid v.$color-border;
+      font-size: 13px;
+    }
+
+    &__account {
+      width: fit-content;
+      margin-top: 20px;
+    }
+  }
+
+  @media (max-width: v.$breakpoint-mobile) {
+    &__inner {
+      min-height: 72px;
+      padding-inline: v.$gutter-mobile;
+    }
+
+    &__mark {
+      flex-basis: 39px;
+      width: 39px;
+      height: 39px;
+      font-size: 19px;
+    }
+
+    &__brand {
+      gap: 8px;
+      font-size: 9px;
+    }
+
+    &__nav {
+      top: 72px;
+      max-height: calc(100dvh - 72px);
+      padding-inline: v.$gutter-mobile;
+    }
+  }
+}

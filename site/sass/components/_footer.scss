@@ -1,0 +1,14 @@
+@use "../base/variables" as v;
+
+.footer {
+  min-height: 95px;
+  background: v.$color-navy;
+  color: rgba(255, 255, 255, 0.8);
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    min-height: 95px;
+    font-size: 12px;
+  }
+}
