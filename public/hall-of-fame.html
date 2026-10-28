@@ -15,7 +15,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/site/css/hall.min.css" />
+    <link rel="stylesheet" href="/site/css/hall.min.css?v=athlete-card-20261028-2" />
   </head>
   <body class="hall-page">
     <div id="site-header"></div>
@@ -214,11 +214,17 @@
             <section class="hall-people" id="athletes" data-hall-panel="athletes" aria-labelledby="hall-people-title">
         <div class="container">
           <div class="hall-people__top"><div><span class="hall-people__eyebrow">Спортивное наследие Хакасии</span><h2 id="hall-people-title">Архив спортсменов</h2></div><p>Имена и лица тех, кто сохранял и развивал традиции кикбоксинга в Хакасии.</p></div>
-          <p class="hall-people__notice">Фотографии, имена и достижения будут опубликованы после подтверждения Федерацией. Ниже — места для будущих портретов.</p>
+          <p class="hall-people__notice">Первая карточка — демонстрационный пример перехода к профилю спортсмена. Остальные портреты и сведения появятся после подтверждения Федерацией.</p>
           <div class="hall-people__grid">
-            <article class="heritage-card">
-              <div class="heritage-card__photo" role="img" aria-label="Фотография архивного спортсмена будет добавлена"><span class="heritage-card__num">01</span><span class="heritage-card__placeholder">Фотография<br>готовится</span></div>
-              <div class="heritage-card__details"><h3>Имя спортсмена</h3><p>Архивные сведения уточняются</p></div>
+            <article class="heritage-card heritage-card--linked">
+              <a
+                class="heritage-card__anchor"
+                href="/public/athlete-profile.html"
+                aria-label="Открыть демонстрационный профиль спортсмена Иванова Артёма"
+              >
+                <div class="heritage-card__photo" role="img" aria-label="Фотография для демонстрационного профиля готовится"><span class="heritage-card__num">01</span><span class="heritage-card__placeholder">Профиль<br>спортсмена</span></div>
+                <div class="heritage-card__details"><h3>Иванов Артём</h3><p>Демонстрационный профиль · открыть</p></div>
+              </a>
             </article>
             <article class="heritage-card">
               <div class="heritage-card__photo" role="img" aria-label="Фотография архивного спортсмена будет добавлена"><span class="heritage-card__num">02</span><span class="heritage-card__placeholder">Фотография<br>готовится</span></div>

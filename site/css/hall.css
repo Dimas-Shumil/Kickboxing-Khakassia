@@ -1924,3 +1924,34 @@ body.site-search-open {
     transition: none;
   }
 }
+/* Профиль обычного спортсмена: вся карточка — одна нативная ссылка. */
+.heritage-card--linked {
+  min-width: 0;
+}
+
+.heritage-card__anchor {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.heritage-card__anchor,
+.heritage-card__anchor *,
+.heritage-card__anchor .heritage-card__photo,
+.heritage-card__anchor .heritage-card__photo::before,
+.heritage-card__anchor .heritage-card__photo::after {
+  cursor: pointer;
+}
+
+.heritage-card__anchor:focus-visible {
+  outline: 3px solid #bc202b;
+  outline-offset: 5px;
+  border-radius: 9px;
+}
+
+.heritage-card--linked:focus-within .heritage-card__photo {
+  box-shadow: 0 17px 34px rgba(16, 35, 56, 0.2);
+}
