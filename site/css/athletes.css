@@ -94,6 +94,30 @@ video {
     scroll-behavior: auto;
   }
 }
+body select:not([multiple]):not([size]),
+body select:not([multiple])[size="1"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 44px;
+  padding-inline-end: 48px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%2317243c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 16px center;
+  background-repeat: no-repeat;
+  background-size: 12px 8px;
+}
+
+body[dir=rtl] select:not([multiple]):not([size]) {
+  background-position: left 16px center;
+}
+
+@media (forced-colors: active) {
+  body select:not([multiple]):not([size]), body select:not([multiple])[size="1"] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    background-image: none;
+    padding-inline-end: 16px;
+  }
+}
 /* Glass-header Федерации. Механика mobile-menu — как в Landshaft Park. */
 .header {
   position: fixed;

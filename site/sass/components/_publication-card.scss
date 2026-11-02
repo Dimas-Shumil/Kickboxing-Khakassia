@@ -1,0 +1,5 @@
+@use '../base/variables' as v;
+.publication-meta { display:flex; flex-wrap:wrap; gap:8px 18px; color:#586477; font-size:12px; line-height:1.6; span { color:v.$color-red; font-weight:700; } }
+.publication-card { min-width:0; background:white; border:1px solid #d3d7dd; &__link { display:flex; flex-direction:column; height:100%; transition:box-shadow .2s; &:hover { box-shadow:0 12px 32px #111d3725; } } &__visual { position:relative; overflow:hidden; img { width:100%; aspect-ratio:16/10; height:auto; object-fit:cover; } } &__badge { position:absolute; left:16px; bottom:16px; padding:6px 10px; background:#111d37; color:white; font-size:11px; } &__body { padding:26px; display:flex; flex-direction:column; flex:1; } h3 { font:500 clamp(26px,2.1vw,34px)/1.2 v.$font-display; margin:18px 0 14px; } p { color:v.$color-muted; font-size:14px; } &__read { margin-top:auto; padding-top:16px; font-size:12px; font-weight:700; color:v.$color-red; } }
+
+.publication-card { border-radius:v.$radius-card; &__link { border-radius:inherit; } &__visual { border-radius:(v.$radius-card - 1px) (v.$radius-card - 1px) 0 0; } }

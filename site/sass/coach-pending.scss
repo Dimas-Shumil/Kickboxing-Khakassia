@@ -1,0 +1,115 @@
+@use './base/base';
+@use './base/variables' as v;
+@use './components/header';
+@use './components/footer';
+
+// Страница подготовки персональных материалов тренера.
+// Имена, результаты и фотографии не подставляем без подтверждения Федерации.
+.coach-pending-page {
+  background: #0b1931;
+  color: #fff;
+}
+
+.coach-pending {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: max(750px, 100svh);
+  overflow: hidden;
+  background: radial-gradient(ellipse at 82% 30%, rgba(181, 44, 64, .15), transparent 35%), linear-gradient(145deg, #102643, #09172d 70%);
+  color: #fff;
+}
+.coach-pending__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-top: clamp(148px, 16vh, 215px);
+  padding-bottom: 110px;
+}
+.coach-pending__breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255,255,255,.65);
+  font-size: 12px;
+}
+.coach-pending__breadcrumbs a:hover { color: #fff; }
+.coach-pending__body {
+  position: relative;
+  z-index: 2;
+  max-width: 850px;
+  margin-block: auto;
+  padding-block: 65px 30px;
+}
+.coach-pending__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 26px;
+  color: #f35a6b;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.coach-pending__eyebrow::before {
+  content: '';
+  width: 27px;
+  height: 3px;
+  background: #e63849;
+}
+.coach-pending h1 {
+  margin: 0;
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(46px, 6vw, 105px);
+  font-weight: 600;
+  line-height: 1.04;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.coach-pending h1 span { display: block; color: #f04455; }
+.coach-pending__body p {
+  max-width: 630px;
+  margin: 28px 0 35px;
+  color: rgba(255,255,255,.79);
+  font-size: clamp(14px, 1.2vw, 18px);
+  line-height: 1.75;
+}
+.coach-pending__back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 14px 24px;
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  transition: background .2s ease, transform .2s ease;
+}
+.coach-pending__back:hover { background: rgba(255,255,255,.10); }
+.coach-pending__back:active { transform: scale(.98); }
+.coach-pending__decor {
+  position: absolute;
+  right: -4%;
+  bottom: 6%;
+  z-index: 0;
+  color: rgba(255,255,255,.035);
+  font: 700 clamp(220px, 36vw, 640px)/.9 'Oswald', sans-serif;
+  pointer-events: none;
+  user-select: none;
+}
+@media (max-width: 767px) {
+  .coach-pending { min-height: 100svh; }
+  .coach-pending__inner { padding-top: 115px; padding-bottom: 65px; }
+  .coach-pending__body { padding-block: 75px 35px; }
+  .coach-pending__eyebrow { font-size: 10px; }
+  .coach-pending h1 { font-size: clamp(42px, 11vw, 67px); }
+  .coach-pending__decor { bottom: 12%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .coach-pending__back { transition: none; }
+}

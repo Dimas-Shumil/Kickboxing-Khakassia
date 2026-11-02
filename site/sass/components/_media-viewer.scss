@@ -1,0 +1,13 @@
+.athlete-lightbox-open { overflow:hidden; }
+.profile-lightbox { position:fixed; inset:0; z-index:2500; color:#fff; display:flex; align-items:center; justify-content:center; padding:20px; overscroll-behavior:contain;
+  &__backdrop { position:absolute; inset:0; background:#050b15f5; }
+  &__dialog { position:relative; width:min(1300px,100%); max-height:100%; display:flex; flex-direction:column; }
+  &__top { display:flex; align-items:center; justify-content:space-between; font-size:12px; }
+  button { border:1px solid #ffffff50; background:#111d37; color:#fff; width:48px; height:48px; font-size:22px; flex-shrink:0; }
+  &__stage { position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:0; touch-action:pan-y; }
+  &__media { min-width:0; width:100%; display:flex; align-items:center; justify-content:center; img { max-height:70svh; max-width:100%; width:auto; height:auto; object-fit:contain; user-select:none; } }
+  &__caption { text-align:center; font-size:12px; margin:18px 0 6px; }
+  &__hint { color:#a4aebe; text-align:center; font-size:11px; }
+}
+
+[hidden] { display:none !important; }

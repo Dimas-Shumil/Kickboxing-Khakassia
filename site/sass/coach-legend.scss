@@ -1,0 +1,222 @@
+@use './base/base';
+@use './base/variables' as v;
+@use './components/header';
+@use './components/footer';
+
+/* Independent page layer: coach-legend.scss (shared base/header/footer are imported above). */
+.coach-legend-page { color: #f7f4ed; background:#06111d; }
+.coach-legend-main { overflow:clip; }
+.coach-legend-page .container { max-width:1720px; }
+.coach-legend-hero { position:relative; isolation:isolate; min-height:760px; padding:135px 0 0; background:linear-gradient(110deg,#060f1a 0%,#081a27 56%,#07121c 100%); overflow:hidden; }
+.coach-legend-hero__texture { position:absolute; z-index:-1; inset:0; pointer-events:none; background:radial-gradient(ellipse at 7% 34%,rgba(183,125,55,.2),transparent 34%),radial-gradient(ellipse at 82% 20%,rgba(29,48,59,.75),transparent 44%),linear-gradient(96deg,transparent,rgba(197,149,74,.08) 47%,transparent 85%); }
+.coach-legend-hero__texture::after { content:""; position:absolute; inset:0; opacity:.18; background: repeating-linear-gradient(147deg, transparent 0 31px,rgba(233,193,127,.12) 32px,transparent 33px); mask-image:linear-gradient(to right,black,transparent 34%); }
+.coach-legend-hero__breadcrumbs { display:flex;flex-wrap:wrap;align-items:center;gap:10px;color:#9aa9b7;font-size:12px;margin:0 0 38px; }
+.coach-legend-hero__breadcrumbs a:hover { color:#dcb47b; }
+.coach-legend-hero__grid { display:grid;grid-template-columns:minmax(0,1.08fr) minmax(400px,.96fr) minmax(235px,.56fr);gap:24px;align-items:stretch;min-height:625px; }
+.coach-legend-hero__intro { position:relative;z-index:2; padding:24px 0 62px; align-self:center; }
+.coach-legend-hero__eyebrow { display:block; margin-bottom:17px; color:#e3b26e;font:600 15px/1.2 "Oswald",sans-serif;letter-spacing:.14em;text-transform:uppercase; }
+.coach-legend-hero__star {font-size:24px;vertical-align:middle;padding-right:5px;}
+.coach-legend-hero__title { margin:0; line-height:.96; letter-spacing:-.03em; font-family:"Oswald",sans-serif; font-weight:700; text-transform:uppercase; }
+.coach-legend-hero__title span { display:block; }
+.coach-legend-hero__title span:first-child { font-size:clamp(74px,7.5vw,142px);line-height:.9;color:#e4b574;white-space:nowrap; }
+.coach-legend-hero__title span:last-child {font-size:clamp(42px,4.3vw,82px);margin-top:10px;color:#fff;line-height:.92;}
+.coach-legend-hero__subhead { margin:23px 0 0;color:#dcb57f;font:500 clamp(15px,1.35vw,22px)/1.35 "Oswald",sans-serif;letter-spacing:.08em;text-transform:uppercase; }
+.coach-legend-hero__quote { max-width:510px;margin:24px 0 25px;color:#c9cbd0;font:italic 19px/1.6 Georgia,serif; }
+.coach-legend-hero__primary {display:inline-flex;align-items:center;justify-content:center;padding:13px 24px;border:1px solid #ba925d;border-radius:4px;color:#edc995;font-weight:700;font-size:13px;transition:background .25s,transform .25s;}
+.coach-legend-hero__primary:hover { background:rgba(218,169,103,.13); }
+.coach-legend-hero__primary:active {transform:scale(.98);}
+.coach-legend-hero__portrait { position:relative;align-self:stretch;margin:-54px -8px 0;overflow:hidden;background:#121d2a;min-height:680px;border-radius:0; }
+.coach-legend-hero__portrait img {height:100%;width:100%;object-fit:cover;object-position:center 22%;filter:saturate(.88);}
+.coach-legend-hero__portrait::before {content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(90deg,#07131e 0%,transparent 14%,transparent 76%,#07131e 100%),linear-gradient(0deg,#07131e 0%,transparent 16%,transparent 86%,rgba(7,19,30,.55));pointer-events:none;}
+.coach-legend-hero__portrait-label {position:absolute;z-index:2;bottom:23px;left:50%;transform:translateX(-50%);color:#c2ac8c;white-space:nowrap;font-size:10px;letter-spacing:.1em;text-transform:uppercase;}
+.coach-legend-hero__facts {display:grid;gap:13px;align-self:center;padding:34px 0 34px;}
+.coach-legend-hero__facts>div {display:flex;gap:12px;align-items:center;padding:13px 12px;border-bottom:1px solid rgba(255,255,255,.11);}
+.coach-legend-hero__facts>div>span {width:36px;flex:0 0 36px;color:#e1b170;font-size:26px;text-align:center;}
+.coach-legend-hero__facts p {margin:0;min-width:0;}
+.coach-legend-hero__facts strong,.coach-legend-hero__facts small {display:block;}
+.coach-legend-hero__facts strong {font:600 14px/1.45 "Inter",sans-serif;color:#f4f0e8;}
+.coach-legend-hero__facts small {font:400 12px/1.55 "Inter",sans-serif;color:#8e9eae;}
+.coach-legend-sections {position:relative;z-index:4;background:#07131e;border-block:1px solid #4c412f;}
+.coach-legend-sections__inner {display:flex;justify-content:space-between;gap:14px;overflow-x:auto;scrollbar-width:thin;}
+.coach-legend-sections a {display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-height:56px;padding:12px 8px;color:#c9cdd0;font:500 13px/1.2 "Oswald",sans-serif;text-transform:uppercase;letter-spacing:.045em;white-space:nowrap;border-bottom:2px solid transparent;transition:color .25s,border-color .25s;}
+.coach-legend-sections a:hover,.coach-legend-sections a:focus-visible {color:#eac58e;border-color:#d9a86b;}
+.coach-legend-content {background:radial-gradient(ellipse at -18% 27%,rgba(137,97,46,.14),transparent 28%),radial-gradient(ellipse at 110% 90%,rgba(127,85,36,.12),transparent 30%),linear-gradient(180deg,#07121d,#07111c 58%,#06101a);}
+.coach-legend-notice {margin:0;padding:14px 17px;border-left:3px solid #b48b51;background:rgba(234,193,132,.07);color:#b5bec4;font-size:12px;}
+.coach-legend-notice strong {color:#e3bb81;}
+.coach-legend-section {scroll-margin-top:110px;padding:58px 0;border-bottom:1px solid rgba(195,153,98,.22);}
+.coach-section-title {display:flex;align-items:flex-start;gap:18px;min-width:0;}
+.coach-section-title__index {display:block;flex:0 0 auto;color:#c2995f;font:700 clamp(42px,4vw,76px)/.86 "Oswald",sans-serif;letter-spacing:-.04em;text-transform:uppercase;}
+.coach-section-title h2 {margin:0;color:#f8f6f0;font:700 clamp(32px,3.05vw,58px)/.98 "Oswald",sans-serif;text-transform:uppercase;letter-spacing:-.03em;}
+.coach-section-title p {margin:12px 0 0;color:#9daab6;font:500 12px/1.5 "Oswald",sans-serif;letter-spacing:.1em;text-transform:uppercase;}
+.coach-story__grid {display:grid;grid-template-columns:minmax(215px,.79fr) minmax(245px,.79fr) minmax(280px,1.17fr);gap:30px;align-items:center;}
+.coach-story__text {max-width:470px;}
+.coach-story__text p,.coach-school__text p {color:#c4ced5;font-size:15px;line-height:1.75;margin-bottom:17px;}
+.coach-link {display:inline-flex;align-items:center;gap:15px;padding:10px 13px;border:1px solid rgba(209,168,110,.65);border-radius:4px;color:#e9c38b;font-size:12px;font-weight:600;}
+.coach-link:hover {background:rgba(209,168,110,.1);}
+.coach-story__image {height:280px;overflow:hidden;border-radius:6px;position:relative;}
+.coach-story__image::after {content:"";position:absolute;inset:0;background:linear-gradient(90deg,#07121c,transparent 16%),linear-gradient(0deg,#07121c,transparent 25%);}
+.coach-story__image img {width:100%;height:100%;object-fit:cover;filter:grayscale(.9);}
+.coach-achievements__grid {display:grid;grid-template-columns:320px minmax(0,1fr);gap:34px;align-items:start;}
+.coach-achievements__cards {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;}
+.coach-award {display:flex;flex-direction:column;min-width:0;min-height:235px;padding:24px 18px 20px;border:1px solid rgba(208,156,91,.45);border-radius:5px;background:linear-gradient(160deg,rgba(16,33,46,.68),rgba(4,13,23,.8));}
+.coach-award__icon {font-size:35px;line-height:1;margin-bottom:17px;text-align:center;color:#e8bd79;}
+.coach-award h3 {color:#dfb97e;font:500 17px/1.25 "Oswald",sans-serif;letter-spacing:.055em;text-align:center;text-transform:uppercase;min-height:42px;margin:0 0 16px;}
+.coach-award p {margin:0;font-size:12px;line-height:1.6;color:#bfcbd3;text-align:center;}
+.coach-students__top {display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:24px;}
+.coach-students__top>p {max-width:440px;margin:0;color:#bfc8cf;font-size:14px;line-height:1.7;}
+.coach-students__grid {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;}
+.coach-student {min-width:0;border:1px solid rgba(200,159,107,.35);border-radius:5px;overflow:hidden;background:#091926;}
+.coach-student__image {height:210px;overflow:hidden;background:#101b28;}
+.coach-student__image img {width:100%;height:100%;object-fit:cover;object-position:center 20%;transition:transform .5s ease;}
+.coach-student:hover .coach-student__image img {transform:scale(1.045);}
+.coach-student__body {padding:15px 14px 20px;}
+.coach-student__number {font:500 11px "Oswald",sans-serif;color:#dbac6b;text-transform:uppercase;letter-spacing:.1em;}
+.coach-student h3 {font:600 18px/1.15 "Oswald",sans-serif;color:#fff;text-transform:uppercase;margin:9px 0;}
+.coach-student p {font:400 12px/1.5 "Inter",sans-serif;color:#adbdc6;margin:0;}
+.coach-school .coach-section-title {margin-bottom:26px;}
+.coach-school__grid {display:grid;grid-template-columns: minmax(0,1.15fr) minmax(0,.7fr) minmax(0,.7fr);gap:26px;align-items:center;}
+.coach-school__photo {height:270px;overflow:hidden;position:relative;border-radius:5px;}
+.coach-school__photo img {width:100%;height:100%;object-fit:cover;object-position:center center;}
+.coach-school__photo::after {content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 80%,#07121c),linear-gradient(0deg,rgba(0,0,0,.15),transparent);}
+.coach-school blockquote {margin:0;color:#d7d9dc;font:italic 20px/1.6 Georgia,serif;}
+.coach-school blockquote>span {display:block;color:#e0ad69;font-size:60px;line-height:.6;}
+.coach-school blockquote p {margin:14px 0 0;}
+.coach-school__text h3 {font:600 22px "Oswald",sans-serif;color:#e4bd85;margin-bottom:13px;text-transform:uppercase;}
+.coach-path__grid {display:grid;grid-template-columns:320px minmax(0,1fr);gap:34px;align-items:start;}
+.coach-path__timeline {list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin:0;padding:20px 0 0;position:relative;}
+.coach-path__timeline::before {content:"";position:absolute;left:0;right:0;top:25px;border-top:1px solid rgba(224,175,107,.6);}
+.coach-path__timeline li {position:relative;min-width:0;padding:28px 5px 0;}
+.coach-path__timeline li::before {content:"";position:absolute;z-index:1;top:-3px;left:0;width:15px;height:15px;border-radius:50%;background:#d9ae72;box-shadow:0 0 0 4px #07121c;}
+.coach-path__step {font:600 23px/1 "Oswald",sans-serif;color:#e8bf81;}
+.coach-path__timeline h3 {margin:9px 0 7px;font:600 15px/1.35 "Inter",sans-serif;color:#fff;}
+.coach-path__timeline p {margin:0;color:#aebcc7;font-size:12px;line-height:1.55;}
+.coach-gallery .coach-section-title {margin-bottom:22px;}
+.coach-gallery__filters {display:flex;flex-wrap:wrap;gap:9px;margin-bottom:20px;}
+.coach-gallery__filters button {min-height:38px;padding:8px 19px;border:1px solid rgba(205,163,101,.55);border-radius:5px;background:transparent;color:#bfcbd3;font-size:12px;transition:background .25s,color .25s;}
+.coach-gallery__filters button:hover {border-color:#e2b36f;color:#fff;}
+.coach-gallery__filters button.is-active {color:#151d23;background:#ddb271;border-color:#ddb271;font-weight:700;}
+.coach-gallery__grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+.coach-gallery__item {position:relative;min-width:0;aspect-ratio:1.48;border:1px solid rgba(218,171,104,.28);padding:0;overflow:hidden;border-radius:5px;background:#111f2b;color:#fff;cursor:pointer;text-align:left;}
+.coach-gallery__item[hidden] {display:none;}
+.coach-gallery__item--wide {grid-column:span 2;aspect-ratio:2.9;}
+.coach-gallery__item img {display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.7);transition:transform .5s ease,filter .4s;}
+.coach-gallery__item:hover img,.coach-gallery__item:focus-visible img {transform:scale(1.05);filter:saturate(.9);}
+.coach-gallery__item::after {content:"";position:absolute;inset:50% 0 0;background:linear-gradient(0deg,rgba(2,9,17,.88),transparent);pointer-events:none;}
+.coach-gallery__item-title {position:absolute;z-index:1;bottom:14px;left:13px;right:45px;color:#f4efe7;font:600 13px/1.35 "Inter",sans-serif;}
+.coach-gallery__plus {position:absolute;z-index:2;right:12px;bottom:11px;font:500 25px/1 "Inter",sans-serif;color:#dfb273;}
+.coach-gallery__empty {border:1px solid rgba(207,163,105,.38);border-radius:6px;padding:24px;color:#cbd0d2;}
+.coach-gallery__empty[hidden],.coach-gallery__more-wrap[hidden] {display:none;}
+.coach-gallery__more-wrap {text-align:center;margin-top:24px;}
+.coach-gallery__more {padding:13px 25px;min-height:47px;background:rgba(214,165,100,.08);border:1px solid #b98b58;color:#efcca0;border-radius:4px;font-size:13px;font-weight:700;}
+.coach-gallery__more:hover {background:rgba(214,165,100,.17);}
+.coach-gallery__more span {padding-left:8px;}
+.coach-lightbox[hidden] {display:none;}
+.coach-lightbox {position:fixed;z-index:2400;inset:0;display:flex;align-items:center;justify-content:center;padding:15px;color:#fff;}
+.coach-lightbox__backdrop {position:absolute;inset:0;background:rgba(0,4,10,.94);backdrop-filter:blur(8px);}
+.coach-lightbox__dialog {position:relative;width:min(1150px,100%);height:min(94dvh,920px);display:flex;flex-direction:column;justify-content:center;}
+.coach-lightbox__head {position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;z-index:5;color:#f2c992;font-size:13px;}
+.coach-lightbox__close {width:48px;height:48px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;font-size:28px;}
+.coach-lightbox__stage {display:flex;align-items:center;justify-content:center;position:relative;min-height:0;flex:1;padding:58px 72px 30px;touch-action:pan-y;}
+.coach-lightbox__media {display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;width:100%;height:100%;}
+.coach-lightbox__media img {width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;border:1px solid rgba(216,175,108,.28);user-select:none;-webkit-user-drag:none;}
+.coach-lightbox__prev,.coach-lightbox__next {position:absolute;z-index:3;top:50%;transform:translateY(-50%);width:50px;height:64px;border:1px solid rgba(255,255,255,.23);border-radius:6px;background:rgba(9,19,31,.9);color:#fff;font-size:36px;line-height:1;}
+.coach-lightbox__prev {left:0;}
+.coach-lightbox__next {right:0;}
+.coach-lightbox__prev:disabled,.coach-lightbox__next:disabled {opacity:.3;cursor:default;}
+.coach-lightbox__caption {font-size:13px;text-align:center;color:#bec8d2;margin:0 0 8px;}
+body.coach-legend-lightbox-open {overflow:hidden;}
+@media (max-width:1350px) {
+.coach-legend-hero__grid {grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr) minmax(200px,.62fr);gap:18px;}
+.coach-legend-hero__title span:first-child {font-size:clamp(66px,6.6vw,116px);}
+.coach-legend-hero__title span:last-child {font-size:clamp(38px,3.8vw,68px);}
+.coach-achievements__grid,.coach-path__grid {grid-template-columns:280px 1fr;gap:28px;}
+.coach-award {padding:20px 13px;}
+.coach-award h3 {font-size:15px;}
+.coach-story__grid {grid-template-columns:220px 1fr 1fr;gap:23px;}
+}
+@media (max-width:1060px) {
+.coach-legend-hero {padding-top:120px;min-height:0;}
+.coach-legend-hero__grid {grid-template-columns:minmax(0,1fr) minmax(320px,.95fr);grid-template-areas:"text photo" "facts facts";align-items:stretch;min-height:0;}
+.coach-legend-hero__intro {grid-area:text;}
+.coach-legend-hero__portrait {grid-area:photo;margin:-26px 0 0;min-height:520px;max-height:none;}
+.coach-legend-hero__facts {grid-area:facts;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;}
+.coach-legend-hero__facts>div {align-items:flex-start;padding:10px 4px;gap:8px;}
+.coach-legend-hero__facts>div>span {width:25px;flex-basis:25px;font-size:22px;}
+.coach-section-title h2 {font-size:clamp(27px,3.5vw,41px);}
+.coach-story__grid {grid-template-columns:1fr 1.2fr;}
+.coach-story__grid .coach-section-title {grid-column:1/-1;}
+.coach-achievements__grid,.coach-path__grid {grid-template-columns:1fr;}
+.coach-achievements__cards {grid-template-columns:repeat(2,minmax(0,1fr));}
+.coach-students__grid {grid-template-columns:repeat(3,minmax(0,1fr));}
+.coach-school__grid {grid-template-columns:1fr 1fr;}
+.coach-school__photo {grid-column:1/-1;}
+.coach-path__timeline {grid-template-columns:repeat(5,minmax(0,1fr));}
+.coach-gallery__grid {grid-template-columns:repeat(3,minmax(0,1fr));}
+.coach-gallery__item--wide {grid-column:span 2;aspect-ratio:2.1;}
+}
+@media (max-width:767px) {
+.coach-legend-hero {padding:107px 0 22px;min-height:0;}
+.coach-legend-hero__breadcrumbs {margin-bottom:25px;font-size:11px;}
+.coach-legend-hero__grid {grid-template-columns:minmax(0,1fr);grid-template-areas:"text" "photo" "facts";gap:20px;}
+.coach-legend-hero__title span:first-child {font-size:clamp(56px,16vw,92px);}
+.coach-legend-hero__title span:last-child {font-size:clamp(34px,10vw,56px);}
+.coach-legend-hero__eyebrow {font-size:13px;}
+.coach-legend-hero__subhead {font-size:15px;}
+.coach-legend-hero__quote {font-size:16px;}
+.coach-legend-hero__portrait {min-height:420px;max-height:none;margin:0 -6px 0;}
+.coach-legend-hero__portrait img {object-position:center 18%;}
+.coach-legend-hero__facts {grid-template-columns:repeat(2,minmax(0,1fr));}
+.coach-legend-hero__facts strong {font-size:12px;}
+.coach-legend-sections__inner {justify-content:flex-start;}
+.coach-legend-section {scroll-margin-top:65px;padding:43px 0;}
+.coach-section-title {gap:13px;}
+.coach-section-title__index {font-size:45px;}
+.coach-section-title h2 {font-size:clamp(28px,8vw,44px);}
+.coach-section-title p {font-size:10px;}
+.coach-story__grid {grid-template-columns:1fr;gap:20px;}
+.coach-story__grid .coach-section-title {grid-column:auto;}
+.coach-story__text p,.coach-school__text p {font-size:14px;}
+.coach-story__image {height:240px;}
+.coach-achievements__cards {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+.coach-award {padding:19px 12px;min-height:220px;}
+.coach-award h3 {font-size:14px;}
+.coach-award p {font-size:11px;}
+.coach-students__top {display:block;}
+.coach-students__top>p {margin:16px 0 0;font-size:13px;}
+.coach-students__grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
+.coach-student__image {height:200px;}
+.coach-school__grid {grid-template-columns:1fr;gap:22px;}
+.coach-school__photo {grid-column:auto;height:230px;}
+.coach-school blockquote {font-size:18px;}
+.coach-path__timeline {grid-template-columns:1fr;gap:15px;padding-left:6px;}
+.coach-path__timeline::before {left:13px;right:auto;top:0;bottom:0;border-top:0;border-left:1px solid rgba(224,175,107,.6);}
+.coach-path__timeline li {padding:0 0 3px 35px;}
+.coach-path__timeline li::before {left:0;top:5px;}
+.coach-gallery__filters {overflow-x:auto;flex-wrap:nowrap;margin-inline:-32px;padding:0 32px 10px;}
+.coach-gallery__filters button {flex:0 0 auto;}
+.coach-gallery__grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.coach-gallery__item,.coach-gallery__item--wide {grid-column:span 1;aspect-ratio:.87;}
+.coach-gallery__item:nth-child(3n+1) {grid-column:span 2;aspect-ratio:1.9;}
+.coach-lightbox__dialog {height:96dvh;}
+.coach-lightbox__stage {padding:58px 38px 24px;}
+.coach-lightbox__prev,.coach-lightbox__next {width:36px;height:48px;font-size:27px;}
+}
+@media (max-width:380px) {
+.coach-legend-hero__title span:first-child {font-size:42px;}
+.coach-legend-hero__facts {grid-template-columns:1fr 1fr;gap:4px;}
+.coach-legend-hero__facts>div {padding:8px 2px;}
+.coach-legend-hero__facts>div>span {display:none;}
+.coach-gallery__filters {margin-inline:-22px;padding-inline:22px;}
+.coach-student__image {height:158px;}
+.coach-student__body {padding:12px 10px 15px;}
+.coach-student h3 {font-size:16px;}
+}
+@media (prefers-reduced-motion:reduce) {
+.coach-legend-page *, .coach-legend-page *::before,.coach-legend-page *::after {scroll-behavior:auto;transition:none;}
+}
+
+/* Keep the large editorial labels within their own columns. */
+.coach-achievements .coach-section-title h2 {font-size:clamp(30px,2.4vw,46px);}
+.coach-path .coach-section-title h2 {font-size:clamp(30px,2.45vw,46px);}
+@media (max-width:1060px) { .coach-achievements .coach-section-title h2,.coach-path .coach-section-title h2 {font-size:clamp(30px,4.4vw,42px);} }
+@media (max-width:767px) { .coach-achievements .coach-section-title h2,.coach-path .coach-section-title h2 {font-size:clamp(28px,8vw,40px);} }

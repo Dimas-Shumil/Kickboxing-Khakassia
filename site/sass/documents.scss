@@ -1,0 +1,9 @@
+@use './base/base';
+@use './base/variables' as v;
+@use './components/header';
+@use './components/footer';
+@use './components/info-layout';
+
+// Уникальное оформление страницы documents; общий каркас в info-layout.
+#official .stage-panel { border-top:3px solid v.$color-red; }
+#tournaments .stage-status { background:#e9edf3; }

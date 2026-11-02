@@ -1,0 +1,24 @@
+(() => {
+ 'use strict';
+ const id = new URLSearchParams(location.search).get('id');
+ const x = (window.FED_COMPETITIONS||[]).find(x=>x.id===id), root=document.querySelector('#competition-content');
+ const esc = value => String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const safe = value => typeof value==='string' && (/^\/(?!\/)/.test(value)||/^https:\/\//.test(value)) ? esc(value) : '';
+ if(!x) { root.innerHTML='<section class="stage-hero"><div class="container"><h1>Событие не найдено</h1><p>Ссылка не содержит доступной записи. Выберите соревнование в каталоге.</p><a class="stage-button" href="/public/competitions.html">В каталог соревнований</a></div></section>';return; }
+ document.title=x.title+' — Федерация кикбоксинга Хакасии';
+ const date=d=>new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
+ const section=(id,title,body,paper=false)=>`<section class="stage-section ${paper?'stage-section--paper':''}" id="${id}" aria-labelledby="${id}-title"><div class="container"><div class="stage-heading"><h2 id="${id}-title">${title}</h2></div>${body}</div></section>`;
+ const empty=text=>`<div class="stage-empty"><p>${text}</p><span class="stage-status">Ожидаются материалы</span></div>`;
+ const links=(rows)=>`<div class="stage-links">${rows.filter(r=>safe(r.url)).map(r=>`<a class="stage-button stage-button--outline" href="${safe(r.url)}">${esc(r.title)}</a>`).join('')}</div>`;
+ let html=`<section class="stage-hero"><div class="container"><nav class="stage-crumbs" aria-label="Хлебные крошки"><a href="/public/index.html">Главная</a><span>/</span><a href="/public/competitions.html">Соревнования</a><span>/</span><span aria-current="page">${esc(x.title)}</span></nav><span class="stage-hero__label">${x.isDemo?'Демонстрационная запись':'Соревнование Федерации'}</span><h1>${esc(x.title)}</h1><span class="stage-status">${x.status==='upcoming'?'Предстоящее':'Завершено'}</span></div></section>`;
+ if(x.isDemo) html+='<div class="container"><p class="stage-notice"><strong>Пример интерфейса.</strong> Это вымышленная запись для проверки страницы. Даты и место условные. Не является анонсом или отчётом Федерации.</p></div>';
+ html+=section('overview','О соревновании',`<dl class="competition-facts"><div><dt>Дата ${x.isDemo?'· условная':''}</dt><dd>${date(x.startDate)} — ${date(x.endDate)}</dd></div><div><dt>Место</dt><dd>${esc(x.location)}</dd></div><div><dt>Дисциплины и категории</dt><dd>${x.disciplines.length?esc(x.disciplines.join(', ')):'Не подтверждены'}</dd></div><div><dt>Организатор</dt><dd>${esc(x.organizer||'Сведения ожидаются')}</dd></div></dl><p class="stage-notice">${esc(x.description)}</p><figure class="competition-cover"><img src="${safe(x.image)}" alt="${esc(x.imageCaption)}"><figcaption>${esc(x.imageCaption)}</figcaption></figure>`);
+ html+=section('program',x.status==='upcoming'?'Программа соревнования':'Программа и ход турнира',x.program.length?`<ul class="competition-program">${x.program.map(p=>`<li><strong>${esc(p.time)}</strong><span>${esc(p.title)}</span></li>`).join('')}</ul>`:empty(x.status==='upcoming'?'Расписание, время взвешивания и начала поединков будут опубликованы после согласования программы.':'Подтверждённая программа этого события пока не предоставлена.'),true);
+ html+=section('event-documents','Положение и документы',x.documents.length?links(x.documents):empty('Положение, условия допуска и другие документы ещё не предоставлены. Ссылки появятся после получения настоящих файлов.'));
+ if(x.status==='completed') html+=section('results','Результаты и протоколы',x.results.length?links(x.results):empty('Официальные протоколы не предоставлены. Имена победителей и результаты не публикуются без подтверждения.'),true);
+ const photos=x.photos.filter(p=>safe(p.src));
+ html+=section('photos','Фотоотчёт',photos.length?`<div class="competition-gallery" data-gallery-grid>${photos.map(p=>`<button type="button" data-media-type="image" data-full="${safe(p.src)}" data-caption="${esc(p.caption)}" aria-label="Открыть: ${esc(p.caption)}"><img src="${safe(p.src)}" alt="${esc(p.caption)}" loading="lazy"><span>${esc(p.caption)}</span></button>`).join('')}</div><div class="profile-gallery__more-wrap stage-links"><button class="stage-button" type="button" data-gallery-more>Показать ещё</button></div>`:empty(x.status==='upcoming'?'Фотоотчёт появится после события и проверки материалов.':'Фотографии с подтверждённой привязкой к этому событию пока не предоставлены.'));
+ if(x.relatedHistory.length) html+=section('related','Исторические материалы',links(x.relatedHistory));
+ if(x.participants.length) html+=section('people','Участники',links(x.participants));
+ html+=section('back','Другие соревнования','<a class="stage-button" href="/public/competitions.html">Вернуться в каталог</a>',true);root.innerHTML=html;
+})();

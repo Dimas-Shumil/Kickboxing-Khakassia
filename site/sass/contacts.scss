@@ -1,0 +1,9 @@
+@use './base/base';
+@use './base/variables' as v;
+@use './components/header';
+@use './components/footer';
+@use './components/info-layout';
+
+// Уникальное оформление страницы contacts; общий каркас в info-layout.
+#contact-details .stage-panel { border-top:3px solid v.$color-navy; }
+#questions .stage-links { margin-bottom:32px; }

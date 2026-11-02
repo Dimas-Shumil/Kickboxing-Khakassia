@@ -1,1 +1,12 @@
-const express=require('express');const path=require('node:path');const app=express();const root=__dirname;app.use('/site',express.static(path.join(root,'site')));app.use('/components',express.static(path.join(root,'components')));app.use(express.static(path.join(root,'public'),{extensions:['html']}));app.get('/',(_req,res)=>res.sendFile(path.join(root,'public','index.html')));const port=Number(process.env.PORT)||3000;app.listen(port,()=>console.log(`Federation: http://localhost:${port}`));
+const {config}=require('./server/config');
+const {PrismaClient}=require('@prisma/client');
+const {createApp}=require('./server/app');
+async function main(){
+ const cfg=config();const db=new PrismaClient();
+ await db.$connect();await db.user.count();
+ const app=createApp(db,cfg);
+ const server=app.listen(cfg.port,cfg.host,()=>console.log(`Federation: ${cfg.origin}\nАдминка: ${cfg.origin}/admin`));
+ async function stop(){server.close(async()=>{app.locals.sessionStore.close();await db.$disconnect();process.exit(0);});}
+ process.on('SIGINT',stop);process.on('SIGTERM',stop);
+}
+main().catch(err=>{console.error('Запуск остановлен:',err.message);process.exitCode=1;});

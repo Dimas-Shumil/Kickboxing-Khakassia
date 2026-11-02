@@ -94,6 +94,30 @@ video {
     scroll-behavior: auto;
   }
 }
+body select:not([multiple]):not([size]),
+body select:not([multiple])[size="1"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 44px;
+  padding-inline-end: 48px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%2317243c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 16px center;
+  background-repeat: no-repeat;
+  background-size: 12px 8px;
+}
+
+body[dir=rtl] select:not([multiple]):not([size]) {
+  background-position: left 16px center;
+}
+
+@media (forced-colors: active) {
+  body select:not([multiple]):not([size]), body select:not([multiple])[size="1"] {
+    appearance: auto;
+    -webkit-appearance: auto;
+    background-image: none;
+    padding-inline-end: 16px;
+  }
+}
 /* Glass-header Федерации. Механика mobile-menu — как в Landshaft Park. */
 .header {
   position: fixed;
@@ -1336,5 +1360,44 @@ body.site-search-open {
   .coaches-hero__bottom > span {
     font-size: 9px;
     max-width: 145px;
+  }
+}
+/* Карточка тренера — единая ссылка, включая фото и имя. */
+a.coach-card--linked {
+  display: block;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 9px;
+  -webkit-tap-highlight-color: rgba(188, 32, 43, 0.12);
+}
+
+a.coach-card--linked .coach-card__photo,
+a.coach-card--linked .coach-card__details,
+a.coach-card--linked .coach-card__photo * {
+  cursor: pointer;
+}
+
+a.coach-card--linked:focus-visible {
+  outline: 3px solid #bc202b;
+  outline-offset: 5px;
+}
+
+a.coach-card--linked:hover .coach-card__details h3,
+a.coach-card--linked:focus-visible .coach-card__details h3 {
+  color: #bc202b;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.coach-card--linked:hover .coach-card__photo,
+  a.coach-card--linked:focus-visible .coach-card__photo {
+    transform: translateY(-5px);
+    box-shadow: 0 17px 34px rgba(16, 35, 56, 0.16);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  a.coach-card--linked .coach-card__photo {
+    transition: none;
   }
 }
