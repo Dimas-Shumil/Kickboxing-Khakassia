@@ -6,11 +6,13 @@ function createAdminPagesRouter({db,config,requireAuth}){
  const send=(res,file,status=200)=>res.status(status).sendFile(path.join(dir,file+'.html'));
  router.get('/login',(_req,res)=>send(res,'login'));
  router.get('/',requireAuth.page,(_req,res)=>res.redirect(302,'/admin/dashboard'));
- const pages=['dashboard','gym','students','student','payments','payment','news','news-edit','news-preview'];
+ const pages=['dashboard','gym','students','student','payments','payment','news','news-edit','news-preview','people','person-edit','competitions','competition-edit'];
  for(const page of pages)router.get('/'+page,requireAuth.page,asyncHandler(async(req,res)=>{
   if(['gym','students','student','payments','payment'].includes(page)&&req.user.role!=='OWNER')return send(res,'forbidden',403);
-  const model=['student','payment','news-edit','news-preview'].includes(page)?(page.startsWith('news')?'news':page):null;
-  if(model&&req.query.id&&req.query.id!=='working'&&(typeof req.query.id!=='string'||!await db[model].findUnique({where:{id:req.query.id},select:{id:true}})))return send(res,'not-found',404);
+  if(page==='news-preview'&&(!req.query.id||req.query.id==='working'))return send(res,'not-found',404);
+  if(['person-edit','competition-edit'].includes(page)&&Object.hasOwn(req.query,'id')&&(typeof req.query.id!=='string'||!req.query.id))return send(res,'not-found',404);
+  const model=['student','payment','news-edit','news-preview','person-edit','competition-edit'].includes(page)?(page==='competition-edit'?'competition':page==='person-edit'?'person':page.startsWith('news')?'news':page):null;
+  if(model&&req.query.id&&(typeof req.query.id!=='string'||!await db[model].findUnique({where:{id:req.query.id},select:{id:true}})))return send(res,'not-found',404);
   return send(res,page);
  }));
  // Старые закладки патчей 08.1/08.2 продолжают работать.

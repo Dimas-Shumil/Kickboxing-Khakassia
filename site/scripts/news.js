@@ -4,7 +4,7 @@
  const data=V.sorted();
  const home=document.querySelector('.home-feed__news-list');
  if(home) {
-  home.innerHTML=data.slice(0,3).map(x=>`<article class="news-card"><a class="news-card__image" href="${V.href(x)}" aria-label="${V.escape(x.title)}"><img src="${V.url(x.cover)}" alt="${V.escape(x.coverCaption)}" width="116" height="82" loading="lazy"></a><div class="news-card__content"><time class="news-card__date" datetime="${V.escape(x.publishedAt)}">${V.date(x.publishedAt)}${x.isDemo?' · демо':''}</time><h3 class="news-card__title">${V.escape(x.title)}</h3><a class="news-card__link" href="${V.href(x)}">Читать материал</a></div></article>`).join('');
+  home.innerHTML=data.slice(0,3).map(x=>`<article class="news-card"><a class="news-card__image" href="${V.href(x)}" aria-label="${V.escape(x.title)}">${x.cover?`<img src="${V.url(x.cover)}" alt="${V.escape(x.alt)}" width="116" height="82" loading="lazy">`:``}</a><div class="news-card__content"><time class="news-card__date" datetime="${V.escape(x.publishedAt)}">${V.date(x.publishedAt)}${x.isDemo?' · демо':''}</time><h3 class="news-card__title">${V.escape(x.title)}</h3><a class="news-card__link" href="${V.href(x)}">Читать материал</a></div></article>`).join('')||'<p>Публикаций пока нет.</p>';
  }
  const form=document.querySelector('#news-filters');if(!form)return;
  const year=document.querySelector('#news-year'),category=document.querySelector('#news-category'),grid=document.querySelector('#news-grid'),more=document.querySelector('#news-more');

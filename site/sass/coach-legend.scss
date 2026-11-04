@@ -2,6 +2,7 @@
 @use './base/variables' as v;
 @use './components/header';
 @use './components/footer';
+@use './components/person-content';
 
 /* Independent page layer: coach-legend.scss (shared base/header/footer are imported above). */
 .coach-legend-page { color: #f7f4ed; background:#06111d; }

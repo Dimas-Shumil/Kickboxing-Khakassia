@@ -20,14 +20,14 @@
    const heading=document.createElement('h3'); heading.textContent=label; group.append(heading);
    const grid=document.createElement('div'); grid.className='stage-grid'; group.append(grid);
    subset.forEach(x=>{
-    const a=document.createElement('a'); a.className='event-card'; a.href='/competition?id='+encodeURIComponent(x.id);
-    const img=document.createElement('img'); img.className='event-card__image'; img.src=x.image; img.alt=x.imageCaption; img.loading='lazy'; a.append(img);
+    const a=document.createElement('a'); a.className='event-card'; a.href='/competitions/'+encodeURIComponent(x.slug);
+    const img=document.createElement('img'); img.className='event-card__image'; if(x.image){img.src=x.image; img.alt=x.imageAlt||x.title; img.loading='lazy'; a.append(img);}
     const body=document.createElement('div'); body.className='event-card__body';
-    for (const [tag,cls,text] of [['span','event-card__demo',x.isDemo?'Демонстрационная запись':'Соревнование Федерации'],['h4','',x.title],['p','',date(x.startDate)+' — '+date(x.endDate)+' · '+(x.isDemo?'условные даты':'')],['p','',x.location],['span','stage-status',key==='upcoming'?'Предстоящее':'Завершено'],['span','event-card__open','Подробнее о соревновании']]) { const el=document.createElement(tag); el.className=cls; el.textContent=text; body.append(el); }
+    for (const [tag,cls,text] of [['span','event-card__demo','Соревнование Федерации'],['h4','',x.title],['p','',date(x.startDate)+' — '+date(x.endDate)],['p','',x.location],['span','stage-status',key==='upcoming'?'Предстоящее':'Завершено'],['span','event-card__open','Подробнее о соревновании']]) { const el=document.createElement(tag); el.className=cls; el.textContent=text; body.append(el); }
     a.append(body);grid.append(a);
    }); groups.append(group);
   });
-  document.querySelector('#event-count').textContent='Найдено: '+rows.length+(rows.some(x=>x.isDemo)?' · демонстрационные записи':'');
+  document.querySelector('#event-count').textContent='Найдено: '+rows.length;
   document.querySelector('#event-empty').hidden=rows.length!==0;
   const q=new URLSearchParams(); if(year.value!=='all')q.set('year',year.value); if(status.value!=='all')q.set('status',status.value);
   history.replaceState(null,'',location.pathname+(q.size?'?'+q:'')+location.hash);

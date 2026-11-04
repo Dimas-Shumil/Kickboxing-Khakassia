@@ -1312,3 +1312,14 @@ button, input, select, textarea { font-family: inherit; }
 .home-feed__news-list .news-card { border-radius:v.$radius-card; }
 .home-feed__news-list .news-card__image { border-radius:v.$radius-card; }
 .competition-card { border-radius:v.$radius-card; }
+
+.home-feed__athletes-track .athlete-card__photo img { width:100%;height:100%;object-fit:cover; }
+.home-feed__athletes-track .person-empty { padding:24px; }
+
+.competition-card__info a { color: inherit; text-decoration: none; overflow-wrap: anywhere; }
+.competition-card__info a:hover { text-decoration: underline; }
+.competition-home-empty { padding: 24px; color: #111d37; text-align: center; }
+
+.hero__confirmed-date { margin-top: 18px; font-weight: 600; overflow-wrap: anywhere; }
+.hero__event-name { overflow-wrap: anywhere; }
+.competition-card__category { max-width: 100%; overflow-wrap: anywhere; }

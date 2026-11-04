@@ -1552,3 +1552,12 @@ body.site-search-open {
   border-radius: 9px;
   overflow: hidden;
 }
+
+.news-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.news-article h1, .stage-hero h1 {
+  overflow-wrap: anywhere;
+}

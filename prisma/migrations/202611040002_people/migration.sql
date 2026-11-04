@@ -1,0 +1,11 @@
+CREATE TABLE "Person" (
+ "id" TEXT NOT NULL PRIMARY KEY, "name" TEXT NOT NULL, "status" TEXT NOT NULL DEFAULT 'draft',
+ "payload" TEXT NOT NULL, "publishedPayload" TEXT, "slug" TEXT, "version" INTEGER NOT NULL DEFAULT 1,
+ "publishedOn" DATETIME, "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, "updatedAt" DATETIME NOT NULL
+);
+CREATE UNIQUE INDEX "Person_slug_key" ON "Person"("slug");
+CREATE TABLE "PersonAsset" (
+ "id" TEXT NOT NULL PRIMARY KEY, "personId" TEXT NOT NULL, "size" INTEGER NOT NULL,
+ "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT "PersonAsset_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

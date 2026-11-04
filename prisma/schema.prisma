@@ -73,6 +73,10 @@ model PaymentRevision {
 }
 
 model News {
+  slug String? @unique
+  publishedPayload String?
+  publishedOn DateTime?
+  assets NewsAsset[]
   id        String   @id @default(cuid())
   title     String
   status    String   @default("draft")
@@ -105,4 +109,56 @@ model AdminSession {
   admin         Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
   @@index([adminId])
   @@index([expiresAt])
+}
+
+model NewsAsset {
+  id String @id
+  newsId String
+  news News @relation(fields: [newsId], references: [id], onDelete: Restrict)
+  size Int
+  createdAt DateTime @default(now())
+}
+
+// Публичные биографии не связаны с приватными учениками и оплатами.
+model Person {
+ id String @id @default(cuid())
+ name String
+ status String @default("draft")
+ payload String
+ publishedPayload String?
+ slug String? @unique
+ version Int @default(1)
+ publishedOn DateTime?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ assets PersonAsset[]
+}
+model PersonAsset {
+ id String @id
+ personId String
+ person Person @relation(fields: [personId], references: [id], onDelete: Restrict)
+ size Int
+ createdAt DateTime @default(now())
+}
+
+model Competition {
+ id String @id @default(cuid())
+ title String
+ status String @default("draft")
+ payload String
+ publishedPayload String?
+ slug String? @unique
+ version Int @default(1)
+ publishedOn DateTime?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ assets CompetitionAsset[]
+}
+model CompetitionAsset {
+ id String @id
+ competitionId String
+ competition Competition @relation(fields: [competitionId], references: [id], onDelete: Restrict)
+ size Int
+ kind String
+ createdAt DateTime @default(now())
 }

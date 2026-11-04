@@ -234,7 +234,8 @@
     const prev = section?.querySelector('[data-competitions-prev]');
     const next = section?.querySelector('[data-competitions-next]');
     const counter = section?.querySelector('[data-competitions-counter]');
-    if (!gallery || cards.length < 2 || !prev || !next) return;
+    if (!gallery || !prev || !next) return;
+    if(cards.length<2){prev.disabled=next.disabled=true;if(cards[0]){cards[0].classList.add('is-current');cards[0].style.opacity='1';cards[0].style.transform='translate(-50%,-50%)';}return;}
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     const count = cards.length;
@@ -257,6 +258,7 @@
         card.style.zIndex = String(100 - Math.round(d * 30));
         const selected = index === modulo(Math.round(target));
         card.setAttribute('aria-hidden', String(!selected));
+        card.querySelectorAll('a').forEach(a=>a.tabIndex=selected?0:-1);
         card.classList.toggle('is-current', selected);
       });
     }
@@ -295,7 +297,6 @@
       cancelAnimationFrame(frame);
       pointer = {id:event.pointerId, x:event.clientX, y:event.clientY, origin:position, lastX:event.clientX, lastTime:performance.now(), velocity:0, locked:false};
       suppressClick = false;
-      if (event.pointerType === 'mouse') gallery.setPointerCapture(event.pointerId);
     });
     gallery.addEventListener('pointermove', event => {
       if (!pointer || event.pointerId !== pointer.id) return;
@@ -331,11 +332,11 @@
     gallery.addEventListener('pointercancel', event=>release(event,true));
     gallery.addEventListener('lostpointercapture', event=>{if(event.target===gallery&&pointer)release(event,true);});
     gallery.addEventListener('click', event=>{
-      if(suppressClick){suppressClick=false;return;}
+      if(suppressClick){event.preventDefault();suppressClick=false;return;}
       const card=event.target.closest('[data-competition-card]');
       if(!card)return;
       const offset=modulo(cards.indexOf(card)-position+count/2)-count/2;
-      if(Math.abs(offset)>.1)goTo(Math.round(position+offset));
+      if(Math.abs(offset)>.1){event.preventDefault();goTo(Math.round(position+offset));}
     });
     const resize=()=>{cardWidth=cards[0].offsetWidth;render();};
     if('ResizeObserver' in window)new ResizeObserver(resize).observe(gallery);

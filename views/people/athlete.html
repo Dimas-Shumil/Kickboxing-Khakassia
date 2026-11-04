@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#0a1425" name="theme-color"/>
+<meta content="{{DESCRIPTION}}" name="description"/>
+<title>{{PAGE_TITLE}}</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Oswald:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="/site/css/athlete.min.css" rel="stylesheet"/>
+<link href="/favicon.ico?v=20261104" rel="icon" sizes="any"/><link href="/site/img/brand/favicon-32.png?v=20261104" rel="icon" sizes="32x32" type="image/png"/><link href="/site/img/brand/favicon-180.png?v=20261104" rel="apple-touch-icon" sizes="180x180"/></head>
+<body data-person-page="true" class="athlete-page">
+<div id="site-header"></div>
+<main class="main">
+<section aria-labelledby="profile-hero-title" class="profile-hero">
+<div aria-hidden="true" class="profile-hero__ambient"></div>
+<div aria-hidden="true" class="profile-hero__photo">{{PORTRAIT}}</div>
+<div class="container profile-hero__inner">
+<nav aria-label="Навигационная цепочка" class="profile-hero__breadcrumbs">
+<a href="/">Главная</a><span aria-hidden="true">/</span>
+<a href="/hall-of-fame">Зал славы</a><span aria-hidden="true">/</span>
+<span aria-current="page">Профиль спортсмена</span>
+</nav>
+<div class="profile-hero__content">
+<h1 class="profile-hero__title" id="profile-hero-title">{{NAME_SPANS}}</h1>
+<div class="profile-hero__rank">
+<span aria-hidden="true" class="profile-hero__flag">🇷🇺</span><strong>{{ATHLETE_TITLE}}</strong>
+</div>
+<p class="profile-hero__discipline">{{DISCIPLINE}}</p>
+<dl class="profile-hero__facts">{{ATHLETE_FACTS}}</dl>
+<blockquote class="profile-hero__quote">{{QUOTE_LINKS}}</blockquote>
+</div>
+<div class="profile-hero__bottom">
+<span>Сила. Характер. История.</span><a href="#athlete-story">Узнать историю </a>
+</div>
+</div>
+</section>
+<section aria-labelledby="profile-awards-title" class="profile-awards">
+<div class="container profile-awards__inner">
+<div class="profile-section-head profile-awards__intro">
+<span class="profile-section-head__eyebrow">Путь к вершинам</span>
+<h2 class="profile-section-head__title" id="profile-awards-title">
+              Главные<br/>достижения
+            </h2>
+<span aria-hidden="true" class="profile-section-head__line"></span>
+<p>{{AWARDS_INTRO}}</p>
+</div>
+<div class="profile-awards__cards">{{AWARDS}}</div>
+</div>
+</section>
+<section aria-labelledby="profile-story-title" class="profile-story" id="athlete-story">
+<div aria-hidden="true" class="profile-story__image">{{STORY_IMAGE}}</div>
+<div class="container profile-story__inner">
+<div aria-hidden="true" class="profile-story__spacer"></div>
+<div class="profile-story__copy">{{LEGEND_BIO}}</div>
+<blockquote class="profile-story__quote">{{QUOTE}}</blockquote>
+</div>
+</section>
+<section aria-labelledby="profile-journey-title" class="profile-journey">
+<div class="container profile-journey__inner">
+<div class="profile-section-head profile-journey__intro">
+<span class="profile-section-head__eyebrow">С чего всё начиналось</span>
+<h2 class="profile-section-head__title" id="profile-journey-title">
+              Спортивный<br/>путь
+            </h2>
+<span aria-hidden="true" class="profile-section-head__line"></span>
+<p>{{PATH_INTRO}}</p>
+</div>
+<ol class="profile-journey__timeline">{{TIMELINE}}</ol>
+<div aria-hidden="true" class="profile-journey__art">{{STORY_IMAGE}}</div>
+</div>
+</section>
+<section aria-labelledby="profile-gallery-title" class="profile-gallery" id="athlete-gallery">
+<div class="container">
+<div class="profile-gallery__heading">
+<div class="profile-section-head">
+<span class="profile-section-head__eyebrow">Моменты, которые остаются</span>
+<h2 class="profile-section-head__title" id="profile-gallery-title">
+                Фото и видео
+              </h2>
+<span aria-hidden="true" class="profile-section-head__line"></span>
+<p>Жизнь в спорте — в фотографиях, кадрах и воспоминаниях.</p>
+</div>
+<span class="profile-gallery__hint">Нажми на фото, чтобы открыть</span>
+</div>
+<div aria-label="Фильтры галереи" class="profile-gallery__filters" role="group">
+<button aria-pressed="true" class="is-active" data-gallery-filter="all" type="button">
+              Все
+            </button>
+<button aria-pressed="false" data-gallery-filter="competition" type="button">
+              Соревнования
+            </button>
+<button aria-pressed="false" data-gallery-filter="training" type="button">
+              Тренировки
+            </button>
+<button aria-pressed="false" data-gallery-filter="awards" type="button">
+              Награждения
+            </button>
+<button aria-pressed="false" data-gallery-filter="video" type="button">
+              Видео
+            </button>
+</div>
+<div class="profile-gallery__grid" data-gallery-grid="">{{GALLERY}}</div>
+<p class="profile-gallery__empty" data-gallery-empty="" hidden="">В этой категории пока нет фотографий.</p>
+<div class="profile-gallery__more-wrap">
+<button class="profile-gallery__more" data-gallery-more="" type="button">
+              Показать ещё фото <span aria-hidden="true">+</span>
+</button>
+</div>
+
+</div>
+</section>
+</main>
+<div id="site-footer"></div>
+<div aria-hidden="true" aria-label="Просмотр фотографий" aria-modal="true" class="profile-lightbox" data-lightbox="" hidden="" role="dialog" tabindex="-1">
+<div class="profile-lightbox__backdrop" data-lightbox-close=""></div>
+<div class="profile-lightbox__dialog">
+<div class="profile-lightbox__top">
+<span aria-live="polite" class="profile-lightbox__counter" data-lightbox-counter="">01 / 01</span>
+<button aria-label="Закрыть просмотр" class="profile-lightbox__close" data-lightbox-close="" type="button">
+            ✕
+          </button>
+</div>
+<div class="profile-lightbox__stage" data-lightbox-stage="">
+<button aria-label="Предыдущее фото" class="profile-lightbox__nav profile-lightbox__nav--prev" data-lightbox-prev="" type="button">
+<svg aria-hidden="true" focusable="false" viewbox="0 0 24 24">
+<path d="m15 5-7 7 7 7"></path>
+</svg>
+</button>
+<div class="profile-lightbox__media" data-lightbox-media=""></div>
+<button aria-label="Следующее фото" class="profile-lightbox__nav profile-lightbox__nav--next" data-lightbox-next="" type="button">
+<svg aria-hidden="true" focusable="false" viewbox="0 0 24 24">
+<path d="m9 5 7 7-7 7"></path>
+</svg>
+</button>
+</div>
+<p class="profile-lightbox__caption" data-lightbox-caption=""></p>
+<span class="profile-lightbox__hint">Листайте свайпом или стрелками клавиатуры</span>
+</div>
+</div>
+<script src="/site/scripts/main.js"></script>
+<script src="/site/scripts/athlete.js"></script>
+<script src="/site/scripts/site-search.js"></script></body>
+</html>

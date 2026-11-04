@@ -4,6 +4,7 @@
 @use './components/footer';
 @use './components/info-layout';
 @use './components/media-viewer';
+@use './components/page-hero';
 .competition-cover { margin:0; img { width:100%; max-height:650px; object-fit:cover; } figcaption { padding-top:12px; font-size:12px; color:v.$color-muted; } }
 .competition-facts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin:0; gap:1px; background:#d3d7dd; border:1px solid #d3d7dd; div { background:white; padding:24px; } dt { color:v.$color-muted; font-size:12px; margin-bottom:12px; } dd { margin:0; font-weight:600; } }
 .competition-program { list-style:none; padding:0; li { padding:22px; border-bottom:1px solid #d3d7dd; display:flex; flex-wrap:wrap; gap:24px; } }
@@ -12,3 +13,10 @@
 @media(max-width:430px) { .competition-facts,.competition-gallery { grid-template-columns:1fr; } .profile-lightbox { padding:8px; button { width:36px; height:40px; } &__stage { gap:4px; } } }
 
 .competition-gallery button { border-radius:v.$radius-card; overflow:hidden; }
+
+.competition-preview-banner { position: relative; z-index: 100; padding: 18px; background: #fff0c4; color: #111d37; text-align: center; a { color: inherit; text-decoration: underline; } }
+.competition-facts dd, .competition-program, .stage-notice, .stage-links a, .competition-gallery span { overflow-wrap: anywhere; }
+.competition-gallery button { min-width: 0; }
+
+.stage-hero h1 { overflow-wrap: anywhere; }
+.stage-links a { min-width: 0; max-width: 100%; }

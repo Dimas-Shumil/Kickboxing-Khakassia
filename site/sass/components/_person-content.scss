@@ -1,0 +1,23 @@
+/* Повторяемое оформление данных в четырёх независимых профилях. */
+.person-content-text { white-space:pre-wrap;overflow-wrap:anywhere; }
+.person-role-links { display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;font:600 13px/1.4 'Inter',sans-serif; }
+.person-role-links a { display:inline-flex;align-items:center;min-height:42px;padding:10px 15px;border:1px solid currentColor;border-radius:7px;transition:box-shadow .2s; }
+.person-role-links a:hover { box-shadow:0 4px 16px #0003; }
+.person-role-links a[aria-current=page] { text-decoration:underline;text-underline-offset:4px; }
+.person-empty { padding-block:24px;line-height:1.7;grid-column:1/-1; }
+.person-preview-banner { position:relative;z-index:1001;padding:18px;background:#fff5cf;color:#172440;font:600 14px/1.7 'Inter',sans-serif; }
+.person-preview-banner a { display:inline-block;margin-inline:14px;text-decoration:underline; }
+[data-person-page] h1,[data-person-page] h3 { overflow-wrap:anywhere; }
+[data-person-page] h1>span { display:block; }
+[data-person-page] .coach-profile-hero__image { background:#091a30; }
+[data-person-page] .coach-profile-hero__image img { width:100%;height:100%;object-fit:cover; }
+[data-person-page] .coach-profile-hero__image::after { content:'';position:absolute;inset:0;background:linear-gradient(90deg,#061327f5, #07132680 70%,#06132740); }
+[data-person-page] .coach-profile-student__photo img { width:100%;height:100%;object-fit:cover; }
+.coach-card__photo img,.heritage-card__photo img { width:100%;height:100%;object-fit:cover; }
+[data-person-page] h1 { font-size:clamp(40px,4.8vw,86px); }
+[data-person-page] h1.coach-legend-hero__title span { font-size:inherit;white-space:normal; }
+[data-person-page] .person-photo-credit { display:block;position:absolute;bottom:12px;left:12px;right:12px;padding:8px;background:#061327b3;color:white;font:12px/1.5 'Inter',sans-serif; }
+@media(max-width:600px) {
+ [data-person-page] h1 { font-size:clamp(32px,9vw,48px); }
+ [data-person-page] .coach-profile-section-head h2 { font-size:clamp(28px,7.4vw,36px); }
+}

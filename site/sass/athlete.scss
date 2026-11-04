@@ -2,6 +2,7 @@
 @use './base/variables' as v;
 @use './components/header';
 @use './components/footer';
+@use './components/person-content';
 
 /* PAGE: ATHLETE PROFILE — independent styles, no @use './main'. */
 .athlete-page { color:#15233c; background:#fbfaf8; }

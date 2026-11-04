@@ -1023,6 +1023,126 @@ body.site-search-open {
   }
 }
 
+/* Повторяемое оформление данных в четырёх независимых профилях. */
+.person-content-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.person-role-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  font: 600 13px/1.4 "Inter", sans-serif;
+}
+
+.person-role-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 10px 15px;
+  border: 1px solid currentColor;
+  border-radius: 7px;
+  transition: box-shadow 0.2s;
+}
+
+.person-role-links a:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.person-role-links a[aria-current=page] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.person-empty {
+  padding-block: 24px;
+  line-height: 1.7;
+  grid-column: 1/-1;
+}
+
+.person-preview-banner {
+  position: relative;
+  z-index: 1001;
+  padding: 18px;
+  background: #fff5cf;
+  color: #172440;
+  font: 600 14px/1.7 "Inter", sans-serif;
+}
+
+.person-preview-banner a {
+  display: inline-block;
+  margin-inline: 14px;
+  text-decoration: underline;
+}
+
+[data-person-page] h1, [data-person-page] h3 {
+  overflow-wrap: anywhere;
+}
+
+[data-person-page] h1 > span {
+  display: block;
+}
+
+[data-person-page] .coach-profile-hero__image {
+  background: #091a30;
+}
+
+[data-person-page] .coach-profile-hero__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+[data-person-page] .coach-profile-hero__image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(6, 19, 39, 0.9607843137), rgba(7, 19, 38, 0.5019607843) 70%, rgba(6, 19, 39, 0.2509803922));
+}
+
+[data-person-page] .coach-profile-student__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.coach-card__photo img, .heritage-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+[data-person-page] h1 {
+  font-size: clamp(40px, 4.8vw, 86px);
+}
+
+[data-person-page] h1.coach-legend-hero__title span {
+  font-size: inherit;
+  white-space: normal;
+}
+
+[data-person-page] .person-photo-credit {
+  display: block;
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  padding: 8px;
+  background: rgba(6, 19, 39, 0.7019607843);
+  color: white;
+  font: 12px/1.5 "Inter", sans-serif;
+}
+
+@media (max-width: 600px) {
+  [data-person-page] h1 {
+    font-size: clamp(32px, 9vw, 48px);
+  }
+  [data-person-page] .coach-profile-section-head h2 {
+    font-size: clamp(28px, 7.4vw, 36px);
+  }
+}
 .hall-page {
   background: #fbfaf8;
 }
@@ -1427,7 +1547,7 @@ body.site-search-open {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("/site/img/natasha2.png") center top/cover no-repeat;
+  background: none;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.5s ease;
@@ -1471,9 +1591,6 @@ body.site-search-open {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-.hall-legend__photo::after {
-  background-image: url("/site/img/natasha2.png");
 }
 .hall-legend__body {
   padding: 20px 18px 24px;
@@ -1987,4 +2104,31 @@ body.site-search-open {
 
 .heritage-card--linked:focus-within .heritage-card__photo {
   box-shadow: 0 17px 34px rgba(16, 35, 56, 0.2);
+}
+
+.hall-legend__photo--swap .hall-legend__photo-hover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hall-legend:hover .hall-legend__photo--swap .hall-legend__photo-hover {
+    opacity: 1;
+  }
+}
+.hall-legend__link:focus-visible + .hall-legend__photo--swap .hall-legend__photo-hover {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hall-legend__photo--swap .hall-legend__photo-hover {
+    transition: none;
+  }
 }

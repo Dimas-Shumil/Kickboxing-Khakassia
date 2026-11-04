@@ -1327,6 +1327,74 @@ body.site-search-open {
   display: none !important;
 }
 
+.stage-hero.page-hero {
+  box-sizing: border-box;
+  min-height: 640px;
+  display: flex;
+  align-items: center;
+  padding-block: 140px 64px;
+  background: #111d37;
+  overflow: hidden;
+}
+.stage-hero.page-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(8, 18, 36, 0.88), rgba(8, 18, 36, 0.48));
+}
+.stage-hero.page-hero .stage-hero__image {
+  opacity: 1;
+  object-position: center 45%;
+}
+.stage-hero.page-hero > .container {
+  width: 100%;
+}
+.stage-hero.page-hero .stage-crumbs {
+  margin-bottom: 32px;
+}
+.stage-hero.page-hero .stage-hero__label {
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+}
+.stage-hero.page-hero h1 {
+  max-width: 1050px;
+  font: 500 clamp(42px, 5.6vw, 80px)/1.08 "Oswald", "Roboto Condensed", "Arial Narrow", "Liberation Sans Narrow", "Impact", sans-serif;
+  text-transform: uppercase;
+  margin: 24px 0;
+}
+.stage-hero.page-hero p {
+  max-width: 650px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: #e0e6ef;
+  margin: 0;
+}
+.stage-hero.page-hero .stage-button {
+  margin-top: 24px;
+}
+
+@media (max-width: 600px) {
+  .stage-hero.page-hero {
+    min-height: 620px;
+    padding-block: 120px 44px;
+  }
+  .stage-hero.page-hero .stage-crumbs {
+    margin-bottom: 24px;
+  }
+  .stage-hero.page-hero .stage-hero__label {
+    font-size: 10px;
+  }
+  .stage-hero.page-hero h1 {
+    font-size: clamp(36px, 9vw, 48px);
+    margin-block: 20px;
+  }
+  .stage-hero.page-hero p {
+    font-size: 15px;
+  }
+}
 .competition-cover {
   margin: 0;
 }
@@ -1427,4 +1495,34 @@ body.site-search-open {
 .competition-gallery button {
   border-radius: 9px;
   overflow: hidden;
+}
+
+.competition-preview-banner {
+  position: relative;
+  z-index: 100;
+  padding: 18px;
+  background: #fff0c4;
+  color: #111d37;
+  text-align: center;
+}
+.competition-preview-banner a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.competition-facts dd, .competition-program, .stage-notice, .stage-links a, .competition-gallery span {
+  overflow-wrap: anywhere;
+}
+
+.competition-gallery button {
+  min-width: 0;
+}
+
+.stage-hero h1 {
+  overflow-wrap: anywhere;
+}
+
+.stage-links a {
+  min-width: 0;
+  max-width: 100%;
 }

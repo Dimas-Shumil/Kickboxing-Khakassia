@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#09182d" name="theme-color"/>
+<meta content="noindex, nofollow" name="robots"/>
+<meta content="{{DESCRIPTION}}" name="description"/>
+<title>{{PAGE_TITLE}}</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Oswald:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="/site/css/athlete-profile.min.css" rel="stylesheet"/>
+<link href="/favicon.ico?v=20261104" rel="icon" sizes="any"/><link href="/site/img/brand/favicon-32.png?v=20261104" rel="icon" sizes="32x32" type="image/png"/><link href="/site/img/brand/favicon-180.png?v=20261104" rel="apple-touch-icon" sizes="180x180"/></head>
+<body data-person-page="true" class="athlete-detail-page">
+<div id="site-header"></div>
+<main class="main">
+<section aria-labelledby="athlete-detail-title" class="athlete-detail-hero">
+<div aria-hidden="true" class="athlete-detail-hero__background"></div>
+<div class="container athlete-detail-hero__inner">
+<nav aria-label="Навигационная цепочка" class="athlete-detail-hero__breadcrumbs">
+<a href="/">Главная</a><span aria-hidden="true">/</span>
+<a href="/hall-of-fame#athletes">Спортсмены</a><span aria-hidden="true">/</span>
+<span aria-current="page">{{NAME}}</span>
+</nav>
+
+<div class="athlete-detail-hero__grid">
+<div class="athlete-detail-hero__copy">
+<p class="athlete-detail-eyebrow">Спортсмен Федерации</p>
+<h1 class="athlete-detail-hero__name" id="athlete-detail-title">{{NAME_SPANS}}</h1>
+<blockquote class="athlete-detail-hero__quote">{{QUOTE_LINKS}}</blockquote>
+</div>
+<div class="athlete-detail-hero__portrait">{{PORTRAIT}}</div>
+<aside aria-label="Информация о спортсмене" class="athlete-detail-hero__about">
+<dl>{{ATHLETE_FACTS}}</dl>
+</aside>
+</div>
+<div aria-label="Кратко о результатах" class="athlete-detail-highlights">{{HIGHLIGHTS}}</div>
+</div>
+</section>
+<section aria-labelledby="athlete-detail-story-title" class="athlete-detail-story" id="athlete-story">
+<div class="container">
+<div class="athlete-detail-heading"><h2 id="athlete-detail-story-title"><span>Моя</span> история</h2></div>
+<div class="athlete-detail-story__layout">
+<div class="athlete-detail-story__text">{{BIO}}</div>
+<figure class="athlete-detail-story__figure">{{STORY_FIGURE}}</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="athlete-detail-results-title" class="athlete-detail-results" id="athlete-results">
+<div class="container">
+<div class="athlete-detail-results__heading">
+<div class="athlete-detail-heading"><h2 id="athlete-detail-results-title"><span>Результаты и</span> достижения</h2></div>
+<span class="athlete-detail-results__caption">{{AWARDS_INTRO}}</span>
+</div>
+<div class="athlete-detail-results__grid">{{AWARDS}}</div>
+</div>
+</section>
+<section aria-labelledby="athlete-detail-journey-title" class="athlete-detail-journey">
+<div class="container">
+<div class="athlete-detail-heading"><h2 id="athlete-detail-journey-title"><span>Спортивный</span> путь</h2></div>
+<ol class="athlete-detail-journey__list">{{TIMELINE}}</ol>
+</div>
+</section>
+<section aria-labelledby="athlete-detail-gallery-title" class="profile-gallery athlete-detail-gallery" id="athlete-gallery">
+<div class="container">
+<div class="athlete-detail-gallery__head">
+<div class="athlete-detail-heading"><h2 id="athlete-detail-gallery-title"><span>Фото</span>галерея</h2></div>
+<p>Открой фотографию, чтобы посмотреть её крупнее</p>
+</div>
+<div aria-label="Фильтр фотогалереи" class="profile-gallery__filters" role="group">
+<button aria-pressed="true" class="is-active" data-gallery-filter="all" type="button">Все</button>
+<button aria-pressed="false" data-gallery-filter="competition" type="button">Соревнования</button>
+<button aria-pressed="false" data-gallery-filter="training" type="button">Тренировки</button>
+<button aria-pressed="false" data-gallery-filter="awards" type="button">Награждения</button>
+<button aria-pressed="false" data-gallery-filter="video" type="button">Видео</button>
+</div>
+<div class="profile-gallery__grid" data-gallery-grid="">{{GALLERY}}</div>
+<p class="profile-gallery__empty" data-gallery-empty="" hidden="">В этой категории пока нет фотографий.</p>
+<div class="profile-gallery__more-wrap"><button class="profile-gallery__more" data-gallery-more="" type="button">Показать ещё фото <span aria-hidden="true">+</span></button></div>
+
+</div>
+</section>
+</main>
+<div id="site-footer"></div>
+<div aria-hidden="true" aria-label="Полноэкранный просмотр фотографий" aria-modal="true" class="profile-lightbox" data-lightbox="" hidden="" role="dialog">
+<div class="profile-lightbox__backdrop" data-lightbox-close=""></div>
+<div class="profile-lightbox__dialog">
+<div class="profile-lightbox__top"><span aria-live="polite" data-lightbox-counter="">01 / 01</span><button aria-label="Закрыть просмотр" class="profile-lightbox__close" data-lightbox-close="" type="button">✕</button></div>
+<div class="profile-lightbox__stage" data-lightbox-stage="">
+<button aria-label="Предыдущее фото" class="profile-lightbox__nav profile-lightbox__nav--prev" data-lightbox-prev="" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m15 5-7 7 7 7"></path></svg></button>
+<div class="profile-lightbox__media" data-lightbox-media=""></div>
+<button aria-label="Следующее фото" class="profile-lightbox__nav profile-lightbox__nav--next" data-lightbox-next="" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m9 5 7 7-7 7"></path></svg></button>
+</div>
+<p class="profile-lightbox__caption" data-lightbox-caption=""></p><span class="profile-lightbox__hint">Свайп, стрелки клавиатуры или кнопки для перелистывания</span>
+</div>
+</div>
+<script src="/site/scripts/main.js?v=athlete-profile-1"></script>
+<script src="/site/scripts/site-search.js?v=athlete-profile-1"></script>
+<script src="/site/scripts/athlete-profile.js?v=athlete-profile-1"></script>
+</body>
+</html>

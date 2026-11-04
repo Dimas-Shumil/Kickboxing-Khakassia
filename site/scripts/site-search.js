@@ -1,5 +1,5 @@
 /**
- * Поиск по статическому сайту Федерации (этап до БД/API).
+ * Поиск по разделам и опубликованным материалам Федерации.
  * Не зависит от загрузки Footer и не требует прямого импорта из main.js.
  * Делегирование клика работает с Header, который вставляется через fetch.
  */
@@ -7,19 +7,10 @@
   'use strict';
 
   const ITEMS = [
-{"title": "Навстречу новым стартам", "category": "Новости · демоматериал", "description": "Демонстрационная публикация. От анонса до итогового протокола: информация о соревновании в одном месте.", "href": "/news-item?id=demo-calendar", "keywords": "новость новости Соревнования 2026"},
-{"title": "Сохраняя историю кикбоксинга", "category": "Новости · демоматериал", "description": "Демонстрационная публикация. Фотография становится частью истории, когда известны её дата, место и участники.", "href": "/news-item?id=demo-archive", "keywords": "новость новости История 2026"},
-{"title": "Люди, которые передают опыт", "category": "Новости · демоматериал", "description": "Демонстрационная публикация. Наставничество и преемственность — темы будущих публикаций о людях спорта.", "href": "/news-item?id=demo-mentors", "keywords": "новость новости Федерация 2026"},
-{"title": "Моменты спортивного сезона", "category": "Новости · демоматериал", "description": "Демонстрационная публикация. Эмоции и движение — демонстрационная подборка иллюстраций, без привязки к реальному турниру.", "href": "/news-item?id=demo-season", "keywords": "новость новости Соревнования 2025"},
-{"title": "Документы перед стартом", "category": "Новости · демоматериал", "description": "Демонстрационная публикация. Где искать положение и программу: пример информационного материала.", "href": "/news-item?id=demo-documents", "keywords": "новость новости Федерация 2025"},
-{"title": "Федерация: открытый диалог", "category": "Новости · демоматериал", "description": "Демонстрационная публикация. Люди, клубы и события республики — направления для будущих новостей.", "href": "/news-item?id=demo-dialogue", "keywords": "новость новости Федерация 2025"},
-{"title": "Соревнования", "href": "/competitions", "keywords": "календарь турниры предстоящие прошедшие результаты", "description": "Демонстрационный календарь. Официальные сведения ожидаются.", "category": "Раздел Федерации", "popular": true},
+{"title": "Соревнования", "href": "/competitions", "keywords": "календарь турниры предстоящие прошедшие результаты", "description": "Опубликованные соревнования, программа, документы и результаты.", "category": "Раздел Федерации", "popular": true},
 {"title": "О Федерации", "href": "/federation", "keywords": "руководство деятельность клубы секции", "description": "Раздел о деятельности Федерации в процессе наполнения.", "category": "Раздел Федерации", "popular": true},
 {"title": "Контакты", "href": "/contacts", "keywords": "телефон почта адрес связь контакты", "description": "Официальные контакты ожидают подтверждения.", "category": "Раздел Федерации", "popular": true},
 {"title": "Документы", "href": "/documents", "keywords": "устав положение правила разряды протоколы документы", "description": "Категории документов. Реальные файлы пока не предоставлены.", "category": "Раздел Федерации", "popular": true},
-{"title": "Предстоящий турнир · демо", "href": "/competition?id=demo-upcoming", "keywords": "демо соревнование турнир 2027", "description": "Демонстрационная запись. Не реальное событие Федерации.", "category": "Соревнования · демо"},
-{"title": "Завершённый турнир · демо", "href": "/competition?id=demo-completed", "keywords": "демо соревнование турнир 2026", "description": "Демонстрационная запись. Не реальное событие Федерации.", "category": "Соревнования · демо"},
-{"title": "Архивный турнир · демо", "href": "/competition?id=demo-archive", "keywords": "демо соревнование турнир 2025", "description": "Демонстрационная запись. Не реальное событие Федерации.", "category": "Соревнования · демо"},
     { title: 'Зал славы', category: 'Раздел Федерации',
       description: 'Легенды кикбоксинга Хакасии и спортивное наследие региона.',
       href: '/hall-of-fame#legends',
@@ -37,14 +28,11 @@
       href: '/history',
       keywords: 'архив фото фотография история фотоколлаж хронология документы протоколы прошлое', popular: true },
     { title: 'Новости Федерации', category: 'Главная страница',
-      description: 'Лента публикаций Федерации. Сейчас представлены демонстрационные материалы.',
+      description: 'Опубликованные новости Федерации.',
       href: '/news', keywords: 'новость новости события публикации' },
     { title: 'Федерация кикбоксинга Республики Хакасия', category: 'Главная страница',
       description: 'Официальный сайт Федерации.',
       href: '/', keywords: 'федерация хакасия абакан главная кикбоксинг' },
-    { title: 'Шумилов', category: 'Именные материалы · в подготовке',
-      description: 'Персональная страница пока не опубликована. Подтверждённые сведения готовятся.',
-      keywords: 'шумилов шумилова шумиловы shumilov shumilova', pending: true },
   ];
 
   const normalize = value => String(value || '').toLocaleLowerCase('ru-RU')
@@ -101,14 +89,14 @@
     return replacement;
   }
 
-  function matches(query) {
+  function matches(query,news=[]) {
     const q = normalize(query);
     if (!q) return ITEMS.filter(item => item.popular);
     const parts = q.split(' ');
-    return ITEMS.map((item, i) => {
+    return [...ITEMS,...news].map((item, i) => {
       const title = normalize(item.title);
       const haystack = normalize([item.title, item.category, item.description, item.keywords].join(' '));
-      if (!parts.every(part => haystack.includes(part))) return null;
+      if (!news.includes(item)&&!parts.every(part => haystack.includes(part))) return null;
       const rank = title === q ? 100 : title.startsWith(q) ? 70 : title.includes(q) ? 50 : 0;
       return { item, i, rank };
     }).filter(Boolean)
@@ -142,12 +130,22 @@
   let previousFocus = null;
   let activeTrigger = null;
 
+  let searchSerial=0, searchTimer;
   function render() {
+    clearTimeout(searchTimer); const serial=++searchSerial;
+    searchTimer=setTimeout(()=>renderSearch(serial),180);
+  }
+  async function renderSearch(serial) {
     const overlay = getOverlay();
     const input = overlay.querySelector('#site-search-input');
     const results = overlay.querySelector('#site-search-results');
     const summary = overlay.querySelector('#site-search-summary');
-    const found = matches(input.value);
+    const query=input.value;
+    let news=[];
+    summary.textContent='Поиск…';results.replaceChildren();
+    try{const responses=await Promise.all(['/api/news/search','/api/people/search','/api/competitions/search'].map(url=>fetch(url+'?q='+encodeURIComponent(query),{cache:'no-store'})));if(responses.some(r=>!r.ok))throw Error();const data=await Promise.all(responses.map(r=>r.json()));news=data.flatMap(d=>d.items);}catch{if(serial!==searchSerial)return;summary.textContent='Не удалось загрузить материалы. Повторите поиск.';results.replaceChildren(...matches(query).map(resultNode));return;}
+    if(serial!==searchSerial)return;
+    const found = matches(query,news);
     summary.textContent = !normalize(input.value) ? 'Популярные разделы'
       : found.length ? `Найдено: ${found.length}` : 'Ничего не найдено';
     if (!found.length) {

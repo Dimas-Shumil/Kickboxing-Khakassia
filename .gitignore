@@ -9,3 +9,10 @@ node_modules/
 *.sqlite
 *.sqlite3
 coverage/
+
+# Закрытые оригиналы и подготовленные файлы новостей
+var/news-media/
+
+var/people-media/
+
+var/competition-media/

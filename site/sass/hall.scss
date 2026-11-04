@@ -2,6 +2,7 @@
 @use './base/variables' as v;
 @use './components/header';
 @use './components/footer';
+@use './components/person-content';
 
 // Hero «Зал славы»: одно широкое полотно на десктопе.
 // Отдельный кадр того же полотна на планшетах и смартфонах.
@@ -363,7 +364,7 @@
 
 
 // Hover легенд: карточка выходит на передний план, снимок плавно меняется.
-// Второе изображение будет доступно по /pankova2.png после добавления файла.
+// Второй снимок поступает из опубликованных данных конкретного человека.
 .hall-legend {
   position: relative;
   z-index: 0;
@@ -380,7 +381,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: url('/site/img/natasha2.png') center top / cover no-repeat;
+      background: none;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.5s ease;
@@ -425,7 +426,7 @@
 
     img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-    &::after { background-image: url('/site/img/natasha2.png'); }
+
   }
 
   &__body { padding: 20px 18px 24px; }
@@ -679,4 +680,17 @@
 }
 .heritage-card--linked:focus-within .heritage-card__photo {
   box-shadow: 0 17px 34px rgba(16,35,56,.2);
+}
+
+// Второй снимок — отдельное изображение конкретной опубликованной карточки.
+.hall-legend__photo--swap .hall-legend__photo-hover {
+ position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;
+ opacity:0;pointer-events:none;transition:opacity .5s ease;
+}
+@media(hover:hover) and (pointer:fine) {
+ .hall-legend:hover .hall-legend__photo--swap .hall-legend__photo-hover { opacity:1; }
+}
+.hall-legend__link:focus-visible + .hall-legend__photo--swap .hall-legend__photo-hover { opacity:1; }
+@media(prefers-reduced-motion:reduce) {
+ .hall-legend__photo--swap .hall-legend__photo-hover { transition:none; }
 }

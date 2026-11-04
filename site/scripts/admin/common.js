@@ -21,7 +21,7 @@ try {const buffer=JSON.parse(sessionStorage.getItem(bufferKey)||'null');if(buffe
 const canGym=state.user.role==='OWNER';
 let dirty=false, saving=false;
 const statuses={active:'Занимается',paused:'Приостановил',finished:'Завершил'};
-const newsStatuses={draft:'Черновик',archived:'Архив'};
+const newsStatuses={draft:'Черновик',published:'Опубликовано',archived:'Архив'};
 const studentName=id=>state.students.find(s=>s.id===id)?.name||'Ученик не найден';
 const sortedPayments=()=>[...state.payments].sort((a,b)=>b.received.localeCompare(a.received));
 const receiptTotal=()=>state.payments.filter(p=>p.received.slice(0,7)===month).reduce((a,p)=>a+p.amount,0);
@@ -45,9 +45,9 @@ const select=(label,name,options,value)=>`<label>${label}<select name="${name}" 
 const formMessage = '<div id="form-message" class="notice notice--error" role="alert"></div>';
 const saveActions=(back)=>`<div class="form-actions"><button class="btn btn--primary" type="submit">Сохранить</button>${btn('Отмена',back)}</div><p class="form-note">Данные сохраняются в SQLite. Контакты и оплаты доступны только владельцу.</p>`;
 const notFound=()=>`<div class="panel"><h2>Запись не найдена</h2><p class="form-note">Запись недоступна или не найдена в базе.</p>${btn('Обзор сайта','/admin/dashboard')}</div>`;
-const title={dashboard:'Обзор сайта',gym:'Управление залом',students:'Ученики',student:'Карточка ученика',payments:'Оплаты',payment:'Внести оплату',news:'Новости','news-edit':'Редактор новости','news-preview':'Предпросмотр новости'}[page];
-const nav=[['dashboard','Обзор','house-door'],['news','Новости','newspaper'],['','Соревнования','trophy'],['','Люди','people'],['','История и архив','clock-history'],['','Медиа и документы','images'],['','Страницы','file-earmark-text'],['gym','Управление залом','activity'],['','Настройки и доступ','gear']];
-const active=page.startsWith('news')?'news':['students','student','payments','payment'].includes(page)?'gym':page;
+const title={dashboard:'Обзор сайта',gym:'Управление залом',students:'Ученики',student:'Карточка ученика',payments:'Оплаты',payment:'Внести оплату',news:'Новости','news-edit':'Редактор новости','news-preview':'Предпросмотр новости',competitions:'Соревнования','competition-edit':'Редактор соревнования',people:'Люди', 'person-edit':'Редактор профиля'}[page];
+const nav=[['dashboard','Обзор','house-door'],['news','Новости','newspaper'],['competitions','Соревнования','trophy'],['people','Люди','people'],['','История и архив','clock-history'],['','Медиа и документы','images'],['','Страницы','file-earmark-text'],['gym','Управление залом','activity'],['','Настройки и доступ','gear']];
+const active=page==='competition-edit'?'competitions':page==='person-edit'?'people':page.startsWith('news')?'news':['students','student','payments','payment'].includes(page)?'gym':page;
 const clone=()=>JSON.parse(JSON.stringify(state));
 const addChange=(next,text)=>{next.changes.push({text,at:new Date().toLocaleString('ru-RU',{timeZone:'Asia/Krasnoyarsk'})});next.changes=next.changes.slice(-50);};
 const readForm=()=>Object.fromEntries(new FormData(form));
@@ -76,11 +76,11 @@ async function persist(next) {
     feedback('Запись сохранена в базе.');return saved;
   }
 document.querySelector('#month')?.addEventListener('change',ev=>{if(ev.target.checkValidity()&&ev.target.value)location.href='/admin/'+page+'?month='+ev.target.value;});
-form=document.querySelector('#student-form,#payment-form,#news-form');
+form=document.querySelector('#student-form,#payment-form,#news-form,#person-form,#competition-form');
 pageModule.bind?.();
 form?.addEventListener('input',()=>{dirty=true;});
 form?.addEventListener('change',()=>{dirty=true;});
-if(params.get('saved'))feedback('Запись сохранена в базе.');
+if(params.get('saved')&&!page.startsWith('news')&&!page.startsWith('competition'))feedback('Запись сохранена в базе.');
 const sidebar=document.querySelector('#sidebar'),open=document.querySelector('#open-menu'),close=document.querySelector('#close-menu');
 const narrow=matchMedia('(max-width: 950px)');
 const syncMenu=()=>{sidebar.inert=narrow.matches&&!sidebar.classList.contains('is-open');};
