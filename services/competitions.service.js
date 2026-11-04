@@ -22,7 +22,7 @@ export function validateCompetition(b,publishing=false){
  d.program=list('program',50,x=>{obj(x);return {time:text(x.time,'Время / дата',100),title:text(x.title,'Пункт программы',300,true),description:text(x.description,'Описание',2000)};});
  const document=x=>{obj(x);const url=media(x.url,'pdf');if(!url)fail('Выберите PDF.');return {title:text(x.title,'Название документа',300,true),url};};
  d.documents=list('documents',20,document);d.results=list('results',20,document);
- d.photos=list('photos',30,x=>{obj(x);const src=media(x.src,'webp');if(!src)fail('Выберите фото.');return {src,alt:text(x.alt,'Alt',1000),caption:text(x.caption,'Подпись',2000),credit:text(x.credit,'Автор',1000),category:text(x.category,'Категория',100)};});
+ d.photos=list('photos',50,x=>{obj(x);const src=media(x.src,'webp');if(!src)fail('Выберите фото.');return {src,alt:text(x.alt,'Alt',1000),caption:text(x.caption,'Подпись',2000),credit:text(x.credit,'Автор',1000),category:text(x.category,'Категория',100)};});
  d.participants=list('participants',100,x=>text(x,'Публичный профиль',100,true));
  if(new Set(d.participants).size!==d.participants.length)fail('Участник повторяется.');
  if(publishing&&(!d.startDate||!d.endDate||!d.location||!d.description||!d.disciplines.length))fail('Для публикации заполните обе даты, место, описание и дисциплины.');

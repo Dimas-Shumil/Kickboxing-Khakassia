@@ -1,0 +1,8 @@
+import {mount} from './common.js';
+mount('site-documents',ctx=>{
+ const {api,e,btn,feedback,table}=ctx;let docs=[];
+ const statuses={draft:'Черновик',published:'Опубликован',archived:'Архив'};
+ const draw=()=>{const query=document.querySelector('#docs-query').value.trim().toLocaleLowerCase('ru'),status=document.querySelector('#docs-status').value;
+ const rows=docs.filter(d=>(!status||status===d.status)&&[d.title,d.category,d.description].join(' ').toLocaleLowerCase('ru').includes(query));document.querySelector('#documents-table').innerHTML=table(['Документ','Категория','Статус','Действия'],rows.map(d=>[e(d.title),e(d.category),e(statuses[d.status]+(d.hasChanges?' · есть правки':'')),btn('Открыть','/admin/site-document-edit?id='+encodeURIComponent(d.id))]),'Таких документов пока нет.');};
+ return {render:()=>`<div class="toolbar">${btn('Создать документ','/admin/site-document-edit',true)}${btn('Медиатека','/admin/site-media')}</div><div class="panel"><p class="form-note">Официальные документы до 12 МиБ, PDF, с датами, источниками и подтверждением владельца. Черновики публично недоступны.</p><div class="form-grid"><label>Поиск<input id="docs-query" type="search" placeholder="Название, категория"></label><label>Статус<select id="docs-status"><option value="">Все</option><option value="draft">Черновики</option><option value="published">Опубликованные</option><option value="archived">Архив</option></select></label></div><div id="documents-table" role="status">Загрузка…</div></div>`,bind:async()=>{document.querySelector('#docs-query').oninput=draw;document.querySelector('#docs-status').onchange=draw;try{docs=(await api('/api/admin/site/documents')).documents;draw();}catch(err){feedback('Ошибка загрузки документов: '+err.message,true);}}};
+});

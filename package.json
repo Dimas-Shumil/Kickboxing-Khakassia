@@ -11,7 +11,8 @@
     "db:deploy": "prisma migrate deploy",
     "build:admin": "sass site/sass/admin.scss site/css/admin.css --no-source-map --style=expanded && sass site/sass/admin.scss site/css/admin.min.css --no-source-map --style=compressed",
     "test": "node --test tests/*.test.cjs",
-    "user:create": "node prisma/create-admin.js"
+    "user:create": "node prisma/create-admin.js",
+    "build:history": "sass site/sass/history.scss site/css/history.css --no-source-map --style=expanded && sass site/sass/history.scss site/css/history.min.css --no-source-map --style=compressed && sass site/sass/history-item.scss site/css/history-item.css --no-source-map --style=expanded && sass site/sass/history-item.scss site/css/history-item.min.css --no-source-map --style=compressed"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",

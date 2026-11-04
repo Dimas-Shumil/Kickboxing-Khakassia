@@ -34,7 +34,7 @@
       record.hidden = !match;
       if (match) count++;
     });
-    document.getElementById('archive-count').textContent = `Карточек-примеров: ${count}`;
+    document.getElementById('archive-count').textContent = `Материалов: ${count}`;
     document.getElementById('archive-empty').hidden = count !== 0;
   }
   if (year && kind) {

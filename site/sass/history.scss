@@ -160,3 +160,17 @@
 .history-photo { border-radius:v.$radius-card; }
 .history-era >img { border-radius:v.$radius-card 0 0 v.$radius-card; }
 @media(max-width:767px) { .history-era >img { border-radius:v.$radius-card v.$radius-card 0 0; } }
+
+// 08.7: multiple SQLite-backed stories and optional imagery.
+.history-story + .history-story { margin-top: clamp(45px,6vw,85px); }
+.history-story__placeholder { min-height:250px; background:#e4e2dd; display:grid;place-items:center; color:#667080; }
+.history-era:not(:has(> img))>div { grid-column:1/-1; }
+.history-people .history-story__text>p {color:#c1cbdb;}
+.history-event__image:empty {min-height:180px;background:#e1e4e9;}
+.history-item-page .history-photo {border-radius:7px;}
+
+.history-story:not(:has(>figure))>.history-story__text { grid-column:1/-1; }
+.history-button,.history-reset,.history-photo-filters button,.history-timeline button {border-radius:7px;}
+
+.history-section--navy .history-story__text>p { color:#c1cbdb; }
+.history-event__image { min-height:190px; background:#e1e4e9; }

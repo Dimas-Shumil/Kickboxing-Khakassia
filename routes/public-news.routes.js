@@ -1,3 +1,5 @@
+import {publishedPage} from '../services/site-content.service.js';
+import {renderHomeSite} from '../services/site-content-render.service.js';
 import {publishedCompetitions} from '../services/competitions.service.js';
 import {renderHomeCompetitions} from '../services/competitions-render.service.js';
 import {publishedPeople} from '../services/people.service.js';
@@ -42,7 +44,7 @@ export default function createPublicNewsRouter({db,config}){
   html=html.replace('<script src="/site/scripts/news-data.js"></script>',()=>'<script>window.FED_NEWS='+data+';</script>');
   if(name==='index')html=html.replace(/<p class="home-feed__news-notice">[\s\S]*?<\/p>/,'').replace(/<div class="home-feed__news-list">[\s\S]*?<\/article><\/div>/,'<div class="home-feed__news-list"><p>Публикаций пока нет.</p></div>');
   if(name==='news')html=html.replace(/<div class="container"><p class="stage-notice">[\s\S]*?<\/p><\/div>/,'').replace('Демонстрационная версия раздела.','Опубликованные материалы Федерации.').replace('Подтверждённые новости пока не предоставлены.','');
-  if(name==='index'){html=renderHomePeople(html,await publishedPeople(db));html=renderHomeCompetitions(html,await publishedCompetitions(db));}
+  if(name==='index'){html=renderHomePeople(html,await publishedPeople(db));html=renderHomeCompetitions(html,await publishedCompetitions(db));html=renderHomeSite(html,await publishedPage(db,'home'));}
   res.type('html').send(html);
  }));return router;
 }

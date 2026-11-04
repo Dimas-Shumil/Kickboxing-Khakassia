@@ -8,9 +8,9 @@
 
   const ITEMS = [
 {"title": "Соревнования", "href": "/competitions", "keywords": "календарь турниры предстоящие прошедшие результаты", "description": "Опубликованные соревнования, программа, документы и результаты.", "category": "Раздел Федерации", "popular": true},
-{"title": "О Федерации", "href": "/federation", "keywords": "руководство деятельность клубы секции", "description": "Раздел о деятельности Федерации в процессе наполнения.", "category": "Раздел Федерации", "popular": true},
-{"title": "Контакты", "href": "/contacts", "keywords": "телефон почта адрес связь контакты", "description": "Официальные контакты ожидают подтверждения.", "category": "Раздел Федерации", "popular": true},
-{"title": "Документы", "href": "/documents", "keywords": "устав положение правила разряды протоколы документы", "description": "Категории документов. Реальные файлы пока не предоставлены.", "category": "Раздел Федерации", "popular": true},
+{"title": "О Федерации", "href": "/federation", "keywords": "руководство деятельность клубы секции", "description": "Направления работы, руководство и клубы Федерации.", "category": "Раздел Федерации", "popular": true},
+{"title": "Контакты", "href": "/contacts", "keywords": "телефон почта адрес связь контакты", "description": "Телефон, почта, адрес и проверенные каналы связи.", "category": "Раздел Федерации", "popular": true},
+{"title": "Документы", "href": "/documents", "keywords": "устав положение правила разряды протоколы документы", "description": "Опубликованные документы Федерации в PDF.", "category": "Раздел Федерации", "popular": true},
     { title: 'Зал славы', category: 'Раздел Федерации',
       description: 'Легенды кикбоксинга Хакасии и спортивное наследие региона.',
       href: '/hall-of-fame#legends',
@@ -93,7 +93,7 @@
     const q = normalize(query);
     if (!q) return ITEMS.filter(item => item.popular);
     const parts = q.split(' ');
-    return [...ITEMS,...news].map((item, i) => {
+    return [...news,...ITEMS.filter(item=>!news.some(x=>x.href===item.href))].map((item, i) => {
       const title = normalize(item.title);
       const haystack = normalize([item.title, item.category, item.description, item.keywords].join(' '));
       if (!news.includes(item)&&!parts.every(part => haystack.includes(part))) return null;
@@ -143,7 +143,7 @@
     const query=input.value;
     let news=[];
     summary.textContent='Поиск…';results.replaceChildren();
-    try{const responses=await Promise.all(['/api/news/search','/api/people/search','/api/competitions/search'].map(url=>fetch(url+'?q='+encodeURIComponent(query),{cache:'no-store'})));if(responses.some(r=>!r.ok))throw Error();const data=await Promise.all(responses.map(r=>r.json()));news=data.flatMap(d=>d.items);}catch{if(serial!==searchSerial)return;summary.textContent='Не удалось загрузить материалы. Повторите поиск.';results.replaceChildren(...matches(query).map(resultNode));return;}
+    try{const responses=await Promise.all(['/api/news/search','/api/people/search','/api/competitions/search','/api/history/search','/api/site/search'].map(url=>fetch(url+'?q='+encodeURIComponent(query),{cache:'no-store'})));if(responses.some(r=>!r.ok))throw Error();const data=await Promise.all(responses.map(r=>r.json()));news=data.flatMap(d=>d.items);}catch{if(serial!==searchSerial)return;summary.textContent='Не удалось загрузить материалы. Повторите поиск.';results.replaceChildren(...matches(query).map(resultNode));return;}
     if(serial!==searchSerial)return;
     const found = matches(query,news);
     summary.textContent = !normalize(input.value) ? 'Популярные разделы'

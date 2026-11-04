@@ -8,3 +8,6 @@
 // Уникальное оформление страницы contacts; общий каркас в info-layout.
 #contact-details .stage-panel { border-top:3px solid v.$color-navy; }
 #questions .stage-links { margin-bottom:32px; }
+
+.site-map { margin:32px 0 0; iframe { display:block; width:100%;min-height:340px;border:1px solid #cdd3de;border-radius:7px;margin-bottom:16px; } }
+@media(max-width:600px) { .site-map iframe { min-height:260px; } }

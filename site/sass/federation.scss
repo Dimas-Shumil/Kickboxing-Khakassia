@@ -8,3 +8,8 @@
 // Уникальное оформление страницы federation; общий каркас в info-layout.
 
 #leadership .stage-empty { border-left:4px solid v.$color-red; }
+
+.federation-leader { margin:22px 0 0;
+ img { display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:7px; }
+ figcaption { color:#657087;font-size:12px;margin-top:6px; }
+}

@@ -24,7 +24,7 @@ test('08.6: соревнования, PDF, публикации, файлы и �
   for(const route of ['/admin/competition-edit?id=','/admin/competition-edit?id[]=x','/admin/competition-edit?id=missing','/admin/competition-preview'])assert.equal((await owner.request(route)).status,404);
   assert.deepEqual((await(await anon.request('/api/competitions')).json()).competitions,[]);assert.ok(!(await(await anon.request('/')).text()).includes('Демонстрационный календарь'));
   assert.equal((await save(draft)).status,201);
-  for(const change of [{title:''},{endDate:'2027-01-01'},{startDate:'2027-02-30'},{eventStatus:'published'},{documents:[{title:'bad',url:'javascript:alert(1)'}]},{participants:['private-student']},{photos:Array(31).fill({src:'/media/competitions/'+ 'a'.repeat(48)+'.webp'})},{program:[null]},{disciplines:['x'.repeat(151)]}])assert.equal((await save({...draft,...change,version:competition.version})).status,422);
+  for(const change of [{title:''},{endDate:'2027-01-01'},{startDate:'2027-02-30'},{eventStatus:'published'},{documents:[{title:'bad',url:'javascript:alert(1)'}]},{participants:['private-student']},{photos:Array(51).fill({src:'/media/competitions/'+ 'a'.repeat(48)+'.webp'})},{program:[null]},{disciplines:['x'.repeat(151)]}])assert.equal((await save({...draft,...change,version:competition.version})).status,422);
   assert.equal((await editor.json('/api/admin/competitions/'+competition.id,'PATCH',{...draft,version:competition.version},{origin:'https://evil.invalid'})).status,403);
   assert.equal((await editor.json('/api/admin/competitions/'+competition.id,'PATCH',{...draft,version:competition.version},{'x-csrf-token':'bad'})).status,403);
   assert.equal((await action('publish',editor)).status,403);assert.deepEqual(await search('Турнир'),[]);
@@ -49,6 +49,9 @@ test('08.6: соревнования, PDF, публикации, файлы и �
  });
  await t.test('Сохранение файлов, закрытый предпросмотр и блокировка удаления используемых файлов',async()=>{
   assert.equal((await save({...competition,image:src,photos:[{src,alt:'Фото',caption:'Подпись',credit:'Автор',category:'Награждение'}],documents:[{title:'Положение',url:pdf}],results:[{title:'Протокол',url:pdf}],resultsText:'ИТОГИ ТУРНИРА',version:competition.version})).status,200);
+  const fifty=Array.from({length:50},(_,i)=>({src,alt:'Фото '+(i+1),caption:'Подпись '+(i+1),credit:'Автор',category:'Награждение'}));
+  assert.equal((await save({...competition,photos:fifty,version:competition.version})).status,200);assert.equal(competition.photos.length,50);
+  const tooMany=await save({...competition,photos:[...fifty,fifty[0]],version:competition.version});assert.equal(tooMany.status,422);assert.match((await tooMany.json()).message,/максимум 50/);
   assert.equal((await anon.request('/admin/competition-preview?id='+competition.id)).status,303);
   const r=await editor.request('/admin/competition-preview?id='+competition.id);assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-store');const html=await r.text();assert.ok(html.includes('/api/admin/competitions/media/'));assert.ok(html.includes('&lt;script&gt;window.XSS=1&lt;/script&gt;'));assert.ok(html.includes('Турнир &lt;script&gt; $&'));assert.ok(!html.includes('<script>window.XSS=1</script>'));assert.ok(html.includes('competition.min.css'));
   assert.equal((await remove(src)).status,409);assert.equal((await remove(pdf)).status,409);

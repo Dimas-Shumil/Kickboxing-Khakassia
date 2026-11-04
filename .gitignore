@@ -16,3 +16,6 @@ var/news-media/
 var/people-media/
 
 var/competition-media/
+
+# 08.7: архивные оригиналы (не публичная директория)
+var/history-media/

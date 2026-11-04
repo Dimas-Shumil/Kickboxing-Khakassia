@@ -6,12 +6,13 @@ function createAdminPagesRouter({db,config,requireAuth}){
  const send=(res,file,status=200)=>res.status(status).sendFile(path.join(dir,file+'.html'));
  router.get('/login',(_req,res)=>send(res,'login'));
  router.get('/',requireAuth.page,(_req,res)=>res.redirect(302,'/admin/dashboard'));
- const pages=['dashboard','gym','students','student','payments','payment','news','news-edit','news-preview','people','person-edit','competitions','competition-edit'];
+ const pages=['dashboard','gym','students','student','payments','payment','news','news-edit','news-preview','people','person-edit','competitions','competition-edit','history','history-edit','site-pages','site-page-edit','site-documents','site-document-edit','site-media'];
  for(const page of pages)router.get('/'+page,requireAuth.page,asyncHandler(async(req,res)=>{
   if(['gym','students','student','payments','payment'].includes(page)&&req.user.role!=='OWNER')return send(res,'forbidden',403);
+  if(page==='site-page-edit'&&!['home','federation','contacts'].includes(req.query.key))return send(res,'not-found',404);
   if(page==='news-preview'&&(!req.query.id||req.query.id==='working'))return send(res,'not-found',404);
-  if(['person-edit','competition-edit'].includes(page)&&Object.hasOwn(req.query,'id')&&(typeof req.query.id!=='string'||!req.query.id))return send(res,'not-found',404);
-  const model=['student','payment','news-edit','news-preview','person-edit','competition-edit'].includes(page)?(page==='competition-edit'?'competition':page==='person-edit'?'person':page.startsWith('news')?'news':page):null;
+  if(['person-edit','competition-edit','history-edit','site-document-edit'].includes(page)&&Object.hasOwn(req.query,'id')&&(typeof req.query.id!=='string'||!req.query.id))return send(res,'not-found',404);
+  const model=['student','payment','news-edit','news-preview','person-edit','competition-edit','history-edit','site-document-edit'].includes(page)?(page==='site-document-edit'?'federationDocument':page==='history-edit'?'historyMaterial':page==='competition-edit'?'competition':page==='person-edit'?'person':page.startsWith('news')?'news':page):null;
   if(model&&req.query.id&&(typeof req.query.id!=='string'||!await db[model].findUnique({where:{id:req.query.id},select:{id:true}})))return send(res,'not-found',404);
   return send(res,page);
  }));

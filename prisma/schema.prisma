@@ -162,3 +162,59 @@ model CompetitionAsset {
  kind String
  createdAt DateTime @default(now())
 }
+
+// 08.7 История: редакционная копия и утвержденный публичный снимок независимы.
+model HistoryMaterial {
+  id               String   @id @default(cuid())
+  title            String
+  status           String   @default("draft")
+  payload          String
+  publishedPayload String?
+  slug             String?  @unique
+  version          Int      @default(1)
+  publishedOn      DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  assets           HistoryAsset[]
+}
+
+model HistoryAsset {
+  id         String @id
+  materialId String
+  material   HistoryMaterial @relation(fields: [materialId], references: [id], onDelete: Restrict)
+  size       Int
+  createdAt  DateTime @default(now())
+  @@index([materialId])
+}
+
+// 08.8 Публичные страницы: рабочие данные отдельно от снимка, утверждённого владельцем.
+model SitePage {
+  key              String   @id
+  payload          String
+  publishedPayload String?
+  version          Int      @default(1)
+  publishedOn      DateTime?
+  updatedAt        DateTime @updatedAt
+}
+
+model FederationDocument {
+  id               String   @id @default(cuid())
+  title            String
+  status           String   @default("draft")
+  payload          String
+  publishedPayload String?
+  version          Int      @default(1)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  publishedOn      DateTime?
+}
+
+// В отличие от файлов новостей/спортсменов, медиа этих разделов принадлежат странице или документу.
+model SiteAsset {
+  id         String   @id
+  ownerKey   String
+  kind       String
+  size       Int
+  createdAt  DateTime @default(now())
+  @@index([ownerKey])
+}

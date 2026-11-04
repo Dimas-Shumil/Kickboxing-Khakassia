@@ -1,0 +1,50 @@
+@use './base/base';
+@use './base/variables' as v;
+@use './components/header';
+@use './components/footer';
+
+// 08.7. Independent history detail stylesheet; no main.scss imports.
+.history-item-page {
+  background:#f4f2ee;color:#111d37;
+  .main {min-height:60vh;}
+  [hidden]{display:none!important;}
+  h1,h2,h3{font-family:v.$font-display;font-weight:500;line-height:1.12;}
+  p{line-height:1.8;}
+  button,a {border-radius:7px;}
+  .history-item-hero{padding:clamp(145px,14vw,190px) 0 clamp(65px,7vw,110px);color:white;background:linear-gradient(105deg,#0b1528eF,#122c49e5),url('/site/img/hall-archive.webp') center / cover;
+    h1{max-width:1060px;font-size:clamp(46px,6vw,94px);overflow-wrap:anywhere;text-transform:uppercase;margin:22px 0;}
+    p{max-width:840px;color:#d5dbe6;font-size:17px;}
+  }
+  .history-item-kicker{text-transform:uppercase;letter-spacing:.12em;font-size:13px!important;color:#dbc49d!important;}
+  .history-item-crumbs{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:#d1d9e6; a{text-decoration:underline;}}
+  .history-item-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:clamp(30px,5vw,85px);padding-block:clamp(50px,7vw,95px);align-items:start;}
+  .history-item-article{min-width:0;}
+  .history-item-cover{margin:0 0 44px; img{width:100%;max-height:620px;object-fit:cover;border-radius:7px;}figcaption{font-size:12px;color:#667185;margin-top:12px;}}
+  .history-item-body{font-size:17px;color:#28394c;white-space:normal;p{margin:0 0 24px;overflow-wrap:anywhere;}}
+  .history-item-aside{background:#fff;border:1px solid #dadee3;border-radius:7px;padding:29px;min-width:0;
+    h2{font-size:27px;margin:0 0 22px;}h3{font-size:22px;margin:30px 0 15px;}dl{margin:0;dt{font-size:12px;color:#727c8a;}dd{margin:5px 0 16px;font-size:15px;}}ul{padding-left:20px;li{margin-bottom:12px;overflow-wrap:anywhere;}}a{display:block;color:#b2233f;text-decoration:underline;margin-bottom:10px;overflow-wrap:anywhere;}p{font-size:13px;color:#7a8190;}}
+  .history-item-gallery{padding:35px 0 10px;h2{font-size:36px;}}
+  .history-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
+  .history-photo{aspect-ratio:1;position:relative;display:block;width:100%;padding:0;border:0;overflow:hidden;background:#111d37;cursor:pointer;text-align:left;
+    img{width:100%;height:100%;object-fit:cover;transition:transform .25s;}
+    &:hover img{transform:scale(1.035);} &::after{content:'';position:absolute;inset:40% 0 0;background:linear-gradient(transparent,#08162cce);pointer-events:none;}
+    &__type,&__caption{position:absolute;z-index:1;left:12px;right:12px;color:white;}
+    &__type{top:12px;font-size:10px;text-transform:uppercase;}
+    &__caption{bottom:13px;font:500 19px v.$font-display;}
+  }
+  .profile-gallery__more-wrap{text-align:center;margin-top:22px;}
+  .history-item-back{display:inline-block;background:#ae2340;color:#fff!important;border:none;text-decoration:none!important;padding:13px 20px;cursor:pointer;font-size:13px;font-weight:600;}
+  .history-item-preview{background:#eed9ac;color:#111d37;padding:14px;text-align:center;font-weight:600;position:relative;z-index:2000;}
+  .profile-lightbox{position:fixed;inset:0;z-index:2500;display:flex;align-items:center;justify-content:center;padding:20px;color:white;
+    &__backdrop{position:absolute;inset:0;background:#050b15f5;}
+    &__dialog{position:relative;width:min(1300px,100%);max-height:100%;display:flex;flex-direction:column;}
+    &__top{display:flex;align-items:center;justify-content:space-between;font-size:12px;}
+    button{background:#111d37;border:1px solid #ffffff70;color:#fff;min-width:46px;min-height:46px;cursor:pointer;}
+    &__stage{position:relative;display:flex;align-items:center;gap:12px;min-height:0;touch-action:pan-y;}
+    &__media{min-width:0;width:100%;display:flex;align-items:center;justify-content:center;img{max-height:70svh;max-width:100%;width:auto;height:auto;object-fit:contain;}}
+    &__caption{text-align:center;font-size:13px;}
+  }
+}
+.athlete-lightbox-open{overflow:hidden;}
+@media(max-width:900px){.history-item-page {.history-item-layout{grid-template-columns:1fr;}.history-item-aside{grid-row:2;}.history-gallery{grid-template-columns:repeat(2,minmax(0,1fr));}}}
+@media(max-width:480px){.history-item-page {.history-item-hero{padding-top:125px;}.history-gallery{gap:9px;}.history-photo__caption{font-size:15px;}}}

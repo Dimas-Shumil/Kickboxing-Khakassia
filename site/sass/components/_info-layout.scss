@@ -15,7 +15,7 @@
 .stage-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
 .stage-panel { background:white; border:1px solid #d3d7dd; padding:30px; h3 { font:500 28px/1.2 v.$font-display; } p { color:v.$color-muted; } &__number { display:block; color:v.$color-red; font:500 16px v.$font-display; margin-bottom:24px; } }
 .stage-status { display:inline-block; border:1px solid #ccd3de; padding:6px 10px; font-size:12px; font-weight:600; background:#f6f7f9; color:v.$color-navy; }
-.stage-button { display:inline-flex; justify-content:center; align-items:center; padding:14px 20px; background:v.$color-red; color:white; border:1px solid transparent; font-weight:600; font-size:14px; transition:box-shadow .2s; &:hover { box-shadow:0 6px 20px #bc202b40; } &--outline { background:white; color:v.$color-navy; border-color:#b7bfcc; } }
+.stage-button { border-radius:7px; display:inline-flex; justify-content:center; align-items:center; padding:14px 20px; background:v.$color-red; color:white; border:1px solid transparent; font-weight:600; font-size:14px; transition:box-shadow .2s; &:hover { box-shadow:0 6px 20px #bc202b40; } &--outline { background:white; color:v.$color-navy; border-color:#b7bfcc; } }
 .stage-links { display:flex; flex-wrap:wrap; gap:16px; margin-top:28px; }
 .stage-empty { border:1px dashed #a4adbc; padding:32px; background:#f7f8fa; h3 { font:500 28px v.$font-display; } p { max-width:720px; color:v.$color-muted; } }
 .stage-page :is(a,button,select):focus-visible { outline:3px solid #dc3545; outline-offset:5px; }
