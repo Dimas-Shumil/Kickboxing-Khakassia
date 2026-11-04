@@ -1,5 +1,6 @@
 // Независимый entrypoint. Не импортирует стили публичных страниц.
 @use './base/variables' as v;
+@use './components/buttons';
 .admin {
   --navy: #121e36; --red: #bf1932; --muted: #5d687a; --line: #e2e5eb;
   margin: 0; color: var(--navy); background: #f8f9fb; font: 14px/1.55 'Inter', Arial, sans-serif;
@@ -71,3 +72,5 @@
 .admin .topbar__right { min-width:0; }
 .admin .topbar__right > span { max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 @media(max-width:600px) { .admin .topbar__right > span { max-width:100px; } }
+
+.admin .login-panel [data-password-toggle] { margin-bottom:14px; }

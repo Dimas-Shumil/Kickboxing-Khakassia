@@ -3,7 +3,8 @@
 @use './components/header';
 @use './components/footer';
 @use './components/info-layout';
+@use './components/page-hero';
 
 // Уникальное оформление страницы federation; общий каркас в info-layout.
-.stage-hero h1 { max-width:1100px; }
+
 #leadership .stage-empty { border-left:4px solid v.$color-red; }

@@ -3,6 +3,7 @@
 @use './components/header';
 @use './components/footer';
 @use './components/info-layout';
+@use './components/page-hero';
 
 .events-filters { display:flex; gap:20px; align-items:end; flex-wrap:wrap; padding:24px; background:#eef0f3; label { display:grid; gap:8px; font-size:13px; font-weight:600; flex:1 1 180px; } select { min-width:0; width:100%; padding:13px; border:1px solid #a9b2c0; background:white; color:v.$color-navy; } }
 .events-group { margin-top:48px; h3 { font:500 32px v.$font-display; } }

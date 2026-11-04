@@ -20,7 +20,7 @@
    const heading=document.createElement('h3'); heading.textContent=label; group.append(heading);
    const grid=document.createElement('div'); grid.className='stage-grid'; group.append(grid);
    subset.forEach(x=>{
-    const a=document.createElement('a'); a.className='event-card'; a.href='/public/competition.html?id='+encodeURIComponent(x.id);
+    const a=document.createElement('a'); a.className='event-card'; a.href='/competition?id='+encodeURIComponent(x.id);
     const img=document.createElement('img'); img.className='event-card__image'; img.src=x.image; img.alt=x.imageCaption; img.loading='lazy'; a.append(img);
     const body=document.createElement('div'); body.className='event-card__body';
     for (const [tag,cls,text] of [['span','event-card__demo',x.isDemo?'Демонстрационная запись':'Соревнование Федерации'],['h4','',x.title],['p','',date(x.startDate)+' — '+date(x.endDate)+' · '+(x.isDemo?'условные даты':'')],['p','',x.location],['span','stage-status',key==='upcoming'?'Предстоящее':'Завершено'],['span','event-card__open','Подробнее о соревновании']]) { const el=document.createElement(tag); el.className=cls; el.textContent=text; body.append(el); }

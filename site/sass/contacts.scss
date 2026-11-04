@@ -3,6 +3,7 @@
 @use './components/header';
 @use './components/footer';
 @use './components/info-layout';
+@use './components/page-hero';
 
 // Уникальное оформление страницы contacts; общий каркас в info-layout.
 #contact-details .stage-panel { border-top:3px solid v.$color-navy; }

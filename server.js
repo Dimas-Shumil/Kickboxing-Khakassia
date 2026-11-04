@@ -1,12 +1,12 @@
-const {config}=require('./server/config');
-const {PrismaClient}=require('@prisma/client');
-const {createApp}=require('./server/app');
+import 'dotenv/config';
+import prisma from './lib/prisma.js';
+import {readConfig} from './config/env.js';
+import {createApp} from './lib/app.js';
 async function main(){
- const cfg=config();const db=new PrismaClient();
- await db.$connect();await db.user.count();
- const app=createApp(db,cfg);
- const server=app.listen(cfg.port,cfg.host,()=>console.log(`Federation: ${cfg.origin}\nАдминка: ${cfg.origin}/admin`));
- async function stop(){server.close(async()=>{app.locals.sessionStore.close();await db.$disconnect();process.exit(0);});}
+ const config=readConfig();await prisma.$connect();await prisma.admin.count();await prisma.adminSession.count();
+ const app=createApp(prisma,config);
+ const server=app.listen(config.port,config.host,()=>console.log(`Federation: ${config.origin}\nАдминка: ${config.origin}/admin`));
+ const stop=()=>server.close(async()=>{await prisma.$disconnect();process.exit(0);});
  process.on('SIGINT',stop);process.on('SIGTERM',stop);
 }
-main().catch(err=>{console.error('Запуск остановлен:',err.message);process.exitCode=1;});
+main().catch(error=>{console.error('Запуск остановлен:',error.message);process.exitCode=1;});

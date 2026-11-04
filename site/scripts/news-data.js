@@ -29,7 +29,7 @@ window.FED_NEWS = [
     "related": [
       {
         "title": "Календарь соревнований",
-        "url": "/public/competitions.html"
+        "url": "/competitions"
       }
     ],
     "source": null
@@ -57,7 +57,7 @@ window.FED_NEWS = [
     "related": [
       {
         "title": "История и архив",
-        "url": "/public/history.html"
+        "url": "/history"
       }
     ],
     "source": null
@@ -85,7 +85,7 @@ window.FED_NEWS = [
     "related": [
       {
         "title": "Каталог тренеров",
-        "url": "/public/coaches.html"
+        "url": "/coaches"
       }
     ],
     "source": null
@@ -129,7 +129,7 @@ window.FED_NEWS = [
     "related": [
       {
         "title": "Соревнования",
-        "url": "/public/competitions.html"
+        "url": "/competitions"
       }
     ],
     "source": null
@@ -157,7 +157,7 @@ window.FED_NEWS = [
     "related": [
       {
         "title": "Документы Федерации",
-        "url": "/public/documents.html"
+        "url": "/documents"
       }
     ],
     "source": null
@@ -185,7 +185,7 @@ window.FED_NEWS = [
     "related": [
       {
         "title": "О Федерации",
-        "url": "/public/federation.html"
+        "url": "/federation"
       }
     ],
     "source": null

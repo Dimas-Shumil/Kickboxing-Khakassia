@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Admin {
   id           String   @id @default(cuid())
   login        String   @unique
   name         String
@@ -15,13 +15,18 @@ model User {
   role         String
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
+  lastLoginAt  DateTime?
+  sessions     AdminSession[]
+  @@map("User")
 }
 
-model Session {
+// Таблица прежних express-session не используется; сохраняется для безопасного обновления.
+model LegacySession {
   sid     String   @id
   data    String
   expires DateTime
   @@index([expires])
+  @@map("Session")
 }
 
 model Student {
@@ -85,4 +90,19 @@ model AuditLog {
   action    String
   createdAt DateTime @default(now())
   @@index([scope, createdAt])
+}
+
+model AdminSession {
+  id            String @id @default(cuid())
+  adminId       String
+  tokenHash     String @unique
+  csrfTokenHash String
+  expiresAt     DateTime
+  lastUsedAt    DateTime @default(now())
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+  admin         Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  @@index([adminId])
+  @@index([expiresAt])
 }

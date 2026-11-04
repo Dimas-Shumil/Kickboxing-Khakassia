@@ -1,4 +1,13 @@
 @charset "UTF-8";
+button,
+input[type=button], input[type=submit], input[type=reset],
+.btn, .stage-button, .history-button, .error-button,
+.hero__button, .family-cta__button, .hall-of-fame__button, .hall-archive__button,
+.profile-gallery__more, .coach-gallery__more, .coach-profile-gallery__more,
+[role=button] {
+  border-radius: 7px !important;
+}
+
 *,
 *::before,
 *::after {
