@@ -44,6 +44,7 @@ model Student {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   payments  Payment[]
+  attendance AttendanceRecord[]
 }
 
 model Payment {
@@ -217,4 +218,52 @@ model SiteAsset {
   size       Int
   createdAt  DateTime @default(now())
   @@index([ownerKey])
+}
+
+// Этап 08.9: один зал. Историческое поле Student.group остаётся без миграции данных.
+// Совпадение названия группы связывает ученика со справочником; переименование группы
+// запрещено, чтобы сохранять такую привязку без изменения старых записей.
+model TrainingGroup {
+  id          String @id @default(cuid())
+  name        String @unique
+  trainer     String @default("")
+  description String @default("")
+  status      String @default("active")
+  version     Int @default(1)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  sessions    GymSession[]
+}
+
+model GymSession {
+  id        String @id @default(cuid())
+  groupId   String?
+  group     TrainingGroup? @relation(fields:[groupId],references:[id],onDelete:Restrict)
+  title     String
+  heldOn    String
+  startsAt  String
+  endsAt    String
+  trainer   String @default("")
+  note      String @default("")
+  status    String @default("planned")
+  version   Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  attendance AttendanceRecord[]
+  @@index([heldOn])
+  @@index([groupId,heldOn])
+}
+
+model AttendanceRecord {
+  id        String @id @default(cuid())
+  sessionId String
+  studentId String
+  session   GymSession @relation(fields:[sessionId],references:[id],onDelete:Restrict)
+  student   Student @relation(fields:[studentId],references:[id],onDelete:Restrict)
+  status    String
+  note      String @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([sessionId,studentId])
+  @@index([studentId])
 }

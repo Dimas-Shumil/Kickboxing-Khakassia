@@ -968,3 +968,55 @@ input[type=button], input[type=submit], input[type=reset],
 .admin .cms-row{min-width:0;border:1px solid #dbe1e9;border-radius:7px;padding:20px;margin-block:16px}.admin .cms-row legend{padding-inline:8px;font-size:16px;font-weight:600}.admin .cms-row .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.admin #site-page-form h2,.admin #site-document-form h2{margin-top:28px}.admin #site-page-form input[type=file],.admin #site-document-form input[type=file]{margin-block:12px}.admin .cms-row .form-grid{min-width:0}@media(max-width:650px){.admin .cms-row{padding:12px}.admin #site-page-form .form-actions,.admin #site-document-form .form-actions{display:flex;flex-direction:column;align-items:stretch}}
 
 .admin .cms-thumb{display:inline-block;vertical-align:middle;max-width:82px;width:82px;height:58px;object-fit:cover;border-radius:7px;margin-right:8px}
+
+/* 08.9 — учёт одного зала */
+.admin .tabs { overflow-x:auto; width:100%; max-width:100%; gap:clamp(14px,2vw,28px); white-space:nowrap; }
+.admin .tabs a { flex:0 0 auto; }
+.admin .gym-shortcuts { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:16px 0 24px; }
+.admin .gym-shortcuts .btn { min-height:42px; }
+.admin .stats .stat:nth-child(3n) { border-right:0; }
+.admin .gym-subline { display:block; margin-top:5px; color:var(--muted); font-size:12px; line-height:1.45; }
+.admin[data-page='attendance'] .responsive-table select { min-width:170px; }
+.admin[data-page='attendance'] .responsive-table input { min-width:150px; }
+.admin #attendance-editor .table-wrap { margin-top:18px; }
+.admin #attendance-editor td { vertical-align:middle; }
+.admin #attendance-editor .form-actions { margin-top:12px; }
+@media(max-width:650px) { .admin .gym-shortcuts { display:grid;grid-template-columns:repeat(2,minmax(0,1fr)); } .admin .gym-shortcuts .btn { white-space:normal;justify-content:center;text-align:center; } .admin #attendance-editor .responsive-table td { grid-template-columns:minmax(0,1fr);gap:6px; } .admin #attendance-editor .responsive-table td::before { font-weight:600; } .admin #attendance-editor .responsive-table td input,.admin #attendance-editor .responsive-table td select { min-width:0;max-width:100%; } }
+
+
+/* 08.10 Аналитика и журнал действий. Скомпилировано из site/sass/admin.scss. */
+.admin .analytics-toolbar {align-items:center;}
+.admin .analytics-toolbar > p {max-width:790px; margin:0;}
+.admin .analytics-toolbar > label {width:min(240px,100%);}
+.admin .analytics-heading {display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:0 0 14px;}
+.admin .analytics-heading h2 {margin:0;}
+.admin .analytics-section {margin-top:24px;}
+.admin .analytics-cards {display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-bottom:24px;}
+.admin .analytics-card {display:flex; flex-direction:column; gap:4px; min-width:0; padding:20px 22px; color:var(--navy); background:#fff; border:1px solid var(--line); border-radius:9px; text-decoration:none; transition:box-shadow .2s ease,transform .2s ease;}
+.admin .analytics-card:hover {box-shadow:0 5px 20px #13203817; transform:translateY(-2px);}
+.admin .analytics-card__heading {display:flex; justify-content:space-between; gap:12px; font-size:16px; font-weight:600;}
+.admin .analytics-card__heading .icon {opacity:.65;}
+.admin .analytics-card > strong {font-size:36px; font-weight:700; line-height:1.15; margin-top:12px;}
+.admin .analytics-card > span:not(.analytics-card__heading) {color:var(--muted);}
+.admin .analytics-card__counts {display:grid; gap:7px; margin-top:18px; padding-top:14px; border-top:1px solid var(--line); font-size:12px;}
+.admin .analytics-card__counts span {display:flex; justify-content:space-between; gap:10px;}
+.admin .analytics-activity-counts {display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px 18px;}
+.admin .analytics-activity-counts span {display:flex; align-items:baseline; justify-content:space-between; gap:8px; padding:12px 14px; border-radius:7px; background:#f5f6f9;}
+.admin .analytics-bars {display:grid; gap:13px; margin-top:20px;}
+.admin .analytics-bars__row {display:grid; grid-template-columns:54px minmax(0,1fr) minmax(70px,max-content); align-items:center; gap:12px; font-size:12px;}
+.admin .analytics-bars__track {height:18px; border-radius:7px; background:#edf0f5; overflow:hidden;}
+.admin .analytics-bars__fill {height:100%; background:#bf1932; border-radius:7px; min-width:0;}
+.admin .analytics-bars__row strong {font-size:12px; text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums;}
+.admin .analytics-filters {margin-bottom:22px;}
+.admin .analytics-filters .filters {margin:18px 0 0; align-items:end;}
+.admin .analytics-filters .filters .btn {min-width:112px;}
+.admin .analytics-pagination {display:flex; align-items:center; justify-content:flex-end; gap:16px; margin:20px 0 0;}
+@media(max-width:1250px) {.admin .analytics-cards {grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:1250px) {.admin .analytics-activity-counts {grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:650px) {.admin .analytics-cards {grid-template-columns:minmax(0,1fr);}}
+@media(max-width:650px) {.admin .analytics-activity-counts {grid-template-columns:minmax(0,1fr);}}
+@media(max-width:650px) {.admin .analytics-bars__row {grid-template-columns:45px minmax(0,1fr) 70px; gap:8px;}}
+@media(max-width:650px) {.admin .analytics-filters .filters {display:grid; grid-template-columns:minmax(0,1fr);}}
+@media(max-width:650px) {.admin .analytics-pagination {justify-content:center; flex-wrap:wrap;}}
+@media(prefers-reduced-motion:reduce) {.admin .analytics-card {transition:none;}}
+@media(prefers-reduced-motion:reduce) {.admin .analytics-card:hover {transform:none;}}

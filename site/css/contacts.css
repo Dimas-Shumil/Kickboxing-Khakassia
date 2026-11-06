@@ -1163,6 +1163,7 @@ body.site-search-open {
 }
 
 .stage-button {
+  border-radius: 7px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -1321,6 +1322,21 @@ body.site-search-open {
 #questions .stage-links {
   margin-bottom: 32px;
 }
-.stage-button{border-radius:7px}
 
-.site-map{margin:32px 0 0}.site-map iframe{display:block;width:100%;min-height:340px;border:1px solid #cdd3de;border-radius:7px;margin-bottom:16px}@media(max-width:600px){.site-map iframe{min-height:260px}}
+.site-map {
+  margin: 32px 0 0;
+}
+.site-map iframe {
+  display: block;
+  width: 100%;
+  min-height: 340px;
+  border: 1px solid #cdd3de;
+  border-radius: 7px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 600px) {
+  .site-map iframe {
+    min-height: 260px;
+  }
+}

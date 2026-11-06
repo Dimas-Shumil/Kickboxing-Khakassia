@@ -1163,6 +1163,7 @@ body.site-search-open {
 }
 
 .stage-button {
+  border-radius: 7px;
   display: inline-flex;
   justify-content: center;
   align-items: center;

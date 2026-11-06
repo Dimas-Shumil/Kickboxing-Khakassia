@@ -1,11 +1,20 @@
 import {mount} from './common.js';
 function createPage(ctx){
- const {KEY,uid,params,now,month,e,money,date,period,icon,btn,api,state,bufferKey,canGym,statuses,newsStatuses,studentName,sortedPayments,receiptTotal,withoutPayment,countBadge,table,paymentRows,stats,tabs,monthInput,gymToolbar,field,area,select,formMessage,saveActions,notFound,feedback,persist,clone,addChange,cents,readForm}=ctx;
- const page="gym";
- const setDirty=ctx.setDirty;
- function gym(){return gymToolbar()+stats([['Действующих учеников',state.students.filter(s=>s.status==='active').length,'people'],['Получено за '+period(month),money(receiptTotal()),'cash-coin'],['Без платежей за период',withoutPayment().length,'person']])+`<div class="two-col"><div class="panel"><h2>Последние оплаты</h2><p class="form-note">Поступления за выбранный месяц, независимо от оплаченного периода.</p>${table(['Ученик','Сумма','Дата платежа','За какой месяц'],paymentRows(sortedPayments().filter(p=>p.received.startsWith(month)).slice(0,8),false),'За этот месяц поступлений нет.')}${btn('Все оплаты','/admin/payments?month='+month)}</div><div class="panel"><h2>Без платежей за период ${countBadge(withoutPayment().length)}</h2><p class="form-note">Нет записи платежа за ${e(period(month))}. Это не расчёт задолженности. Частичные платежи тоже считаются наличием платежа.</p>${withoutPayment().length?`<ul class="list">${withoutPayment().slice(0,8).map(s=>`<li><a href="/admin/student?id=${s.id}">${e(s.name)}</a></li>`).join('')}</ul>`:'<p class="empty">Для каждого действующего ученика есть платёж за период.</p>'}${btn('Открыть список','/admin/students?month='+month+'&unpaid=1')}</div></div>`;}
- return {render:gym,bind(){const form=ctx.form;
-
-}};
+ const {e,api,state,month,money,date,period,btn,table,gymToolbar,stats}=ctx;
+ function renderOverview(summary,sessions){
+  const recent=[...sessions].filter(s=>s.status!=='cancelled').sort((a,b)=>(a.heldOn+a.startsAt).localeCompare(b.heldOn+b.startsAt)).slice(-10).reverse();
+  document.querySelector('#gym-data').innerHTML=stats([
+   ['Действующие ученики',summary.activeStudents,'people'],
+   ['Активные группы',summary.activeGroups,'people'],
+   ['Проведено тренировок',summary.held,'activity'],
+   ['Присутствий за месяц',summary.present,'calendar3'],
+   ['Поступления за '+period(month),money(summary.receivedCents),'cash-coin'],
+   ['Записано платежей',summary.paymentsCount,'cash-coin']
+  ])+`<div class="two-col"><div class="panel"><h2>Тренировки за ${e(period(month))}</h2><p class="form-note">Запланировано: ${summary.scheduled} · проведено: ${summary.held} · отменено: ${summary.cancelled}. Учитываются только сохранённые отметки присутствия.</p>${table(['Дата','Тренировка','Группа','Присутствовали'],recent.map(s=>[date(s.heldOn)+' '+e(s.startsAt),`<a href="/admin/training?id=${encodeURIComponent(s.id)}">${e(s.title)}</a>`,e(s.group?.name||'Общая'),`<a href="/admin/attendance?id=${encodeURIComponent(s.id)}">${s.attendance.filter(a=>a.status==='present').length}</a>`]),'На этот месяц тренировок пока нет.')}${btn('Все тренировки','/admin/trainings?month='+month)}</div><div class="panel"><h2>Последние поступления</h2><p class="form-note">Только фактически полученные деньги за выбранный месяц. Оплачиваемый период хранится отдельно. Долги и просрочки не рассчитываются.</p>${table(['Ученик','Сумма','Дата'],[...state.payments].filter(p=>p.received.startsWith(month)).sort((a,b)=>b.received.localeCompare(a.received)).slice(0,8).map(p=>[`<a href="/admin/student?id=${encodeURIComponent(p.student)}">${e(state.students.find(s=>s.id===p.student)?.name||'Ученик')}</a>`,money(p.amount),date(p.received)]),'Поступлений за месяц нет.')}${btn('Все оплаты','/admin/payments?month='+month)}</div></div>`;
+ }
+ return {render:()=>gymToolbar()+`<div class="gym-shortcuts">${btn('Новая тренировка','/admin/training',true)}${btn('Новая группа','/admin/group')}${btn('Группы','/admin/groups')}</div><div id="gym-data"><p class="muted">Загрузка обзора зала…</p></div>`,bind:async()=>{
+  try{const [a,b]=await Promise.all([api('/api/admin/gym/summary?month='+encodeURIComponent(month)),api('/api/admin/gym/sessions?month='+encodeURIComponent(month))]);renderOverview(a.summary,b.sessions);}
+  catch(err){document.querySelector('#gym-data').innerHTML=`<p class="notice notice--error" role="alert">${e(err.message)}. <a href="/admin/gym?month=${month}">Повторить загрузку</a></p>`;}
+ }};
 }
-mount("gym",createPage);
+mount('gym',createPage);

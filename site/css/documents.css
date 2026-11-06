@@ -1163,6 +1163,7 @@ body.site-search-open {
 }
 
 .stage-button {
+  border-radius: 7px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -1253,4 +1254,3 @@ body.site-search-open {
 #tournaments .stage-status {
   background: #e9edf3;
 }
-.stage-button{border-radius:7px}

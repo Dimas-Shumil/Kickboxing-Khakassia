@@ -1163,6 +1163,7 @@ body.site-search-open {
 }
 
 .stage-button {
+  border-radius: 7px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -1317,6 +1318,19 @@ body.site-search-open {
 #leadership .stage-empty {
   border-left: 4px solid #bc202b;
 }
-.stage-button{border-radius:7px}
 
-.federation-leader{margin:22px 0 0}.federation-leader img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:7px}.federation-leader figcaption{color:#657087;font-size:12px;margin-top:6px}
+.federation-leader {
+  margin: 22px 0 0;
+}
+.federation-leader img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.federation-leader figcaption {
+  color: #657087;
+  font-size: 12px;
+  margin-top: 6px;
+}
