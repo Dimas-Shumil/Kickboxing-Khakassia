@@ -189,36 +189,60 @@
       }
     });
 
-    let drag = null;
+    let drag = null, suppressClick = false, clickTimer = 0;
+    function blockDragClick() {
+      suppressClick = true;
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => { suppressClick = false; }, 400);
+    }
     track.addEventListener('dragstart', event => event.preventDefault());
     track.addEventListener('pointerdown', event => {
-      if (event.pointerType !== 'mouse' || event.button !== 0 || event.target.closest('a, button')) return;
-      drag = {id: event.pointerId, x: event.clientX, start: track.scrollLeft, moved: false};
-      track.setPointerCapture(event.pointerId);
-      track.classList.add('is-dragging');
+      if (event.isPrimary === false || drag ||
+          (event.pointerType === 'mouse' && event.button !== 0) ||
+          event.target.closest('button, input, select, textarea')) return;
+      clearTimeout(clickTimer);
+      suppressClick = false;
+      drag = {id: event.pointerId, x: event.clientX, y: event.clientY,
+        start: track.scrollLeft, index: activeIndex(), moved: false};
     });
     track.addEventListener('pointermove', event => {
       if (!drag || event.pointerId !== drag.id) return;
-      const dx = event.clientX - drag.x;
-      if (Math.abs(dx) > 5) drag.moved = true;
-      if (drag.moved) track.scrollLeft = drag.start - dx;
+      const dx = event.clientX - drag.x, dy = event.clientY - drag.y;
+      if (!drag.moved) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
+        // Let the browser handle a vertical page scroll.
+        if (Math.abs(dy) > Math.abs(dx)) { drag = null; return; }
+        drag.moved = true;
+        track.setPointerCapture(event.pointerId);
+        track.classList.add('is-dragging');
+      }
+      if (event.cancelable) event.preventDefault();
+      track.scrollLeft = drag.start - dx;
     });
-    function release(event) {
+    function release(event, cancelled = false) {
       if (!drag || event.pointerId !== drag.id) return;
-      const moved = drag.moved;
+      const gesture = drag;
       drag = null;
       track.classList.remove('is-dragging');
       if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
-      if (moved) {
-        track.dataset.justDragged = 'true';
-        setTimeout(() => delete track.dataset.justDragged, 120);
-        scrollToCard(activeIndex());
+      if (!gesture.moved) return;
+      blockDragClick();
+      let index = activeIndex();
+      const dx = event.clientX - gesture.x;
+      // A short deliberate swipe still advances a card; a tap opens its profile.
+      if (!cancelled && index === gesture.index &&
+          Math.abs(dx) > Math.min(45, cards[0].getBoundingClientRect().width * 0.18)) {
+        index += dx < 0 ? 1 : -1;
       }
+      scrollToCard(index);
     }
-    track.addEventListener('pointerup', release);
-    track.addEventListener('pointercancel', release);
+    track.addEventListener('pointerup', event => release(event));
+    track.addEventListener('pointercancel', event => release(event, true));
+    track.addEventListener('lostpointercapture', event => {
+      if (event.target === track) release(event, true);
+    });
     track.addEventListener('click', event => {
-      if (!track.dataset.justDragged) return;
+      if (!suppressClick) return;
       event.preventDefault(); event.stopPropagation();
     }, true);
     window.addEventListener('resize', syncSoon);

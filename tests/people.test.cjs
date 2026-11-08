@@ -45,7 +45,7 @@ test('08.5: люди, четыре шаблона, права, версии, м�
   for(const [type,css]of [['athlete','athlete.min.css'],['coach-profile','coach-profile.min.css']]){const r=await anon.request('/'+type+'/'+slug);assert.equal(r.status,200);const html=await r.text();assert.ok(html.includes('/site/css/'+css));assert.ok(html.includes('Тестов Иван &lt;script&gt; $&'));assert.ok(html.includes('&lt;script&gt;window.XSS=1&lt;/script&gt;'));assert.ok(!html.includes('Демонстрационный профиль'));assert.ok(!html.includes('Панкова'));assert.ok(!html.includes('Чочиев'));}
   const redirect=await anon.request('/people/'+slug);assert.equal(redirect.headers.get('location'),'/athlete/'+slug);
   assert.equal((await anon.request('/athlete?id='+person.id)).headers.get('location'),'/athlete/'+slug);
-  for(const route of ['/','/hall-of-fame','/coaches']){const html=await(await anon.request(route)).text();assert.ok(html.includes('Тестов Иван'));assert.ok(!html.includes('PRIVATE-PHONE'));}
+  for(const route of ['/','/hall-of-fame','/coaches']){const html=await(await anon.request(route)).text();assert.ok(html.includes('Тестов Иван'));assert.ok(!html.includes('PRIVATE-PHONE'));if(route!=='/coaches'){assert.ok(!html.includes('class="hall-legend__index"'));assert.ok(!html.includes('class="athlete-card__number"'));}}
   assert.equal((await(await anon.request('/api/people/search?q=ПОИСКБИО')).json()).items.length,1);assert.equal((await anon.request(src)).status,200);
   assert.equal((await action('archive',editor)).status,403);assert.equal((await action('unpublish',editor)).status,403);
  });
