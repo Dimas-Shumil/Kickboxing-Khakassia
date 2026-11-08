@@ -6,10 +6,13 @@ export const peopleMediaDir=config=>config.peopleUploadDir||path.join(config.ROO
 export const profileType=(p,role=p.primaryRole)=>role==='athlete'?(p.athleteLegend?'athlete':'athlete-profile'):(p.coachLegend?'coach-legend':'coach-profile');
 export const personDTO=p=>({...JSON.parse(p.payload),id:p.id,status:p.status,version:p.version,slug:p.slug,hasPublished:!!p.publishedPayload,hasChanges:!!p.publishedPayload&&p.payload!==p.publishedPayload});
 export const publicPerson=p=>({...JSON.parse(p.publishedPayload),id:p.id,slug:p.slug});
-export async function publishedPeople(db){return (await db.person.findMany({where:{status:'published',publishedPayload:{not:null}},orderBy:{name:'asc'}})).map(publicPerson).sort((a,b)=>a.name.localeCompare(b.name,'ru'));}
+export const comparePeople=(a,b)=>(a.sortOrder??1000)-(b.sortOrder??1000)||a.name.localeCompare(b.name,'ru');
+export async function publishedPeople(db){return (await db.person.findMany({where:{status:'published',publishedPayload:{not:null}},orderBy:{name:'asc'}})).map(publicPerson).sort(comparePeople);}
 export function validatePerson(b,publishing=false){
  if(!b||typeof b!=='object'||Array.isArray(b))fail('Ожидается объект профиля.');
  const d={name:text(b.name,'ФИО',180,true)};
+ d.sortOrder=b.sortOrder===undefined?1000:b.sortOrder;
+ if(!Number.isInteger(d.sortOrder)||d.sortOrder<0||d.sortOrder>999999)fail('Порядок отображения: целое число от 0 до 999999.');
  for(const key of ['isAthlete','isCoach','athleteLegend','coachLegend']){if(typeof b[key]!=='boolean')fail('Проверьте роли и статусы легенды.');d[key]=b[key];}
  if(!d.isAthlete&&!d.isCoach)fail('Выберите хотя бы одну роль.');
  if((d.athleteLegend&&!d.isAthlete)||(d.coachLegend&&!d.isCoach))fail('Статус легенды требует соответствующей роли.');

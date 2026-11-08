@@ -22,7 +22,7 @@ test('08.5: люди, четыре шаблона, права, версии, м�
  });
  await t.test('Создание редактором, серверная валидация ролей и полей, Origin/CSRF',async()=>{
   assert.equal((await save(draft)).status,201);
-  for(const bad of [{name:''},{isAthlete:false,athleteLegend:true},{isCoach:false,isAthlete:false,athleteLegend:false},{primaryRole:'other'},{name:'x'.repeat(181)},{gallery:[{src:'/../../secret',category:'training'}]},{publicPupils:[{personId:'private-student'}]}])assert.equal((await save({...draft,...bad,version:person.version})).status,422);
+  for(const bad of [{sortOrder:-1},{sortOrder:1.5},{sortOrder:1000000},{sortOrder:'1'},{sortOrder:null},{name:''},{isAthlete:false,athleteLegend:true},{isCoach:false,isAthlete:false,athleteLegend:false},{primaryRole:'other'},{name:'x'.repeat(181)},{gallery:[{src:'/../../secret',category:'training'}]},{publicPupils:[{personId:'private-student'}]}])assert.equal((await save({...draft,...bad,version:person.version})).status,422);
   assert.equal((await editor.json('/api/admin/people/'+person.id,'PATCH',{...draft,version:person.version},{origin:'https://evil.invalid'})).status,403);
   assert.equal((await editor.json('/api/admin/people/'+person.id,'PATCH',{...draft,version:person.version},{'x-csrf-token':'bad'})).status,403);
   assert.equal((await action('publish',editor)).status,403);assert.equal((await action('publish')).status,422);
@@ -68,6 +68,25 @@ test('08.5: люди, четыре шаблона, права, версии, м�
   assert.equal((await owner.json('/api/admin/people/'+pupil.id+'/unpublish','POST',{version:pupil.version})).status,200);
   assert.ok(!(await(await anon.request('/coach-legend/'+slug)).text()).includes('Публичный воспитанник'));
  });
+ await t.test('Порядок людей: рабочая версия отдельно, публичный порядок после публикации',async()=>{
+  assert.equal((await save({...person,coachLegend:false,version:person.version})).status,200);assert.equal((await action('publish')).status,200);
+  pupil=(await(await owner.request('/api/admin/people/'+pupil.id)).json()).person;
+  let r=await owner.json('/api/admin/people/'+pupil.id,'PATCH',{...pupil,isCoach:true,version:pupil.version});assert.equal(r.status,200);pupil=(await r.json()).entity;
+  r=await owner.json('/api/admin/people/'+pupil.id+'/publish','POST',{version:pupil.version});assert.equal(r.status,200);pupil=(await r.json()).entity;
+  const order=async route=>{const html=await(await anon.request(route)).text();return html.indexOf('Новая версия')<html.indexOf('Публичный воспитанник');};
+  for(const route of ['/','/hall-of-fame','/coaches'])assert.equal(await order(route),true,route);
+  assert.equal((await save({...person,sortOrder:2000,version:person.version})).status,200);
+  assert.equal(person.sortOrder,2000);assert.equal(person.hasChanges,true);
+  for(const route of ['/','/hall-of-fame','/coaches'])assert.equal(await order(route),true,route+' до публикации');
+  const list=(await(await owner.request('/api/admin/people')).json()).people;
+  assert.ok(list.findIndex(x=>x.id===pupil.id)<list.findIndex(x=>x.id===person.id));
+  assert.equal((await action('publish')).status,200);
+  // Both athletes occur in the same home strip and athlete section of the Hall.
+  for(const route of ['/','/hall-of-fame','/coaches'])assert.equal(await order(route),false,route+' после публикации');
+  assert.equal((await save({...person,sortOrder:0,version:person.version})).status,200);assert.equal((await action('publish')).status,200);
+  for(const route of ['/','/hall-of-fame','/coaches'])assert.equal(await order(route),true,route+' порядок 0');
+ });
+
  await t.test('Одновременные правки и жизненный цикл; прежний slug остаётся зарезервирован',async()=>{
   const version=person.version;const rs=await Promise.all(['A','B'].map(name=>editor.json('/api/admin/people/'+person.id,'PATCH',{...person,name,version})));assert.deepEqual(rs.map(r=>r.status).sort(),[200,409]);person=(await(await owner.request('/api/admin/people/'+person.id)).json()).person;
   assert.equal((await action('unpublish')).status,200);assert.equal((await anon.request('/people/'+slug)).status,404);assert.equal((await anon.request(src)).status,404);

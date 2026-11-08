@@ -8,10 +8,10 @@ import {rateLimit} from 'express-rate-limit';
 import {asyncHandler} from '../lib/http.js';
 import {HttpError} from '../lib/validation.js';
 import requireCsrf from '../middleware/require-csrf.js';
-import {createPeopleWriter,personDTO,peopleMediaDir} from '../services/people.service.js';
+import {createPeopleWriter,personDTO,peopleMediaDir,comparePeople} from '../services/people.service.js';
 export default function createPeopleRouter({db,config,requireAuth,validateOrigin}){
  const router=Router(),write=createPeopleWriter(db,config);router.use(requireAuth);
- router.get('/',asyncHandler(async(_req,res)=>res.json({success:true,people:(await db.person.findMany({orderBy:{name:'asc'}})).map(personDTO)})));
+ router.get('/',asyncHandler(async(_req,res)=>res.json({success:true,people:(await db.person.findMany({orderBy:{name:'asc'}})).map(personDTO).sort(comparePeople)})));
  router.get('/media/:file',asyncHandler(async(req,res)=>{if(!/^[a-f0-9]{48}\.webp$/.test(req.params.file)||!await db.personAsset.findUnique({where:{id:req.params.file}}))throw new HttpError(404,'Файл не найден.');res.sendFile(path.join(peopleMediaDir(config),req.params.file));}));
  router.get('/:id',asyncHandler(async(req,res)=>{const p=await db.person.findUnique({where:{id:req.params.id}});if(!p)throw new HttpError(404,'Человек не найден.');res.json({success:true,person:personDTO(p)});}));
  router.get('/:id/media',asyncHandler(async(req,res)=>res.json({success:true,...await listPersonMedia(db,req.params.id)})));
