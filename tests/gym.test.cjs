@@ -40,6 +40,7 @@ test('08.9: группы, занятия, отметки — правила и �
    deleteMany:async({where})=>{attendances.delete(where.sessionId+':'+where.studentId);return {count:1};},
    upsert:async({where,create,update})=>{const key=where.sessionId_studentId.sessionId+':'+where.sessionId_studentId.studentId;const saved={...(attendances.get(key)||create),...update};attendances.set(key,saved);return saved;}
   },
+  financeEntry:{findMany:async()=>[]},
   payment:{findMany:async()=>[{amount:125000}]}
  };
  const sourceGroup={name:'Подростки',trainer:'Тренер',description:'',status:'active'};

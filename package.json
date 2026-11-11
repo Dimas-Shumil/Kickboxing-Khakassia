@@ -12,7 +12,12 @@
     "build:admin": "sass site/sass/admin.scss site/css/admin.css --no-source-map --style=expanded && sass site/sass/admin.scss site/css/admin.min.css --no-source-map --style=compressed",
     "test": "node --test tests/*.test.cjs",
     "user:create": "node prisma/create-admin.js",
-    "build:history": "sass site/sass/history.scss site/css/history.css --no-source-map --style=expanded && sass site/sass/history.scss site/css/history.min.css --no-source-map --style=compressed && sass site/sass/history-item.scss site/css/history-item.css --no-source-map --style=expanded && sass site/sass/history-item.scss site/css/history-item.min.css --no-source-map --style=compressed"
+    "build:history": "sass site/sass/history.scss site/css/history.css --no-source-map --style=expanded && sass site/sass/history.scss site/css/history.min.css --no-source-map --style=compressed && sass site/sass/history-item.scss site/css/history-item.css --no-source-map --style=expanded && sass site/sass/history-item.scss site/css/history-item.min.css --no-source-map --style=compressed",
+    "users:trainers": "node scripts/create-trainers.js",
+    "gym:assign-legacy": "node scripts/assign-legacy.js",
+    "db:backup": "node scripts/backup-db.js",
+    "test:gyms": "node --test tests/two-gyms*.test.cjs",
+    "test:admin-navigation": "node --test tests/admin-navigation.test.cjs"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
@@ -26,6 +31,7 @@
     "sharp": "0.35.5"
   },
   "devDependencies": {
+    "jsdom": "26.1.0",
     "prisma": "6.19.3",
     "sass": "^1.93.0"
   },

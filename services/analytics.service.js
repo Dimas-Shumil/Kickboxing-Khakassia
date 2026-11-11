@@ -3,15 +3,15 @@
 import {HttpError,period} from '../lib/validation.js';
 
 export const contentScopes=['news','people','competitions','history','site-page','site-document','site-media'];
-export const gymScopes=['students','payments','gym-groups','gym-sessions','gym-attendance'];
+export const gymScopes=['students','payments','gym-groups','gym-sessions','gym-attendance','gym-finances'];
 export const scopeLabels={news:'Новости',people:'Люди',competitions:'Соревнования',history:'История',
  'site-page':'Страницы Федерации','site-document':'Документы','site-media':'Медиатека',
  students:'Ученики',payments:'Платежи','gym-groups':'Группы',
- 'gym-sessions':'Тренировки','gym-attendance':'Посещаемость'};
+ 'gym-sessions':'Тренировки','gym-attendance':'Посещаемость','gym-finances':'Доходы и расходы'};
 export const actionLabels={create:'Создание',save:'Сохранение правок',update:'Изменение',publish:'Публикация',
  unpublish:'Снятие публикации',archive:'В архив',restore:'Восстановление',delete:'Удаление файла',
  'delete-file':'Удаление файла','delete-photo':'Удаление фото'};
-export const allowedScopes=role=>role==='OWNER'?[...contentScopes,...gymScopes]:[...contentScopes];
+export const allowedScopes=role=>['OWNER','TRAINER'].includes(role)?[...contentScopes,...gymScopes]:[...contentScopes];
 export const allowedActions=['all','create','save','update','publish','unpublish','archive','restore','delete','delete-file','delete-photo'];
 export function monthWindow(month){
  period(month);
@@ -67,7 +67,7 @@ export async function analyticsOverview(db,role,month){
   byAction[name]+=count;
  }
  const result={month,content,activity:{total:recent,byScope,byAction}};
- if(role==='OWNER'){
+ if(['OWNER','TRAINER'].includes(role)){
   const [activeStudents,activeGroups,sessions,payments]=await Promise.all([
    db.student.count({where:{status:'active'}}),db.trainingGroup.count({where:{status:'active'}}),
    db.gymSession.findMany({where:{heldOn:{startsWith:month}},select:{heldOn:true,status:true,attendance:{select:{status:true}}}}),
@@ -85,7 +85,7 @@ export async function analyticsOverview(db,role,month){
 const linkFor=(scope,id)=>{
  const root={news:'/admin/news-edit?id=',people:'/admin/person-edit?id=',competitions:'/admin/competition-edit?id=',history:'/admin/history-edit?id=',
   'site-document':'/admin/site-document-edit?id=',students:'/admin/student?id=',payments:'/admin/payment?id=',
-  'gym-groups':'/admin/group?id=','gym-sessions':'/admin/training?id=','gym-attendance':'/admin/attendance?id='};
+  'gym-groups':'/admin/group?id=','gym-sessions':'/admin/training?id=','gym-attendance':'/admin/attendance?id=','gym-finances':'/admin/finances?id='};
  if(scope==='site-page')return ['home','contacts','federation'].includes(id)?'/admin/site-page-edit?key='+id:null;
  if(scope==='site-media')return '/admin/site-media';
  return root[scope]?root[scope]+encodeURIComponent(id):null;
@@ -93,7 +93,7 @@ const linkFor=(scope,id)=>{
 export function parseActivityFilter(query,role){
  const month=period(query.month),scope=query.scope||'all',action=query.action||'all';
  if(typeof scope!=='string')throw new HttpError(422,'Недопустимый раздел журнала.');
- if(gymScopes.includes(scope)&&role!=='OWNER')throw new HttpError(403,'Доступ к сведениям зала разрешён только владельцу.');
+ if(gymScopes.includes(scope)&&!['OWNER','TRAINER'].includes(role))throw new HttpError(403,'Учёт зала доступен владельцу и назначенному тренеру.');
  if(!['all',...allowedScopes(role)].includes(scope))throw new HttpError(422,'Недопустимый раздел журнала.');
  if(typeof action!=='string'||!allowedActions.includes(action))throw new HttpError(422,'Недопустимое действие журнала.');
  const page=query.page===undefined?'0':String(query.page);

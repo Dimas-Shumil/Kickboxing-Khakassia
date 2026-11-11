@@ -1268,3 +1268,92 @@ input[type=button], input[type=submit], input[type=reset],
     transform: none;
   }
 }
+
+.admin .navigation {
+  position: relative;
+  isolation: isolate;
+}
+.admin .navigation a {
+  position: relative;
+  z-index: 1;
+  font-weight: 600;
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+.admin .navigation a[aria-current] {
+  background: transparent;
+}
+.admin .navigation a[data-selected]:hover {
+  background: transparent;
+}
+.admin .navigation__indicator {
+  position: absolute;
+  inset: 0 0 auto;
+  border-radius: 7px;
+  background: var(--red);
+  pointer-events: none;
+  z-index: 0;
+  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.2s ease;
+}
+.admin .navigation--instant .navigation__indicator {
+  transition: none;
+}
+.admin .admin-view, .admin #admin-view-slot {
+  min-width: 0;
+}
+.admin.admin--navigating .admin-view {
+  pointer-events: none;
+}
+.admin .admin-navigation-status {
+  position: fixed;
+  inset: 0 0 auto 250px;
+  z-index: 40;
+  height: 3px;
+  overflow: hidden;
+  color: transparent;
+  background: #e9edf4;
+}
+.admin .admin-navigation-status::after {
+  content: "";
+  display: block;
+  width: 35%;
+  height: 100%;
+  background: var(--red);
+  animation: admin-progress 1.1s ease-in-out infinite;
+}
+.admin .admin-navigation-status[hidden] {
+  display: none;
+}
+.admin .tabs a {
+  transition: color 0.16s ease, border-color 0.16s ease;
+}
+@media (max-width: 1200px) {
+  .admin .admin-navigation-status {
+    left: 220px;
+  }
+}
+@media (max-width: 950px) {
+  .admin .admin-navigation-status {
+    left: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin .navigation a, .admin .navigation__indicator, .admin .tabs a, .admin .sidebar {
+    transition: none;
+  }
+  .admin .admin-navigation-status::after {
+    animation: none;
+    width: 100%;
+  }
+}
+
+@keyframes admin-progress {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(390%);
+  }
+}
+html:has(body.admin) {
+  scrollbar-gutter: stable;
+}

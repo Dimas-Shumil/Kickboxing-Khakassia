@@ -16,6 +16,8 @@ model Admin {
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   lastLoginAt  DateTime?
+  gymId        String?
+  gym          Gym? @relation(fields: [gymId], references: [id], onDelete: Restrict)
   sessions     AdminSession[]
   @@map("User")
 }
@@ -30,6 +32,9 @@ model LegacySession {
 }
 
 model Student {
+  gymId String?
+  gym Gym? @relation(fields: [gymId], references: [id], onDelete: Restrict)
+  @@index([gymId])
   id        String   @id @default(cuid())
   name      String
   phone     String   @default("")
@@ -88,6 +93,8 @@ model News {
 }
 
 model AuditLog {
+  gymId String?
+  @@index([gymId, createdAt])
   id        String   @id @default(cuid())
   actorId   String
   scope     String
@@ -220,12 +227,16 @@ model SiteAsset {
   @@index([ownerKey])
 }
 
-// Этап 08.9: один зал. Историческое поле Student.group остаётся без миграции данных.
+// Два зала. Историческое поле Student.group сохраняется; связь по названию внутри зала.
 // Совпадение названия группы связывает ученика со справочником; переименование группы
 // запрещено, чтобы сохранять такую привязку без изменения старых записей.
+// gymId=null: прежний учёт, доступный только OWNER до явного распределения.
 model TrainingGroup {
+  gymId String?
+  gym Gym? @relation(fields: [gymId], references: [id], onDelete: Restrict)
+  @@index([gymId])
   id          String @id @default(cuid())
-  name        String @unique
+  name        String
   trainer     String @default("")
   description String @default("")
   status      String @default("active")
@@ -233,9 +244,13 @@ model TrainingGroup {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   sessions    GymSession[]
+  @@unique([gymId, name])
 }
 
 model GymSession {
+  gymId String?
+  gym Gym? @relation(fields: [gymId], references: [id], onDelete: Restrict)
+  @@index([gymId])
   id        String @id @default(cuid())
   groupId   String?
   group     TrainingGroup? @relation(fields:[groupId],references:[id],onDelete:Restrict)
@@ -266,4 +281,30 @@ model AttendanceRecord {
   updatedAt DateTime @updatedAt
   @@unique([sessionId,studentId])
   @@index([studentId])
+}
+
+model Gym {
+ id String @id
+ name String
+ admins Admin[]
+ students Student[]
+ groups TrainingGroup[]
+ sessions GymSession[]
+ finances FinanceEntry[]
+}
+
+// Только самостоятельные доходы/расходы; оплаты учеников читаются из Payment.
+model FinanceEntry {
+ id String @id @default(cuid())
+ gymId String?
+ gym Gym? @relation(fields: [gymId], references: [id], onDelete: Restrict)
+ kind String
+ amount Int
+ occurredOn String
+ category String
+ comment String @default("")
+ version Int @default(1)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([gymId, occurredOn])
 }

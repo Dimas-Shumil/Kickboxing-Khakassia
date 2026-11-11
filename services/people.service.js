@@ -1,3 +1,4 @@
+import {canPublish} from './permissions.js';
 import path from 'node:path';
 import {access} from 'node:fs/promises';
 import {HttpError,text,version} from '../lib/validation.js';
@@ -54,14 +55,14 @@ export function createPeopleWriter(db,config){return async(req,action)=>{
   if(action==='save'){
    if(old?.status==='archived')fail('Сначала восстановите профиль из архива.');
    if(req.body.status&&!['draft','published'].includes(req.body.status))fail('Состояние изменяется отдельным действием.');
-   if(req.body.status==='published'&&!old?.publishedPayload)fail('Публикацию выполняет владелец отдельным действием.');
+   if(req.body.status==='published'&&!old?.publishedPayload)fail('Публикация выполняется отдельным действием.');
    const p=validatePerson(req.body);await checkPersonImages(tx,config,p,id);
    if(p.publicPupils.some(x=>x.personId===id))fail('Нельзя добавить человека к собственным воспитанникам.');
    for(const ref of p.publicPupils)if(!await tx.person.findUnique({where:{id:ref.personId}}))fail('Публичная запись воспитанника не найдена. Ученики зала сюда не переносятся.');
    data={name:p.name,payload:JSON.stringify(p)};
   }else{
    if(!old)throw new HttpError(404,'Человек не найден.');
-   if(req.user.role!=='OWNER'&&(['publish','unpublish'].includes(action)||(action==='archive'&&old.publishedPayload)))throw new HttpError(403,'Публикацию и снятие подтверждает владелец.');
+   if(!canPublish(req.user)&&(['publish','unpublish'].includes(action)||(action==='archive'&&old.publishedPayload)))throw new HttpError(403,'Публиковать и снимать с публикации могут владелец и тренеры.');
    if(action==='publish'){
     if(old.status==='archived')fail('Сначала восстановите профиль.');
     const p=validatePerson(JSON.parse(old.payload),true);await checkPersonImages(tx,config,p,id);

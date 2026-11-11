@@ -1,3 +1,4 @@
+import {canPublish} from './permissions.js';
 import path from 'node:path';
 import {access} from 'node:fs/promises';
 import {HttpError,text,date,version} from '../lib/validation.js';
@@ -43,11 +44,11 @@ export function createCompetitionWriter(db,config){return async(req,action)=>{
   if(action==='save'){
    if(old?.status==='archived')fail('Сначала восстановите соревнование.');
    if(req.body.status&&!['draft','published'].includes(req.body.status))fail('Состояние изменяется отдельным действием.');
-   if(req.body.status==='published'&&!old?.publishedPayload)fail('Публикацию подтверждает владелец.');
+   if(req.body.status==='published'&&!old?.publishedPayload)fail('Публикацию выполняют владелец и тренеры.');
    const p=validateCompetition(req.body);await checkCompetitionFiles(tx,config,p,id);data={title:p.title,payload:JSON.stringify(p)};
   }else{
    if(!old)throw new HttpError(404,'Соревнование не найдено.');
-   if(req.user.role!=='OWNER'&&(['publish','unpublish'].includes(action)||(action==='archive'&&old.publishedPayload)))throw new HttpError(403,'Публикацию и снятие подтверждает владелец.');
+   if(!canPublish(req.user)&&(['publish','unpublish'].includes(action)||(action==='archive'&&old.publishedPayload)))throw new HttpError(403,'Публиковать и снимать с публикации могут владелец и тренеры.');
    if(action==='publish'){
     if(old.status==='archived')fail('Сначала восстановите соревнование.');
     const p=validateCompetition(JSON.parse(old.payload),true);await checkCompetitionFiles(tx,config,p,id);

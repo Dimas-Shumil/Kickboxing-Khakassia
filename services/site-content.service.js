@@ -1,3 +1,4 @@
+import {canPublish} from './permissions.js';
 import path from 'node:path';
 import {access} from 'node:fs/promises';
 import {HttpError,text,version,date} from '../lib/validation.js';
@@ -46,7 +47,7 @@ export function siteWriter(db,c){
    const p=validatePage(key,req.body);await checkFiles(tx,c,ownerPage(key),usedPageFiles(p));data={payload:JSON.stringify(p)};
   }else{
    if(!old)throw new HttpError(422,'Сначала сохраните рабочую версию.');
-   if(req.user.role!=='OWNER')throw new HttpError(403,'Публикацией управляет только владелец.');
+   if(!canPublish(req.user))throw new HttpError(403,'Публикацией управляют владелец и тренеры.');
    if(action==='publish'){const p=validatePage(key,JSON.parse(old.payload));await checkFiles(tx,c,ownerPage(key),usedPageFiles(p));data={publishedPayload:old.payload,publishedOn:new Date()};}
    else if(action==='unpublish')data={publishedPayload:null};else throw new HttpError(404,'Действие не найдено.');
   }
@@ -67,11 +68,11 @@ export function documentWriter(db,c){return async(req,id,action)=>db.$transactio
   const p=validateDocument(req.body);await checkFiles(tx,c,ownerDocument(id),usedDocumentFiles(p));data={title:p.title,payload:JSON.stringify(p)};
  }else{
   if(!old)throw new HttpError(404,'Документ не найден.');
-  if(['publish','unpublish'].includes(action)&&req.user.role!=='OWNER')throw new HttpError(403,'Публикацией управляет только владелец.');
+  if(['publish','unpublish'].includes(action)&&!canPublish(req.user))throw new HttpError(403,'Публикацией управляют владелец и тренеры.');
   if(action==='publish'){
    if(old.status==='archived')error('Восстановите документ из архива.');const p=validateDocument(JSON.parse(old.payload));if(!p.file)error('Для публикации необходимо прикрепить PDF.');await checkFiles(tx,c,ownerDocument(id),usedDocumentFiles(p));data={publishedPayload:old.payload,status:'published',publishedOn:new Date()};
   }else if(action==='unpublish'){if(old.status!=='published')error('Документ уже снят.');data={publishedPayload:null,status:'draft'};}
-  else if(action==='archive'){if(old.status==='archived')error('Документ уже в архиве.');if(old.publishedPayload&&req.user.role!=='OWNER')throw new HttpError(403,'Архивирование опубликованного документа подтверждает владелец.');data={publishedPayload:null,status:'archived'};}
+  else if(action==='archive'){if(old.status==='archived')error('Документ уже в архиве.');if(old.publishedPayload&&!canPublish(req.user))throw new HttpError(403,'Архивирование опубликованного документа доступно владельцу и тренерам.');data={publishedPayload:null,status:'archived'};}
   else if(action==='restore'){if(old.status!=='archived')error('Документ не в архиве.');data={status:'draft',publishedPayload:null};}else throw new HttpError(404,'Действие не найдено.');
  }
  let row;

@@ -99,12 +99,14 @@ async function saveAttendance(db,actor,id,{version,marks}){
 }
 const sessionInclude={group:{select:{id:true,name:true,status:true}},attendance:{select:{studentId:true,status:true,note:true}}};
 async function summary(db,month){
- const [groups,students,sessions,payments]=await Promise.all([
+ const [groups,students,sessions,payments,finances]=await Promise.all([
   db.trainingGroup.count({where:{status:'active'}}),
   db.student.count({where:{status:'active'}}),
   db.gymSession.findMany({where:{heldOn:{startsWith:month}},include:{attendance:{select:{status:true}}},orderBy:[{heldOn:'asc'},{startsAt:'asc'}]}),
-  db.payment.findMany({where:{received:{startsWith:month}},select:{amount:true}})
+  db.payment.findMany({where:{received:{startsWith:month}},select:{amount:true}}),
+  db.financeEntry.findMany({where:{occurredOn:{startsWith:month}}})
  ]);
- return {month,activeGroups:groups,activeStudents:students,scheduled:sessions.filter(s=>s.status==='planned').length,held:sessions.filter(s=>s.status==='held').length,cancelled:sessions.filter(s=>s.status==='cancelled').length,present:sessions.reduce((n,s)=>n+s.attendance.filter(a=>a.status==='present').length,0),recorded:sessions.reduce((n,s)=>n+s.attendance.length,0),paymentsCount:payments.length,receivedCents:payments.reduce((n,p)=>n+p.amount,0)};
+ const paymentIncome=payments.reduce((n,p)=>n+p.amount,0),otherIncome=finances.filter(f=>f.kind==='income').reduce((n,f)=>n+f.amount,0),expenses=finances.filter(f=>f.kind==='expense').reduce((n,f)=>n+f.amount,0);
+ return {incomeCents:paymentIncome+otherIncome,otherIncomeCents:otherIncome,expenseCents:expenses,balanceCents:paymentIncome+otherIncome-expenses,month,activeGroups:groups,activeStudents:students,scheduled:sessions.filter(s=>s.status==='planned').length,held:sessions.filter(s=>s.status==='held').length,cancelled:sessions.filter(s=>s.status==='cancelled').length,present:sessions.reduce((n,s)=>n+s.attendance.filter(a=>a.status==='present').length,0),recorded:sessions.reduce((n,s)=>n+s.attendance.length,0),paymentsCount:payments.length,receivedCents:payments.reduce((n,p)=>n+p.amount,0)};
 }
 export {groupData,sessionData,attendanceData,createGroup,updateGroup,createSession,updateSession,saveAttendance,summary,sessionInclude};

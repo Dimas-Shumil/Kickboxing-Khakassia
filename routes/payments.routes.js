@@ -1,11 +1,11 @@
 import {Router} from 'express';
 import {asyncHandler} from '../lib/http.js';
 import * as v from '../lib/validation.js';
-import requireOwner from '../middleware/require-owner.js';
+import requireGym from '../middleware/require-gym.js';
 import requireCsrf from '../middleware/require-csrf.js';
 import {createRecordWriter} from '../services/record.service.js';
 function createPaymentsRouter({db,requireAuth,validateOrigin}){
- const router=Router(),write=createRecordWriter(db);router.use(requireAuth,requireOwner);
+ const router=Router(),write=createRecordWriter(db);router.use(requireAuth,requireGym);
  router.get('/',asyncHandler(async(_req,res)=>res.json({success:true,payments:await db.payment.findMany({orderBy:{received:'desc'}})})));
  router.get('/:id',asyncHandler(async(req,res)=>{const payment=await db.payment.findUnique({where:{id:req.params.id},include:{revisions:true}});if(!payment)throw new v.HttpError(404,'Платёж не найден.');res.json({success:true,payment});}));
  router.use(validateOrigin,requireCsrf);

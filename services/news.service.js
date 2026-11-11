@@ -1,3 +1,4 @@
+import {canPublish} from './permissions.js';
 import path from 'node:path';
 import {access} from 'node:fs/promises';
 import * as v from '../lib/validation.js';
@@ -27,11 +28,11 @@ export function createNewsService(db,config){
    const valid=v.news(req.body);await checkImages(tx,config,JSON.parse(valid.payload),id||'');
    if(old?.status==='archived')throw new v.HttpError(422,'Сначала восстановите новость из архива.');
    if(valid.status==='archived'){
-    if(old?.publishedPayload&&req.user.role!=='OWNER')throw new v.HttpError(403,'Архив опубликованной новости доступен владельцу.');
+    if(old?.publishedPayload&&!canPublish(req.user))throw new v.HttpError(403,'Архив опубликованной новости доступен владельцу и тренерам.');
     data={...valid,publishedPayload:null};
    }else data={...valid,status:old?.status||'draft'};
   }else{
-   if(req.user.role!=='OWNER'&&(['publish','unpublish'].includes(action)||(action==='archive'&&old.publishedPayload)))throw new v.HttpError(403,'Публикацию и снятие подтверждает владелец.');
+   if(!canPublish(req.user)&&(['publish','unpublish'].includes(action)||(action==='archive'&&old.publishedPayload)))throw new v.HttpError(403,'Публиковать и снимать с публикации могут владелец и тренеры.');
    if(action==='publish'){
     if(old.status==='archived')throw new v.HttpError(422,'Сначала восстановите новость из архива.');
     const payload=JSON.parse(old.payload);v.news({...payload,status:'draft'});await checkImages(tx,config,payload,id);

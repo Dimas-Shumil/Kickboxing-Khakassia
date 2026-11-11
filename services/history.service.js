@@ -1,3 +1,4 @@
+import {canPublish} from './permissions.js';
 import path from 'node:path';
 import {access} from 'node:fs/promises';
 import {HttpError,text,date,version} from '../lib/validation.js';
@@ -51,7 +52,7 @@ export function createHistoryWriter(db,c){return async(req,action)=>{
    const p=validateHistory(req.body);await checkHistory(tx,c,p,id);data={title:p.title,payload:JSON.stringify(p)};
   }else{
    if(!old)throw new HttpError(404,'Материал не найден.');
-   if(['publish','unpublish'].includes(action)&&req.user.role!=='OWNER')throw new HttpError(403,'Публикацию и снятие подтверждает владелец.');
+   if(['publish','unpublish'].includes(action)&&!canPublish(req.user))throw new HttpError(403,'Публиковать и снимать с публикации могут владелец и тренеры.');
    if(action==='publish'){
     if(old.status==='archived')fail('Сначала восстановите материал.');
     const p=validateHistory(JSON.parse(old.payload),true);await checkHistory(tx,c,p,id);
@@ -60,7 +61,7 @@ export function createHistoryWriter(db,c){return async(req,action)=>{
     if(old.status!=='published')fail('Материал уже снят с публикации.');data={status:'draft',publishedPayload:null};
    }else if(action==='archive'){
     if(old.status==='archived')fail('Материал уже в архиве.');
-    if(old.publishedPayload&&req.user.role!=='OWNER')throw new HttpError(403,'Архивирование опубликованного материала подтверждает владелец.');
+    if(old.publishedPayload&&!canPublish(req.user))throw new HttpError(403,'Архивирование опубликованного материала доступно владельцу и тренерам.');
     data={status:'archived',publishedPayload:null};
    }else if(action==='restore'){
     if(old.status!=='archived')fail('Материал не находится в архиве.');data={status:'draft',publishedPayload:null};

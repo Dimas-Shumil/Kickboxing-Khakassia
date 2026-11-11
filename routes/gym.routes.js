@@ -1,13 +1,13 @@
 import {Router} from 'express';
 import {asyncHandler} from '../lib/http.js';
 import * as v from '../lib/validation.js';
-import requireOwner from '../middleware/require-owner.js';
+import requireGym from '../middleware/require-gym.js';
 import requireCsrf from '../middleware/require-csrf.js';
 import * as gym from '../services/gym.service.js';
 
 function createGymRouter({db,requireAuth,validateOrigin}){
  const router=Router();
- router.use(requireAuth,requireOwner);
+ router.use(requireAuth,requireGym);
  router.get('/summary',asyncHandler(async(req,res)=>res.json({success:true,summary:await gym.summary(db,v.period(req.query.month))})));
  router.get('/groups',asyncHandler(async(_req,res)=>res.json({success:true,groups:await db.trainingGroup.findMany({orderBy:{name:'asc'}})})));
  router.get('/groups/:id',asyncHandler(async(req,res)=>{

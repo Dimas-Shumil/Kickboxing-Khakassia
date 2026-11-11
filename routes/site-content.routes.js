@@ -32,10 +32,10 @@ export default function createSiteAdminRouter({db,config,requireAuth,validateOri
  r.get('/media/:id',asyncHandler(async(req,res)=>{if(!/^[a-f0-9]{48}\.(webp|pdf)$/.test(req.params.id)||!await db.siteAsset.findUnique({where:{id:req.params.id}}))throw new HttpError(404,'Файл не найден.');sendSiteMedia(res,config,req.params.id);}));
  r.use(validateOrigin,requireCsrf);
  r.patch('/pages/:key',asyncHandler(async(req,res)=>res.json({success:true,page:await pageWrite(req,req.params.key,'save')})));
- r.post('/pages/:key/:action',asyncHandler(async(req,res)=>res.json({success:true,page:await pageWrite(req,req.params.key,req.params.action)})));
+ r.post('/pages/:key/:action(publish|unpublish)',asyncHandler(async(req,res)=>res.json({success:true,page:await pageWrite(req,req.params.key,req.params.action)})));
  r.post('/documents',asyncHandler(async(req,res)=>res.status(201).json({success:true,document:await docWrite(req,null,'save')})));
  r.patch('/documents/:id',asyncHandler(async(req,res)=>res.json({success:true,document:await docWrite(req,req.params.id,'save')})));
- r.post('/documents/:id/:action',asyncHandler(async(req,res)=>res.json({success:true,document:await docWrite(req,req.params.id,req.params.action)})));
+ r.post('/documents/:id/:action(publish|unpublish|archive|restore)',asyncHandler(async(req,res)=>res.json({success:true,document:await docWrite(req,req.params.id,req.params.action)})));
  const uploads=rateLimit({windowMs:60_000,limit:70,standardHeaders:'draft-8',legacyHeaders:false,message:{success:false,message:'Слишком много загрузок. Попробуйте позже.'}});
  async function owner(req,kind){if(kind==='image'){
   if(!pageKeys.includes(req.params.key))throw new HttpError(404,'Страница не найдена.');return ownerPage(req.params.key);

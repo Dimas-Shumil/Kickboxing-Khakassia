@@ -12,7 +12,7 @@ function createAuthRouter({db,security,sessions,requireAuth,validateOrigin}){
   if(typeof login!=='string'||login.trim().length<3||login.length>100||typeof password!=='string'||!password||password.length>256)return res.status(400).json({success:false,message:'Проверьте логин и пароль.'});
   const admin=await db.admin.findUnique({where:{login:login.trim().toLowerCase()}});
   const valid=await verifyPassword(password,admin?.passwordHash||await dummy);
-  if(!valid||!admin?.isActive||!['OWNER','EDITOR'].includes(admin.role))return res.status(401).json({success:false,message:'Неверный логин или пароль.'});
+  if(!valid||!admin?.isActive||!['OWNER','EDITOR','TRAINER'].includes(admin.role))return res.status(401).json({success:false,message:'Неверный логин или пароль.'});
   // Пароль прежнего патча продолжает работать, при входе обновляем scrypt до Argon2id.
   const passwordHash=admin.passwordHash.startsWith('scrypt$')?await hashPassword(password):admin.passwordHash;
   await db.admin.update({where:{id:admin.id},data:{lastLoginAt:new Date(),passwordHash}});
