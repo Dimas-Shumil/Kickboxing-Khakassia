@@ -17,7 +17,9 @@
     "gym:assign-legacy": "node scripts/assign-legacy.js",
     "db:backup": "node scripts/backup-db.js",
     "test:gyms": "node --test tests/two-gyms*.test.cjs",
-    "test:admin-navigation": "node --test tests/admin-navigation.test.cjs"
+    "test:admin-navigation": "node --test tests/admin-navigation.test.cjs",
+    "build:pwa": "sass site/sass/pwa.scss site/css/pwa.min.css --no-source-map --style=compressed",
+    "test:pwa": "node --test tests/pwa.test.cjs"
   },
   "dependencies": {
     "@prisma/client": "6.19.3",

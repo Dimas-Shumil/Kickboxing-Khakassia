@@ -132,9 +132,9 @@ function start(){
   await navigation.go(target,{popDelta:delta,popIndex:saved.index,scroll:saved.scroll||0});
  });
  let scrollFrame=0;window.addEventListener('scroll',()=>{if(!scrollFrame)scrollFrame=requestAnimationFrame(()=>{scrollFrame=0;if(!ignorePop)saveScroll();});},{passive:true});
- window.addEventListener('pageshow',event=>{if(event.persisted)location.reload();});
+ // Session guard revalidates a restored document before revealing it.
  window.addEventListener('beforeunload',event=>{if(current?.isDirty()||current?.isSaving()){event.preventDefault();event.returnValue='';}});
- document.addEventListener('admin:session-expired',()=>current?.feedback('Сессия завершилась. Войдите заново; введённые данные пока остаются в форме.',true));
+ document.addEventListener('admin:session-expired',()=>current?.clearDirty());
  void navigation.go(location.href,{initial:true});
 }
 export function registerPage(page,factory,render){pages.set(page,factory);renderer=render;if(!started){started=true;start();}}

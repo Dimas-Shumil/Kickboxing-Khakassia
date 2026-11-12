@@ -1,0 +1,41 @@
+@use './base/variables' as v;
+.pwa-install, .pwa-network, .pwa-update {box-sizing:border-box;font:14px/1.45 Arial,sans-serif;overflow-wrap:anywhere;}
+// Compact top notification follows IDEAL's install surface.
+.pwa-install {
+ --pwa-bg:rgba(250,250,249,.97);--pwa-fg:#1f252c;--pwa-muted:#606872;--pwa-border:rgba(40,48,57,.17);
+ position:fixed;z-index:12000;top:max(8px,env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
+ box-sizing:border-box;width:calc(100% - 32px);max-width:680px;max-height:calc(100dvh - 24px - env(safe-area-inset-top,0px));overflow:auto;
+ display:flex;align-items:center;gap:12px;margin:0;padding:11px 44px 11px 13px;
+ background:var(--pwa-bg);color:var(--pwa-fg);border:1px solid var(--pwa-border);border-radius:15px;box-shadow:0 12px 34px #00000038;
+ font:12px/1.35 "Segoe UI",Arial,sans-serif;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);animation:pwa-install-enter .6s ease both;
+ &[data-pwa-phase="night"]{--pwa-bg:rgba(20,27,38,.96);--pwa-fg:#f1f4f8;--pwa-muted:#b9c4d0;--pwa-border:rgba(208,220,238,.25);}
+ &[hidden],[hidden]{display:none!important;}
+ &__content{flex:1;min-width:0;}
+ &__title{display:flex;align-items:center;gap:9px;margin:0 0 2px;font-size:14px;line-height:1.2;}
+ &__title strong{font:inherit;font-weight:700;}
+ &__text,&__hint{margin:0;color:var(--pwa-muted);font-size:11px;line-height:1.3;overflow-wrap:anywhere;}
+ &__hint{margin-top:5px;}
+ &__logo{width:34px;height:34px;flex:none;margin:0;object-fit:contain;border-radius:7px;}
+ &__actions{display:flex;gap:6px;flex-shrink:0;}
+ &__button{min-height:34px;margin:0;padding:7px 11px;border:1px solid #bc202b;background:#bc202b;color:#fff!important;border-radius:9px;font:600 11px/1.35 "Segoe UI",Arial,sans-serif;white-space:nowrap;cursor:pointer;transition:filter .2s,transform .2s;}
+ &__button--later{background:#40506a;border-color:#40506a;}
+ &__button:hover{filter:brightness(.93);}
+ &__button:active{transform:scale(.98);}
+ &__button:focus-visible,&__close:focus-visible{outline:3px solid #bc202b;outline-offset:2px;}
+ &__close{position:absolute;top:5px;right:5px;display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--pwa-muted);font:22px/1 Arial,sans-serif;cursor:pointer;}
+ &__close:hover{background:#80808020;}
+}
+@keyframes pwa-install-enter{from{opacity:0;transform:translate(-50%,-30px);}to{opacity:1;transform:translate(-50%,0);}}
+@media(max-width:600px){.pwa-install{width:calc(100% - 16px);max-width:430px;max-height:calc(100dvh - 16px - env(safe-area-inset-top,0px));padding:10px 38px 10px 12px;gap:8px;display:grid;grid-template-columns:minmax(0,1fr);align-items:initial;
+ &__title{font-size:13px;}&__text{font-size:10.5px;line-height:1.25;}&__logo{width:30px;height:30px;}
+ &__actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;}&__button{min-height:32px;padding:6px 8px;}
+}}
+@media(prefers-reduced-motion:reduce){.pwa-install{animation:none;}.pwa-install__button{transition:none;}}
+.pwa-network,.pwa-update {margin:12px;padding:12px;background:#fff3d6;color:#17243c;border-radius:8px;}
+.pwa-network[hidden]{display:none!important;}
+.pwa-offline {margin:0;box-sizing:border-box;min-height:100dvh;display:grid;place-items:center;padding:24px max(24px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));background:#fbfaf8;color:#17243c;font:16px/1.6 Arial,sans-serif;
+ main{max-width:540px;width:100%;} h1{font-size:clamp(26px,6vw,42px);line-height:1.15;} &__mark{font-weight:900;color:#bc202b;letter-spacing:.12em;}
+ button{max-width:100%;border:0;padding:14px 20px;border-radius:8px;background:#bc202b;color:white;font:inherit;cursor:pointer;}
+}
+html.admin-locked body > * {visibility:hidden!important;}
+html.admin-locked body > [data-session-lock] {visibility:visible!important;}

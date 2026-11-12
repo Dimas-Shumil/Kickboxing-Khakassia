@@ -1,0 +1,31 @@
+{
+  "id": "/app",
+  "name": "Федерация кикбоксинга Хакасии",
+  "short_name": "Кикбоксинг Хакасии",
+  "lang": "ru",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fbfaf8",
+  "theme_color": "#111d37",
+  "icons": [
+    {
+      "src": "/pwa/assets/public-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa/assets/public-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa/assets/public-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
