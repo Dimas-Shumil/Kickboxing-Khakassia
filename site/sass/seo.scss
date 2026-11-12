@@ -4,12 +4,30 @@
   background: v.$color-background;
   color: v.$color-text;
   h2 { margin: 0 0 24px; font: 600 clamp(26px, 3vw, 40px)/1.2 v.$font-display; }
-  &__item { border-top: 1px solid v.$color-border; padding: 18px 0; }
+  &__item { box-sizing: border-box; border-top: 1px solid v.$color-border; padding: 18px 0; }
   &__item:last-child { border-bottom: 1px solid v.$color-border; }
-  summary { list-style: none; cursor: pointer; font: 600 16px/1.5 v.$font-body; }
+  summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    list-style: none; cursor: pointer; font: 600 16px/1.5 v.$font-body;
+    transition: color 180ms ease;
+    &::after { content: '+'; flex: 0 0 24px; text-align: center; color: v.$color-red; font-size: 24px; font-weight: 400; }
+  }
+  &__item[open] summary::after { content: '−'; }
   summary::-webkit-details-marker { display: none; }
   summary:focus-visible { outline: 2px solid v.$color-red; outline-offset: 5px; }
   &__item div { max-width: 850px; padding-top: 12px; font: 400 15px/1.7 v.$font-body; }
   p { margin: 0 0 10px; }
-  a { color: v.$color-red; text-decoration: underline; text-underline-offset: 3px; }
+  a {
+    display: inline-block; padding: 3px 7px; margin-left: -7px; border-radius: 5px;
+    color: v.$color-red; text-decoration: underline; text-underline-offset: 3px;
+    transition: color 180ms ease, background-color 180ms ease, text-decoration-color 180ms ease;
+    &:focus-visible { outline: 2px solid v.$color-red; outline-offset: 3px; background: rgba(v.$color-red, .06); }
+  }
+  @media (hover: hover) {
+    summary:hover { color: v.$color-red; }
+    a:hover { color: v.$color-navy; background: rgba(v.$color-red, .06); text-decoration-color: transparent; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    summary, a { transition: none; }
+  }
 }

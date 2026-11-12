@@ -1773,6 +1773,8 @@ body.site-search-open {
 }
 
 .athlete-card {
+  border-radius: 8px;
+  overflow: hidden;
   box-shadow: 0 6px 16px rgba(17, 29, 55, 0.09), 0 2px 4px rgba(17, 29, 55, 0.03);
   flex: 0 0 calc((100% - 45px) / 4);
   min-width: 175px;

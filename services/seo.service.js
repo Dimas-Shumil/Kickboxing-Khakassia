@@ -18,7 +18,7 @@ export const staticPages={
 export const faqs=[
  {question:'Что можно найти на сайте Федерации кикбоксинга Хакасии?',answer:'На сайте собраны новости Федерации, сведения о соревнованиях, профили спортсменов и тренеров, история и архивные материалы.',link:'/federation',label:'О Федерации'},
  {question:'Где посмотреть календарь и результаты соревнований?',answer:'В разделе «Соревнования» размещаются даты и места проведения, программа, положения, результаты и фотоотчёты. Состав материалов зависит от того, что опубликовано для конкретного соревнования.',link:'/competitions',label:'Соревнования'},
- {question:'Где прочитать о тренерах по кикбоксингу в Хакасии?',answer:'В каталоге тренеров публикуются профили с биографией и сведениями о подготовке и достижениях.',link:'/coaches',label:'Тренеры'},
+ {question:'Где прочитать о тренерах по кикбоксингу в Хакасии?',answer:'На странице тренеров публикуются профили с биографией и сведениями о подготовке и достижениях.',link:'/coaches',label:'Тренеры'},
  {question:'Как связаться с Федерацией?',answer:'Телефон для связи: +7 923 359-55-55. Остальные опубликованные каналы связи собраны в разделе «Контакты».',link:'/contacts',label:'Контакты'},
  {question:'Где найти историю и архивные фотографии?',answer:'В разделе «История и архив» собраны опубликованные исторические материалы, фотографии, документы и ссылки на источники.',link:'/history',label:'История и архив'}
 ];
@@ -77,7 +77,7 @@ export async function pageSeo(db,path){
 export function indexAllowed(config,req){
  return config.production===true&&config.seoIndexable===true&&config.origin===SITE_ORIGIN&&String(req.get('host')||'').toLowerCase().split(':')[0]==='kickboxing19.ru';
 }
-export function answersHtml(){return `<section class="site-answers" aria-labelledby="site-answers-title"><div class="container"><h2 id="site-answers-title">О кикбоксинге в Хакасии: вопросы и ответы</h2>${faqs.map(q=>`<details class="site-answers__item"><summary>${e(q.question)}</summary><div><p>${e(q.answer)}</p><a href="${e(q.link)}">${e(q.label)}</a></div></details>`).join('')}</div></section>`;}
+export function answersHtml(){return `<section class="site-answers" aria-labelledby="site-answers-title"><div class="container"><h2 id="site-answers-title">О кикбоксинге в Хакасии: вопросы и ответы</h2>${faqs.map(q=>`<details class="site-answers__item"><summary>${e(q.question)}</summary><div><p>${e(q.answer)}</p><a href="${e(q.link)}">${e(q.label)}</a></div></details>`).join('')}</div></section><script defer src="/site/scripts/site-answers.js?v=20261112"></script>`;}
 function clean(obj){return Object.fromEntries(Object.entries(obj).filter(([,v])=>v!==undefined&&v!==null&&v!==''));}
 const publicImage=src=>src&&/^\/(?:site\/img|media)\//.test(src)?absolute(src):absolute(DEFAULT_IMAGE);
 export function graphFor(meta,contacts={}){
@@ -116,7 +116,7 @@ export function injectSeo(html,meta,{indexable=false,contacts={},verification={}
   if(!meta.image)head+='<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">';
   for(const [name,value]of Object.entries(verification))if(value)head+=`<meta name="${e(name)}" content="${e(value)}">`;
   const json=JSON.stringify(graphFor({...meta,description:desc},contacts)).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');head+=`<script type="application/ld+json">${json}</script>`;
-  if(meta.path==='/'){html=html.replace('</main>',()=>answersHtml()+'</main>');head+='<link rel="stylesheet" href="/site/css/seo.min.css?v=20261112">';}
+  if(meta.path==='/'){html=html.replace('</main>',()=>answersHtml()+'</main>');head+='<link rel="stylesheet" href="/site/css/seo.min.css?v=20261112-smooth">';}
  }
  return html.replace('</head>',()=>head+'</head>');
 }
