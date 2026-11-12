@@ -1,0 +1,15 @@
+@use './base/variables' as v;
+.site-answers {
+  padding: clamp(36px, 5vw, 72px) 0;
+  background: v.$color-background;
+  color: v.$color-text;
+  h2 { margin: 0 0 24px; font: 600 clamp(26px, 3vw, 40px)/1.2 v.$font-display; }
+  &__item { border-top: 1px solid v.$color-border; padding: 18px 0; }
+  &__item:last-child { border-bottom: 1px solid v.$color-border; }
+  summary { list-style: none; cursor: pointer; font: 600 16px/1.5 v.$font-body; }
+  summary::-webkit-details-marker { display: none; }
+  summary:focus-visible { outline: 2px solid v.$color-red; outline-offset: 5px; }
+  &__item div { max-width: 850px; padding-top: 12px; font: 400 15px/1.7 v.$font-body; }
+  p { margin: 0 0 10px; }
+  a { color: v.$color-red; text-decoration: underline; text-underline-offset: 3px; }
+}

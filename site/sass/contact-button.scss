@@ -1,0 +1,51 @@
+@use './base/variables' as v;
+
+// Shared additive entrypoint. Existing page CSS stays independent.
+.site-call {
+  position: fixed;
+  right: 24px;
+  right: max(24px, env(safe-area-inset-right, 0px));
+  bottom: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 58px;
+  max-width: calc(100vw - 32px);
+  padding: 12px 20px;
+  border: 1px solid rgba(255, 255, 255, .24);
+  border-radius: 12px;
+  background: v.$color-red;
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(17, 29, 55, .24);
+  font: 600 15px/1.25 v.$font-body;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .18s ease, visibility .18s ease, background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+
+  &:visited { color: #fff; }
+  &:focus-visible { outline: 3px solid v.$color-navy; outline-offset: 4px; }
+  &:active { transform: translateY(1px); }
+  &__icon { width: 24px; height: 24px; flex: 0 0 24px; }
+  &__label { display: grid; gap: 3px; }
+  &__number { font-size: 12px; font-weight: 500; white-space: nowrap; }
+}
+
+@media(hover: hover) {
+  .site-call:hover { background: v.$color-red-hover; box-shadow: 0 8px 28px rgba(17, 29, 55, .3); transform: translateY(-2px); }
+}
+@media(max-width: 1024px) {
+  .site-call { right: 16px; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); width: 52px; height: 52px; min-height: 52px; padding: 0; gap: 0; }
+  .site-call__label { display: none; }
+}
+// The normal link remains usable without JavaScript. With JS, control visibility by scroll.
+.site-call-ready .site-call:not(.is-visible) { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(8px); }
+body.lock > .site-call,
+body.site-search-open > .site-call,
+body.athlete-lightbox-open > .site-call { visibility: hidden; pointer-events: none; }
+@media(prefers-reduced-motion: reduce) {
+  .site-call { transition: none; }
+  .site-call:hover, .site-call:active { transform: none; }
+}
