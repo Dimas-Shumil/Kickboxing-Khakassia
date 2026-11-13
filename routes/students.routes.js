@@ -1,3 +1,4 @@
+import {removeGymRecord} from '../services/gym-delete.service.js';
 import {Router} from 'express';
 import {asyncHandler} from '../lib/http.js';
 import * as v from '../lib/validation.js';
@@ -11,6 +12,10 @@ function createStudentsRouter({db,requireAuth,validateOrigin}){
  router.use(validateOrigin,requireCsrf);
  router.post('/',asyncHandler(async(req,res)=>write(req,res,'student','students',v.student(req.body))));
  router.patch('/:id',asyncHandler(async(req,res)=>write(req,res,'student','students',v.student(req.body))));
+ router.delete('/:id',asyncHandler(async(req,res)=>{
+  await removeGymRecord(db,req.user.id,'student','students',req.params.id,req.body?.version);
+  res.json({success:true});
+ }));
  return router;
 }
 export default createStudentsRouter;

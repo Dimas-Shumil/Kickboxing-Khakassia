@@ -87,6 +87,26 @@ const login=await nativeFetch(base+'/api/admin/auth/login',{method:'POST',header
   reduce=true;await navigation.go('/admin/activity');const f=select('#activity-filters');f.elements.month.value='2026-11';f.dispatchEvent(new win.Event('submit',{bubbles:true,cancelable:true}));await waitFor(()=>win.location.search.includes('month=2026-11')&&!win.document.body.classList.contains('admin--navigating'));
   await navigation.go('/admin/gym');select('#month').value='2026-10';select('#month').dispatchEvent(new win.Event('change',{bubbles:true}));await waitFor(()=>win.location.search.includes('month=2026-10')&&!win.document.body.classList.contains('admin--navigating'));assert.equal(select('#sidebar'),sidebar);
  });
+ await t.test('Кнопки удаления, отказ, повторная фильтрация и сроки оплаты работают в DOM без перезагрузки',async()=>{
+  const pupil=await db.student.create({data:{name:'Удалить из интерфейса',gymId:'school-12',start:'2026-11-15',price:300000,status:'active'}});
+  const group=await db.trainingGroup.create({data:{name:'Удаляемая группа',gymId:'school-12'}});
+  const receipt=await db.payment.create({data:{student:pupil.id,amount:300000,received:'2026-11-15',period:'2026-11'}});
+  await navigation.go('/admin/payments?month=2026-11');
+  assert.ok(select('#payment-statuses'));assert.ok(select('#payment-statuses .badge'));
+  const selector='[data-delete-kind=payments][data-delete-id="'+receipt.id+'"]';
+  global.confirm=()=>false;click(selector);await new Promise(r=>setTimeout(r,15));assert.equal((await db.payment.findUnique({where:{id:receipt.id}})).deletedAt,null);
+  global.confirm=()=>true;click(selector);await waitFor(()=>!select(selector)&&!win.document.body.classList.contains('admin--navigating'),'receipt removed');
+  assert.ok((await db.payment.findUnique({where:{id:receipt.id}})).deletedAt);assert.equal(select('#sidebar'),sidebar);
+  await navigation.go('/admin/groups');await waitFor(()=>select('[data-delete-kind=groups]'));
+  click('[data-delete-id="'+group.id+'"]');await waitFor(()=>!select('[data-delete-id="'+group.id+'"]')&&!win.document.body.classList.contains('admin--navigating'),'group removed');
+  assert.ok((await db.trainingGroup.findUnique({where:{id:group.id}})).deletedAt);
+  await navigation.go('/admin/students');
+  select('#search').value='Удалить из интерфейса';select('#search').dispatchEvent(new win.Event('input',{bubbles:true}));
+  assert.ok(select('[data-delete-id="'+pupil.id+'"]'));click('[data-delete-id="'+pupil.id+'"]');
+  await waitFor(()=>!select('[data-delete-id="'+pupil.id+'"]')&&!win.document.body.classList.contains('admin--navigating'),'pupil removed');
+  assert.ok((await db.student.findUnique({where:{id:pupil.id}})).deletedAt);assert.equal(select('#sidebar'),sidebar);
+  await navigation.go('/admin/gym');
+ });
  await t.test('Смена зала требует отдельной загрузки и не переиспользует старую область',async()=>{
   let destination=null;navigation.hard=href=>{destination=href;};select('#gym-switch').value='school-25';select('#gym-switch').dispatchEvent(new win.Event('change',{bubbles:true}));await waitFor(()=>destination!==null);assert.equal(destination,'/admin/gym');assert.ok(win.document.cookie.includes('fed_gym=school-25'));
  });

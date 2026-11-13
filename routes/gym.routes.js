@@ -1,3 +1,4 @@
+import {removeGymRecord} from '../services/gym-delete.service.js';
 import {Router} from 'express';
 import {asyncHandler} from '../lib/http.js';
 import * as v from '../lib/validation.js';
@@ -44,6 +45,10 @@ function createGymRouter({db,requireAuth,validateOrigin}){
  }));
  router.patch('/sessions/:id/attendance',asyncHandler(async(req,res)=>{
   const session=await gym.saveAttendance(db,req.user.id,req.params.id,gym.attendanceData(req.body));res.json({success:true,session});
+ }));
+ router.delete('/groups/:id',asyncHandler(async(req,res)=>{
+  await removeGymRecord(db,req.user.id,'trainingGroup','gym-groups',req.params.id,req.body?.version);
+  res.json({success:true});
  }));
  return router;
 }

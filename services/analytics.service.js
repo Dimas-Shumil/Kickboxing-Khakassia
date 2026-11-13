@@ -9,7 +9,7 @@ export const scopeLabels={news:'Новости',people:'Люди',competitions:'
  students:'Ученики',payments:'Платежи','gym-groups':'Группы',
  'gym-sessions':'Тренировки','gym-attendance':'Посещаемость','gym-finances':'Доходы и расходы'};
 export const actionLabels={create:'Создание',save:'Сохранение правок',update:'Изменение',publish:'Публикация',
- unpublish:'Снятие публикации',archive:'В архив',restore:'Восстановление',delete:'Удаление файла',
+ unpublish:'Снятие публикации',archive:'В архив',restore:'Восстановление',delete:'Удаление',
  'delete-file':'Удаление файла','delete-photo':'Удаление фото'};
 export const allowedScopes=role=>['OWNER','TRAINER'].includes(role)?[...contentScopes,...gymScopes]:[...contentScopes];
 export const allowedActions=['all','create','save','update','publish','unpublish','archive','restore','delete','delete-file','delete-photo'];

@@ -32,6 +32,7 @@ model LegacySession {
 }
 
 model Student {
+  deletedAt DateTime?
   gymId String?
   gym Gym? @relation(fields: [gymId], references: [id], onDelete: Restrict)
   @@index([gymId])
@@ -53,6 +54,7 @@ model Student {
 }
 
 model Payment {
+  deletedAt DateTime?
   id        String   @id @default(cuid())
   student   String
   pupil     Student  @relation(fields: [student], references: [id], onDelete: Restrict)
@@ -232,6 +234,7 @@ model SiteAsset {
 // запрещено, чтобы сохранять такую привязку без изменения старых записей.
 // gymId=null: прежний учёт, доступный только OWNER до явного распределения.
 model TrainingGroup {
+  deletedAt DateTime?
   gymId String?
   gym Gym? @relation(fields: [gymId], references: [id], onDelete: Restrict)
   @@index([gymId])

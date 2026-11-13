@@ -1,3 +1,4 @@
+import {removeGymRecord} from '../services/gym-delete.service.js';
 import {Router} from 'express';
 import {asyncHandler} from '../lib/http.js';
 import * as v from '../lib/validation.js';
@@ -22,6 +23,10 @@ function createPaymentsRouter({db,requireAuth,validateOrigin}){
   });res.json({success:true,entity});
  }));
 
+ router.delete('/:id',asyncHandler(async(req,res)=>{
+  await removeGymRecord(db,req.user.id,'payment','payments',req.params.id,req.body?.version);
+  res.json({success:true});
+ }));
  return router;
 }
 export default createPaymentsRouter;

@@ -199,3 +199,12 @@
 }
 @keyframes admin-progress { from { transform: translateX(-100%); } to { transform: translateX(390%); } }
 html:has(body.admin) { scrollbar-gutter: stable; }
+
+// Payment reminders and reversible removal controls.
+.badge--yellow {background:#fff1c2;color:#7a5100;}
+.badge--red {background:#fce4e6;color:#a3182b;}
+.payment-due {display:block;margin-top:5px;color:#56637a;font-size:12px;line-height:1.4;}
+.row-actions {display:flex;align-items:center;flex-wrap:wrap;gap:12px;}
+.btn--danger {color:#ae1531;border-color:#e8bec6;background:#fff;}
+.btn--danger:hover {background:#fce4e6;border-color:#ae1531;}
+.btn--compact {min-height:32px;padding:6px 10px;font-size:12px;}

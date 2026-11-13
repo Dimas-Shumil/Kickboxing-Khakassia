@@ -1,3 +1,4 @@
+import {paymentStatus,nextPaymentDate} from './payment-status.js';
 import {navigation,registerPage} from './navigation.js';
 async function mountPage(page,createPage,route){
  const root=document.createElement('div');root.className='admin-view';
@@ -34,17 +35,19 @@ const canGym=['OWNER','TRAINER'].includes(state.user.role);
 let dirty=false, saving=false;
 const statuses={active:'Занимается',paused:'Приостановил',finished:'Завершил'};
 const newsStatuses={draft:'Черновик',published:'Опубликовано',archived:'Архив'};
-const studentName=id=>state.students.find(s=>s.id===id)?.name||'Ученик не найден';
+const studentName=id=>state.students.find(s=>s.id===id)?.name||state.payments.find(p=>p.student===id)?.pupil?.name||'Ученик не найден';
 const sortedPayments=()=>[...state.payments].sort((a,b)=>b.received.localeCompare(a.received));
 const receiptTotal=()=>state.payments.filter(p=>p.received.slice(0,7)===month).reduce((a,p)=>a+p.amount,0);
 const countBadge = (text,kind='quiet')=>`<span class="badge badge--${kind}">${e(text)}</span>`;
 function table(head,rows,empty='Записей пока нет') {
     return `<div class="table-wrap"><table class="responsive-table"><thead><tr>${head.map(h=>`<th scope="col">${e(h)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(row=>`<tr>${row.map((cell,i)=>`<td data-label="${e(head[i])}">${cell}</td>`).join('')}</tr>`).join(''):`<tr><td class="empty" colspan="${head.length}">${e(empty)}</td></tr>`}</tbody></table></div>`;
   }
+const paymentBadge=student=>{const status=paymentStatus(student,state.payments,now);return countBadge(status.text,status.kind)+(status.due?`<small class="payment-due">Оплата ${date(status.due)}</small>`:'');};
+const deleteButton=(kind,item)=>`<button type="button" class="btn btn--danger btn--compact" data-delete-kind="${kind}" data-delete-id="${e(item.id)}" data-delete-version="${item.version}">Удалить</button>`;
 function paymentRows(items,edit=true){return items.map(p=>[
-    `<a href="/admin/student?id=${e(p.student)}">${e(studentName(p.student))}</a>`,
-    `<span class="amount">${money(p.amount)}</span>`,date(p.received),e(period(p.period)),
-    ...(edit?[`<a href="/admin/payment?id=${e(p.id)}">Изменить</a>`]:[])
+    (state.students.some(s=>s.id===p.student)?`<a href="/admin/student?id=${e(p.student)}">${e(studentName(p.student))}</a>`:e(studentName(p.student))+' <small>'+(p.pupil?.deletedAt?'(ученик удалён)':'')+'</small>') ,
+    `<span class="amount">${money(p.amount)}</span>`,date(p.received),e(period(p.period))+`<small class="payment-due">Срок: ${date(p.received)} — ${date(nextPaymentDate(p.received))}</small>`,
+    ...(edit?[`<div class="row-actions"><a href="/admin/payment?id=${e(p.id)}">Изменить</a>${deleteButton('payments',p)}</div>`]:[])
   ]);}
 function stats(items){return `<div class="stats">${items.map(([name,value,i])=>`<div class="stat"><span class="stat__symbol">${icon(i)}</span><div><p>${e(name)}</p><strong>${e(value)}</strong></div></div>`).join('')}</div>`;}
 const tabs = () => `<nav class="tabs" aria-label="Управление залом">${[['gym','Обзор'],['students','Ученики'],['groups','Группы'],['trainings','Тренировки'],['payments','Оплаты'],['finances','Доходы и расходы']].map(([id,title])=>`<a href="/admin/${id}?month=${month}" ${page===id?'aria-current="page"':''}>${title}</a>`).join('')}</nav>`;
@@ -64,9 +67,20 @@ const addChange=(next,text)=>{next.changes.push({text,at:new Date().toLocaleStri
 const readForm=()=>Object.fromEntries(new FormData(form));
 const cents=x=>{const n=Number(x);return Number.isFinite(n)&&n>=0&&n<=1000000?Math.round(n*100):NaN;};
 let form=null;
-const ctx={root,replace:(href)=>alive&&!route.signal.aborted?navigation.go(href,{replace:true}):Promise.resolve(false),navigate:(href,options)=>alive&&!route.signal.aborted?navigation.go(href,options):Promise.resolve(false),KEY,uid,params,now,month,e,money,date,period,icon,btn,api,state,bufferKey,canGym,canPublish,statuses,newsStatuses,studentName,sortedPayments,receiptTotal,countBadge,table,paymentRows,stats,tabs,monthInput,gymToolbar,field,area,select,formMessage,saveActions,notFound,feedback,persist,clone,addChange,readForm,cents,get form(){return root.querySelector('form[id$="-form"]');},setDirty(value){dirty=value;}};
+const ctx={root,deleteButton,paymentBadge,nextPaymentDate,replace:(href)=>alive&&!route.signal.aborted?navigation.go(href,{replace:true}):Promise.resolve(false),navigate:(href,options)=>alive&&!route.signal.aborted?navigation.go(href,options):Promise.resolve(false),KEY,uid,params,now,month,e,money,date,period,icon,btn,api,state,bufferKey,canGym,canPublish,statuses,newsStatuses,studentName,sortedPayments,receiptTotal,countBadge,table,paymentRows,stats,tabs,monthInput,gymToolbar,field,area,select,formMessage,saveActions,notFound,feedback,persist,clone,addChange,readForm,cents,get form(){return root.querySelector('form[id$="-form"]');},setDirty(value){dirty=value;}};
 const pageModule=createPage(ctx);
 root.innerHTML=`<div class="page-head"><h1>${title}</h1><span class="badge badge--green">Рабочая панель</span></div>${storageProblem?`<div class="notice notice--error" role="alert">${e(storageProblem)}</div>`:''}<div id="feedback" class="notice" role="status"></div>${canGym?`<div class="toolbar"><label>Зал ${state.user.role==='OWNER'?`<select id="gym-switch"><option value="unassigned" ${state.gymId===null?'selected':''}>Нераспределённые записи</option>${state.gyms.map(g=>`<option value="${e(g.id)}" ${state.gymId===g.id?'selected':''}>${e(g.name)}</option>`).join('')}</select>`:`<strong>${e(state.gyms[0]?.name||'Зал не назначен')}</strong>`}</label></div>`:''}${pageModule.render()}`;
+root.addEventListener('click',async event=>{
+ const button=event.target.closest('[data-delete-kind]');if(!button||saving||writes)return;
+ const kind=button.dataset.deleteKind;
+ const messages={students:'Удалить ученика из списка? Его оплаты и посещения останутся в истории.',groups:'Удалить группу из справочника? Ученики и история тренировок сохранятся.',payments:'Удалить оплату? Она перестанет учитываться в суммах и оплаченном сроке. Запись останется в истории.'};
+ if(!messages[kind]||!confirm(messages[kind]))return;
+ saving=true;button.disabled=true;
+ try{
+  await api('/api/admin/'+(kind==='groups'?'gym/groups':kind)+'/'+encodeURIComponent(button.dataset.deleteId),{method:'DELETE',body:JSON.stringify({version:Number(button.dataset.deleteVersion)})});
+  dirty=false;saving=false;await ctx.replace('/admin/'+kind+'?month='+month);
+ }catch(err){feedback(err.message,true);button.disabled=false;}finally{saving=false;}
+});
 const shellHTML=`<aside class="sidebar" id="sidebar" aria-label="Боковая панель"><button class="btn sidebar__close" id="close-menu" aria-label="Закрыть меню">${icon('x-lg')}</button><a class="brand" href="/admin/dashboard"><img src="/site/img/logo-fed.png" alt="Логотип Федерации"><span>ФЕДЕРАЦИЯ<br>КИКБОКСИНГА<br>ХАКАСИИ</span></a><nav class="navigation" aria-label="Разделы управления">${nav.filter(([id])=>(canGym||id!=='gym')&&(id!=='access'||state.user.role==='OWNER')).map(([id,label,i])=>id?`<a href="/admin/${id}" >${icon(i)}${label}</a>`:`<button disabled>${icon(i)}${label}<small>Позже</small></button>`).join('')}</nav><div class="sidebar__bottom">Управление Федерацией<br>SQLite · защищённый доступ</div></aside><main class="workspace" id="workspace"><header class="topbar"><button class="btn topbar__menu" id="open-menu" aria-label="Открыть меню" aria-controls="sidebar" aria-expanded="false">${icon('list')}</button><span class="topbar__label">Административная панель</span><div class="topbar__right"><time class="topbar__date">${e(new Date(now+'T12:00:00').toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'}))}</time><a href="../">На сайт</a><span>${e(state.user.name)} · ${state.user.role==='OWNER'?'Владелец':state.user.role==='TRAINER'?'Тренер':'Редактор'}</span><button class="btn" type="button" data-admin-logout>Выйти</button></div></header><div id="admin-view-slot"></div></main><dialog id="leave-dialog" aria-labelledby="leave-title"><h2 id="leave-title">Есть несохранённые изменения</h2><p>Покинуть форму и потерять изменения?</p><div class="actions"><button class="btn" id="stay">Остаться</button><button class="btn btn--primary" id="leave">Уйти без сохранения</button></div></dialog>`;
 root.querySelector('#gym-switch')?.addEventListener('change',async event=>{
  const target=event.target.value;
