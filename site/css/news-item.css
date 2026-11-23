@@ -1563,16 +1563,27 @@ body.site-search-open {
   overflow-wrap: anywhere;
 }
 
+body.gallery-viewer-open {
+  overflow: hidden;
+}
+
 .profile-lightbox {
   position: fixed;
   inset: 0;
   z-index: 5000;
-  display: grid;
-  place-items: center;
+  display: block;
   padding: 0;
   overflow: hidden;
+  color: #fff;
   overscroll-behavior: contain;
   box-sizing: border-box;
+}
+
+.profile-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 4, 10, 0.94);
+  backdrop-filter: blur(8px);
 }
 
 .profile-lightbox[hidden] {
@@ -1580,15 +1591,22 @@ body.site-search-open {
 }
 
 .profile-lightbox__dialog {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  width: auto;
+  max-width: 1200px;
+  height: auto;
+  max-height: none;
+  min-width: 0;
+  min-height: 0;
+  margin-inline: auto;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 56px minmax(0, 1fr) 42px;
-  align-content: stretch;
-  width: min(1200px, 100%);
-  height: 100%;
-  max-height: 100%;
-  padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom));
+  place-content: stretch;
+  place-items: stretch;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1602,15 +1620,17 @@ body.site-search-open {
   min-height: 0;
   z-index: 3;
   gap: 16px;
+  color: #f2c992;
+  font: 600 13px/1.2 system-ui, sans-serif;
+  letter-spacing: normal;
 }
 
 .profile-lightbox__stage {
   position: relative;
   display: block;
-  flex: none;
   min-width: 0;
   min-height: 0;
-  height: 100%;
+  height: auto;
   padding: 8px 60px;
   box-sizing: border-box;
   overflow: hidden;
@@ -1618,24 +1638,30 @@ body.site-search-open {
 }
 
 .profile-lightbox__media {
-  display: grid;
-  place-items: center;
+  position: relative;
+  display: block;
   width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .profile-lightbox__media img, .profile-lightbox__media video {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
   object-position: center;
-  border-radius: 4px;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
   user-select: none;
+  -webkit-user-drag: none;
 }
 
 .profile-lightbox .profile-lightbox__nav, .profile-lightbox .profile-lightbox__prev, .profile-lightbox .profile-lightbox__next {
@@ -1653,8 +1679,7 @@ body.site-search-open {
   border-radius: 8px;
   background: rgba(17, 29, 55, 0.9019607843);
   color: #fff;
-  font-size: 24px;
-  line-height: 1;
+  font: 500 26px/1 system-ui, sans-serif;
   box-sizing: border-box;
 }
 
@@ -1668,7 +1693,7 @@ body.site-search-open {
   left: auto;
 }
 
-.profile-lightbox__close {
+.profile-lightbox .profile-lightbox__close {
   position: static;
   display: grid;
   place-items: center;
@@ -1681,7 +1706,8 @@ body.site-search-open {
   border-radius: 8px;
   background: #111d37;
   color: white;
-  font-size: 26px;
+  font: 500 26px/1 system-ui, sans-serif;
+  box-sizing: border-box;
 }
 
 .profile-lightbox__caption {
@@ -1699,7 +1725,17 @@ body.site-search-open {
   display: none;
 }
 
-@media (max-width: 600px) {
+.profile-lightbox button:focus-visible {
+  outline: 2px solid #f2c992;
+  outline-offset: 2px;
+}
+
+.profile-lightbox button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 767px), (max-height: 500px) and (pointer: coarse) {
   .profile-lightbox__dialog {
     grid-template-rows: 52px minmax(0, 1fr) 42px;
     padding-top: max(8px, env(safe-area-inset-top));
@@ -1708,20 +1744,26 @@ body.site-search-open {
     padding: 6px 0;
   }
   .profile-lightbox .profile-lightbox__nav, .profile-lightbox .profile-lightbox__prev, .profile-lightbox .profile-lightbox__next {
-    width: 38px;
-    height: 46px;
+    display: none;
   }
 }
 .coach-profile-lightbox {
   position: fixed;
   inset: 0;
   z-index: 5000;
-  display: grid;
-  place-items: center;
+  display: block;
   padding: 0;
   overflow: hidden;
+  color: #fff;
   overscroll-behavior: contain;
   box-sizing: border-box;
+}
+
+.coach-profile-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 4, 10, 0.94);
+  backdrop-filter: blur(8px);
 }
 
 .coach-profile-lightbox[hidden] {
@@ -1729,15 +1771,22 @@ body.site-search-open {
 }
 
 .coach-profile-lightbox__dialog {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  width: auto;
+  max-width: 1200px;
+  height: auto;
+  max-height: none;
+  min-width: 0;
+  min-height: 0;
+  margin-inline: auto;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 56px minmax(0, 1fr) 42px;
-  align-content: stretch;
-  width: min(1200px, 100%);
-  height: 100%;
-  max-height: 100%;
-  padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom));
+  place-content: stretch;
+  place-items: stretch;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1751,15 +1800,17 @@ body.site-search-open {
   min-height: 0;
   z-index: 3;
   gap: 16px;
+  color: #f2c992;
+  font: 600 13px/1.2 system-ui, sans-serif;
+  letter-spacing: normal;
 }
 
 .coach-profile-lightbox__stage {
   position: relative;
   display: block;
-  flex: none;
   min-width: 0;
   min-height: 0;
-  height: 100%;
+  height: auto;
   padding: 8px 60px;
   box-sizing: border-box;
   overflow: hidden;
@@ -1767,24 +1818,30 @@ body.site-search-open {
 }
 
 .coach-profile-lightbox__media {
-  display: grid;
-  place-items: center;
+  position: relative;
+  display: block;
   width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .coach-profile-lightbox__media img, .coach-profile-lightbox__media video {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
   object-position: center;
-  border-radius: 4px;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
   user-select: none;
+  -webkit-user-drag: none;
 }
 
 .coach-profile-lightbox .coach-profile-lightbox__nav, .coach-profile-lightbox .coach-profile-lightbox__prev, .coach-profile-lightbox .coach-profile-lightbox__next {
@@ -1802,8 +1859,7 @@ body.site-search-open {
   border-radius: 8px;
   background: rgba(17, 29, 55, 0.9019607843);
   color: #fff;
-  font-size: 24px;
-  line-height: 1;
+  font: 500 26px/1 system-ui, sans-serif;
   box-sizing: border-box;
 }
 
@@ -1817,7 +1873,7 @@ body.site-search-open {
   left: auto;
 }
 
-.coach-profile-lightbox__close {
+.coach-profile-lightbox .coach-profile-lightbox__close {
   position: static;
   display: grid;
   place-items: center;
@@ -1830,7 +1886,8 @@ body.site-search-open {
   border-radius: 8px;
   background: #111d37;
   color: white;
-  font-size: 26px;
+  font: 500 26px/1 system-ui, sans-serif;
+  box-sizing: border-box;
 }
 
 .coach-profile-lightbox__caption {
@@ -1848,7 +1905,17 @@ body.site-search-open {
   display: none;
 }
 
-@media (max-width: 600px) {
+.coach-profile-lightbox button:focus-visible {
+  outline: 2px solid #f2c992;
+  outline-offset: 2px;
+}
+
+.coach-profile-lightbox button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 767px), (max-height: 500px) and (pointer: coarse) {
   .coach-profile-lightbox__dialog {
     grid-template-rows: 52px minmax(0, 1fr) 42px;
     padding-top: max(8px, env(safe-area-inset-top));
@@ -1857,20 +1924,26 @@ body.site-search-open {
     padding: 6px 0;
   }
   .coach-profile-lightbox .coach-profile-lightbox__nav, .coach-profile-lightbox .coach-profile-lightbox__prev, .coach-profile-lightbox .coach-profile-lightbox__next {
-    width: 38px;
-    height: 46px;
+    display: none;
   }
 }
 .coach-lightbox {
   position: fixed;
   inset: 0;
   z-index: 5000;
-  display: grid;
-  place-items: center;
+  display: block;
   padding: 0;
   overflow: hidden;
+  color: #fff;
   overscroll-behavior: contain;
   box-sizing: border-box;
+}
+
+.coach-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 4, 10, 0.94);
+  backdrop-filter: blur(8px);
 }
 
 .coach-lightbox[hidden] {
@@ -1878,15 +1951,22 @@ body.site-search-open {
 }
 
 .coach-lightbox__dialog {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 1;
+  width: auto;
+  max-width: 1200px;
+  height: auto;
+  max-height: none;
+  min-width: 0;
+  min-height: 0;
+  margin-inline: auto;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 56px minmax(0, 1fr) 42px;
-  align-content: stretch;
-  width: min(1200px, 100%);
-  height: 100%;
-  max-height: 100%;
-  padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom));
+  place-content: stretch;
+  place-items: stretch;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1900,15 +1980,17 @@ body.site-search-open {
   min-height: 0;
   z-index: 3;
   gap: 16px;
+  color: #f2c992;
+  font: 600 13px/1.2 system-ui, sans-serif;
+  letter-spacing: normal;
 }
 
 .coach-lightbox__stage {
   position: relative;
   display: block;
-  flex: none;
   min-width: 0;
   min-height: 0;
-  height: 100%;
+  height: auto;
   padding: 8px 60px;
   box-sizing: border-box;
   overflow: hidden;
@@ -1916,24 +1998,30 @@ body.site-search-open {
 }
 
 .coach-lightbox__media {
-  display: grid;
-  place-items: center;
+  position: relative;
+  display: block;
   width: 100%;
   height: 100%;
   min-width: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .coach-lightbox__media img, .coach-lightbox__media video {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: none;
+  max-height: none;
   object-fit: contain;
   object-position: center;
-  border-radius: 4px;
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
   user-select: none;
+  -webkit-user-drag: none;
 }
 
 .coach-lightbox .coach-lightbox__nav, .coach-lightbox .coach-lightbox__prev, .coach-lightbox .coach-lightbox__next {
@@ -1951,8 +2039,7 @@ body.site-search-open {
   border-radius: 8px;
   background: rgba(17, 29, 55, 0.9019607843);
   color: #fff;
-  font-size: 24px;
-  line-height: 1;
+  font: 500 26px/1 system-ui, sans-serif;
   box-sizing: border-box;
 }
 
@@ -1966,7 +2053,7 @@ body.site-search-open {
   left: auto;
 }
 
-.coach-lightbox__close {
+.coach-lightbox .coach-lightbox__close {
   position: static;
   display: grid;
   place-items: center;
@@ -1979,7 +2066,8 @@ body.site-search-open {
   border-radius: 8px;
   background: #111d37;
   color: white;
-  font-size: 26px;
+  font: 500 26px/1 system-ui, sans-serif;
+  box-sizing: border-box;
 }
 
 .coach-lightbox__caption {
@@ -1997,7 +2085,17 @@ body.site-search-open {
   display: none;
 }
 
-@media (max-width: 600px) {
+.coach-lightbox button:focus-visible {
+  outline: 2px solid #f2c992;
+  outline-offset: 2px;
+}
+
+.coach-lightbox button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 767px), (max-height: 500px) and (pointer: coarse) {
   .coach-lightbox__dialog {
     grid-template-rows: 52px minmax(0, 1fr) 42px;
     padding-top: max(8px, env(safe-area-inset-top));
@@ -2006,7 +2104,38 @@ body.site-search-open {
     padding: 6px 0;
   }
   .coach-lightbox .coach-lightbox__nav, .coach-lightbox .coach-lightbox__prev, .coach-lightbox .coach-lightbox__next {
-    width: 38px;
-    height: 46px;
+    display: none;
+  }
+}
+@media (max-width: 767px) {
+  [data-gallery-grid][data-gallery-grid], [data-coach-gallery][data-coach-gallery] {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: row;
+    gap: 4px;
+  }
+  [data-gallery-grid][data-gallery-grid] > button[data-media-type], [data-gallery-grid][data-gallery-grid] > button[data-coach-media], [data-coach-gallery][data-coach-gallery] > button[data-media-type], [data-coach-gallery][data-coach-gallery] > button[data-coach-media] {
+    grid-column: auto;
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 1;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  [data-gallery-grid][data-gallery-grid] > button[data-media-type] > img, [data-gallery-grid][data-gallery-grid] > button[data-coach-media] > img, [data-coach-gallery][data-coach-gallery] > button[data-media-type] > img, [data-coach-gallery][data-coach-gallery] > button[data-coach-media] > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+  }
+  [data-gallery-grid][data-gallery-grid] > button[data-media-type] > span, [data-gallery-grid][data-gallery-grid] > button[data-media-type]::after, [data-gallery-grid][data-gallery-grid] > button[data-coach-media] > span, [data-gallery-grid][data-gallery-grid] > button[data-coach-media]::after, [data-coach-gallery][data-coach-gallery] > button[data-media-type] > span, [data-coach-gallery][data-coach-gallery] > button[data-media-type]::after, [data-coach-gallery][data-coach-gallery] > button[data-coach-media] > span, [data-coach-gallery][data-coach-gallery] > button[data-coach-media]::after {
+    display: none;
+  }
+}
+@media (min-width: 430px) and (max-width: 767px) {
+  [data-gallery-grid][data-gallery-grid], [data-coach-gallery][data-coach-gallery] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
