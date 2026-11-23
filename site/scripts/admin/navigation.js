@@ -59,6 +59,8 @@ export const navigation={
  },
  hard(href){sequence++;controller?.abort();current?.dispose();current?.abort();current?.root.replaceChildren();current?.clearDirty();location.assign(href);},
  async go(href,options={}){
+  const retainedScroll=options.preserveScroll?window.scrollY:null;
+  const detailStates=options.preserveScroll?[...(current?.root.querySelectorAll('details')||[])].map(x=>x.open):null;
   const target=parse(href);
   if(!target){if(await this.allowLeave())this.hard(href);return false;}
   const ticket=++sequence;
@@ -86,11 +88,12 @@ export const navigation={
    else if(!options.initial){saveScroll();index=options.replace?index:index+1;history[options.replace?'replaceState':'pushState']({...history.state,fedAdmin:{index,scroll:0}},'',hrefFor(target.url));}
    installShell(prepared.shellHTML);
    previous?.dispose();previous?.abort();current=prepared;current.abort=()=>nextController.abort();if(controller===nextController)controller=null;
+   if(detailStates)prepared.root.querySelectorAll('details').forEach((el,i)=>{if(i<detailStates.length)el.open=detailStates[i];});
    document.querySelector('#admin-view-slot').replaceChildren(prepared.root);
    document.body.dataset.page=target.name;document.title=prepared.title+' — Федерация';
    moveIndicator(prepared.active,!!options.initial);busy(false);
-   const heading=prepared.root.querySelector('h1');heading?.setAttribute('tabindex','-1');if(!options.initial)heading?.focus({preventScroll:true});
-   const scrollBehavior=document.documentElement.style.scrollBehavior;document.documentElement.style.scrollBehavior='auto';window.scrollTo(0,options.scroll||0);document.documentElement.style.scrollBehavior=scrollBehavior;
+   const heading=prepared.root.querySelector('h1');heading?.setAttribute('tabindex','-1');if(!options.initial&&!options.preserveScroll)heading?.focus({preventScroll:true});
+   const scrollBehavior=document.documentElement.style.scrollBehavior;document.documentElement.style.scrollBehavior='auto';window.scrollTo(0,retainedScroll??options.scroll??0);document.documentElement.style.scrollBehavior=scrollBehavior;
    if(!reduced()&&prepared.root.animate)prepared.root.animate([{opacity:.3,transform:'translateY(5px)'},{opacity:1,transform:'translateY(0)'}],{duration:160,easing:'ease-out'});
    return true;
   }catch(error){

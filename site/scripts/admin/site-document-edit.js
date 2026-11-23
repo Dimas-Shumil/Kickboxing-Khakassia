@@ -6,7 +6,7 @@ mount('site-document-edit',ctx=>{
  const mark=()=>{dirty=true;ctx.setDirty(true);};
  const fileOptions=()=>[['','PDF не выбран'],...[...new Set([p.file,...assets.map(a=>a.src)].filter(Boolean))].map(s=>[s,'PDF '+s.split('/').at(-1).slice(0,10)])];
  const fileList=()=>{const current=p.file;return fileOptions().map(([v,t])=>`<option value="${e(v)}" ${v===current?'selected':''}>${e(t)}</option>`).join('');};
- const setStatus=()=>{ctx.root.querySelector('#doc-status').textContent={draft:'Черновик',published:'Опубликован',archived:'В архиве'}[p.status]+(p.hasChanges?' · есть правки':'');ctx.root.querySelector('#doc-version').textContent=p.id?'Версия '+p.version:'Новый документ';};
+ const setStatus=()=>{ctx.root.querySelector('[data-content-delete]')?.remove();if(p.id)ctx.root.querySelector('.toolbar')?.insertAdjacentHTML('beforeend',ctx.contentDeleteButton('site/documents',p));ctx.root.querySelector('#doc-status').textContent={draft:'Черновик',published:'Опубликован',archived:'В архиве'}[p.status]+(p.hasChanges?' · есть правки':'');ctx.root.querySelector('#doc-version').textContent=p.id?'Версия '+p.version:'Новый документ';};
  const refreshAssets=async()=>{if(!p.id)return;assets=(await api('/api/admin/site/media')).assets.filter(x=>x.ownerKey==='document:'+p.id);const el=ctx.root.querySelector('#document-file');if(el){const value=el.value;el.innerHTML=fileOptions().map(([v,t])=>`<option value="${e(v)}" ${value===v?'selected':''}>${e(t)}</option>`).join('');}};
  const formData=()=>({...Object.fromEntries(new FormData(ctx.root.querySelector('#site-document-form'))),version:p.version});
  const apply=async()=>{

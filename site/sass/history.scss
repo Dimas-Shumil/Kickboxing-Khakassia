@@ -1,3 +1,4 @@
+@use './components/gallery-layout';
 @use './base/base';
 @use './base/variables' as v;
 @use './components/header';
@@ -174,3 +175,5 @@
 
 .history-section--navy .history-story__text>p { color:#c1cbdb; }
 .history-event__image { min-height:190px; background:#e1e4e9; }
+
+@include gallery-layout.layout;

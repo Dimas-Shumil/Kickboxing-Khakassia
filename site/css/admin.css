@@ -1399,3 +1399,22 @@ html:has(body.admin) {
   padding: 6px 10px;
   font-size: 12px;
 }
+
+.news-image-preview {
+  height: 180px;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+.notice.notice--toast:not(:empty) {
+  position: fixed;
+  z-index: 8000;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  right: 20px;
+  left: auto;
+  width: min(480px, 100vw - 40px);
+  max-height: 30vh;
+  overflow: auto;
+  box-shadow: 0 8px 24px rgba(17, 29, 55, 0.2);
+  margin: 0;
+}

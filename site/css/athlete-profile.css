@@ -2249,3 +2249,450 @@ body.athlete-lightbox-open {
     transition: none;
   }
 }
+.profile-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+}
+
+.profile-lightbox[hidden] {
+  display: none;
+}
+
+.profile-lightbox__dialog {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 56px minmax(0, 1fr) 42px;
+  align-content: stretch;
+  width: min(1200px, 100%);
+  height: 100%;
+  max-height: 100%;
+  padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.profile-lightbox__top, .profile-lightbox__head {
+  position: relative;
+  inset: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 0;
+  z-index: 3;
+  gap: 16px;
+}
+
+.profile-lightbox__stage {
+  position: relative;
+  display: block;
+  flex: none;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 8px 60px;
+  box-sizing: border-box;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.profile-lightbox__media {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.profile-lightbox__media img, .profile-lightbox__media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.profile-lightbox .profile-lightbox__nav, .profile-lightbox .profile-lightbox__prev, .profile-lightbox .profile-lightbox__next {
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3137254902);
+  border-radius: 8px;
+  background: rgba(17, 29, 55, 0.9019607843);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.profile-lightbox__prev, .profile-lightbox__nav--prev {
+  left: 0;
+  right: auto;
+}
+
+.profile-lightbox__next, .profile-lightbox__nav--next {
+  right: 0;
+  left: auto;
+}
+
+.profile-lightbox__close {
+  position: static;
+  display: grid;
+  place-items: center;
+  transform: none;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3137254902);
+  border-radius: 8px;
+  background: #111d37;
+  color: white;
+  font-size: 26px;
+}
+
+.profile-lightbox__caption {
+  align-self: center;
+  min-height: 0;
+  max-height: 36px;
+  overflow: hidden;
+  margin: 4px 0;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.profile-lightbox__hint {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .profile-lightbox__dialog {
+    grid-template-rows: 52px minmax(0, 1fr) 42px;
+    padding-top: max(8px, env(safe-area-inset-top));
+  }
+  .profile-lightbox__stage {
+    padding: 6px 0;
+  }
+  .profile-lightbox .profile-lightbox__nav, .profile-lightbox .profile-lightbox__prev, .profile-lightbox .profile-lightbox__next {
+    width: 38px;
+    height: 46px;
+  }
+}
+.coach-profile-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+}
+
+.coach-profile-lightbox[hidden] {
+  display: none;
+}
+
+.coach-profile-lightbox__dialog {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 56px minmax(0, 1fr) 42px;
+  align-content: stretch;
+  width: min(1200px, 100%);
+  height: 100%;
+  max-height: 100%;
+  padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.coach-profile-lightbox__top, .coach-profile-lightbox__head {
+  position: relative;
+  inset: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 0;
+  z-index: 3;
+  gap: 16px;
+}
+
+.coach-profile-lightbox__stage {
+  position: relative;
+  display: block;
+  flex: none;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 8px 60px;
+  box-sizing: border-box;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.coach-profile-lightbox__media {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.coach-profile-lightbox__media img, .coach-profile-lightbox__media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.coach-profile-lightbox .coach-profile-lightbox__nav, .coach-profile-lightbox .coach-profile-lightbox__prev, .coach-profile-lightbox .coach-profile-lightbox__next {
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3137254902);
+  border-radius: 8px;
+  background: rgba(17, 29, 55, 0.9019607843);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.coach-profile-lightbox__prev, .coach-profile-lightbox__nav--prev {
+  left: 0;
+  right: auto;
+}
+
+.coach-profile-lightbox__next, .coach-profile-lightbox__nav--next {
+  right: 0;
+  left: auto;
+}
+
+.coach-profile-lightbox__close {
+  position: static;
+  display: grid;
+  place-items: center;
+  transform: none;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3137254902);
+  border-radius: 8px;
+  background: #111d37;
+  color: white;
+  font-size: 26px;
+}
+
+.coach-profile-lightbox__caption {
+  align-self: center;
+  min-height: 0;
+  max-height: 36px;
+  overflow: hidden;
+  margin: 4px 0;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.coach-profile-lightbox__hint {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .coach-profile-lightbox__dialog {
+    grid-template-rows: 52px minmax(0, 1fr) 42px;
+    padding-top: max(8px, env(safe-area-inset-top));
+  }
+  .coach-profile-lightbox__stage {
+    padding: 6px 0;
+  }
+  .coach-profile-lightbox .coach-profile-lightbox__nav, .coach-profile-lightbox .coach-profile-lightbox__prev, .coach-profile-lightbox .coach-profile-lightbox__next {
+    width: 38px;
+    height: 46px;
+  }
+}
+.coach-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+}
+
+.coach-lightbox[hidden] {
+  display: none;
+}
+
+.coach-lightbox__dialog {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: 56px minmax(0, 1fr) 42px;
+  align-content: stretch;
+  width: min(1200px, 100%);
+  height: 100%;
+  max-height: 100%;
+  padding: 12px max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.coach-lightbox__top, .coach-lightbox__head {
+  position: relative;
+  inset: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 0;
+  z-index: 3;
+  gap: 16px;
+}
+
+.coach-lightbox__stage {
+  position: relative;
+  display: block;
+  flex: none;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 8px 60px;
+  box-sizing: border-box;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.coach-lightbox__media {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.coach-lightbox__media img, .coach-lightbox__media video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.coach-lightbox .coach-lightbox__nav, .coach-lightbox .coach-lightbox__prev, .coach-lightbox .coach-lightbox__next {
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 48px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3137254902);
+  border-radius: 8px;
+  background: rgba(17, 29, 55, 0.9019607843);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.coach-lightbox__prev, .coach-lightbox__nav--prev {
+  left: 0;
+  right: auto;
+}
+
+.coach-lightbox__next, .coach-lightbox__nav--next {
+  right: 0;
+  left: auto;
+}
+
+.coach-lightbox__close {
+  position: static;
+  display: grid;
+  place-items: center;
+  transform: none;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3137254902);
+  border-radius: 8px;
+  background: #111d37;
+  color: white;
+  font-size: 26px;
+}
+
+.coach-lightbox__caption {
+  align-self: center;
+  min-height: 0;
+  max-height: 36px;
+  overflow: hidden;
+  margin: 4px 0;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.coach-lightbox__hint {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .coach-lightbox__dialog {
+    grid-template-rows: 52px minmax(0, 1fr) 42px;
+    padding-top: max(8px, env(safe-area-inset-top));
+  }
+  .coach-lightbox__stage {
+    padding: 6px 0;
+  }
+  .coach-lightbox .coach-lightbox__nav, .coach-lightbox .coach-lightbox__prev, .coach-lightbox .coach-lightbox__next {
+    width: 38px;
+    height: 46px;
+  }
+}

@@ -1,3 +1,4 @@
+@use './components/gallery-layout';
 @use './base/base';
 @use './base/variables' as v;
 @use './components/header';
@@ -171,3 +172,5 @@ body.coach-profile-lightbox-open {overflow:hidden;}
 @media(prefers-reduced-motion:reduce) {
  .coach-profile-page *, .coach-profile-page *::before, .coach-profile-page *::after {scroll-behavior:auto;transition:none;}
 }
+
+@include gallery-layout.layout;

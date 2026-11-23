@@ -1,3 +1,4 @@
+@use './components/gallery-layout';
 @use './base/base';
 @use './base/variables' as v;
 @use './components/header';
@@ -220,3 +221,5 @@ body.athlete-lightbox-open { overflow:hidden; }
 /* Keep long uppercase display headings within their section columns. */
 .profile-awards__intro .profile-section-head__title, .profile-journey__intro .profile-section-head__title { font-size:clamp(35px,3.25vw,50px); }
 .profile-lightbox__media img { user-select:none; -webkit-user-drag:none; }
+
+@include gallery-layout.layout;

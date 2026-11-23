@@ -9,7 +9,7 @@ async function mountPage(page,createPage,route){
   if(mutation)writes++;
   const task=window.FederationAdminSession.requestJson(url,{...options,...(!mutation?{signal:route.signal}:{})});
   pending.add(task);
-  try{const data=await task;if(!alive||route.signal.aborted)throw new DOMException('Экран закрыт','AbortError');return data;}
+  try{const data=await task;if(!alive||route.signal.aborted)throw new DOMException('Экран закрыт','AbortError');if(mutation){const record=data.entity||data.document;const b=root.querySelector('[data-content-delete]');if(record&&b?.dataset.recordId===record.id)b.dataset.version=String(record.version);}return data;}
   finally{pending.delete(task);if(mutation)writes--;}
  };
 'use strict';
@@ -67,7 +67,8 @@ const addChange=(next,text)=>{next.changes.push({text,at:new Date().toLocaleStri
 const readForm=()=>Object.fromEntries(new FormData(form));
 const cents=x=>{const n=Number(x);return Number.isFinite(n)&&n>=0&&n<=1000000?Math.round(n*100):NaN;};
 let form=null;
-const ctx={root,deleteButton,paymentBadge,nextPaymentDate,replace:(href)=>alive&&!route.signal.aborted?navigation.go(href,{replace:true}):Promise.resolve(false),navigate:(href,options)=>alive&&!route.signal.aborted?navigation.go(href,options):Promise.resolve(false),KEY,uid,params,now,month,e,money,date,period,icon,btn,api,state,bufferKey,canGym,canPublish,statuses,newsStatuses,studentName,sortedPayments,receiptTotal,countBadge,table,paymentRows,stats,tabs,monthInput,gymToolbar,field,area,select,formMessage,saveActions,notFound,feedback,persist,clone,addChange,readForm,cents,get form(){return root.querySelector('form[id$="-form"]');},setDirty(value){dirty=value;}};
+const contentDeleteButton=(kind,item)=>canPublish||!item.hasPublished?`<button class="btn btn--danger btn--compact" type="button" data-content-delete="${kind}" data-record-id="${e(item.id)}" data-version="${item.version}">Удалить</button>`:'';
+const ctx={root,contentDeleteButton,deleteButton,paymentBadge,nextPaymentDate,replace:(href)=>alive&&!route.signal.aborted?navigation.go(href,{replace:true,preserveScroll:page.endsWith('-edit')&&!href.includes('-preview')}):Promise.resolve(false),navigate:(href,options)=>alive&&!route.signal.aborted?navigation.go(href,options):Promise.resolve(false),KEY,uid,params,now,month,e,money,date,period,icon,btn,api,state,bufferKey,canGym,canPublish,statuses,newsStatuses,studentName,sortedPayments,receiptTotal,countBadge,table,paymentRows,stats,tabs,monthInput,gymToolbar,field,area,select,formMessage,saveActions,notFound,feedback,persist,clone,addChange,readForm,cents,get form(){return root.querySelector('form[id$="-form"]');},setDirty(value){dirty=value;}};
 const pageModule=createPage(ctx);
 root.innerHTML=`<div class="page-head"><h1>${title}</h1><span class="badge badge--green">Рабочая панель</span></div>${storageProblem?`<div class="notice notice--error" role="alert">${e(storageProblem)}</div>`:''}<div id="feedback" class="notice" role="status"></div>${canGym?`<div class="toolbar"><label>Зал ${state.user.role==='OWNER'?`<select id="gym-switch"><option value="unassigned" ${state.gymId===null?'selected':''}>Нераспределённые записи</option>${state.gyms.map(g=>`<option value="${e(g.id)}" ${state.gymId===g.id?'selected':''}>${e(g.name)}</option>`).join('')}</select>`:`<strong>${e(state.gyms[0]?.name||'Зал не назначен')}</strong>`}</label></div>`:''}${pageModule.render()}`;
 root.addEventListener('click',async event=>{
@@ -81,6 +82,16 @@ root.addEventListener('click',async event=>{
   dirty=false;saving=false;await ctx.replace('/admin/'+kind+'?month='+month);
  }catch(err){feedback(err.message,true);button.disabled=false;}finally{saving=false;}
 });
+const editorKinds={'person-edit':['people','people'],'news-edit':['news','news'],'competition-edit':['competitions','competitions'],'history-edit':['history','history']};
+if(editorKinds[page]){const [kind,key]=editorKinds[page],item=state[key]?.find(x=>x.id===params.get('id'));if(item)root.querySelector('.toolbar')?.insertAdjacentHTML('beforeend',contentDeleteButton(kind,item));}
+root.addEventListener('click',async event=>{
+ const button=event.target.closest('[data-content-delete]');if(!button||writes||saving)return;
+ const kind=button.dataset.contentDelete;if(!['people','news','competitions','history','site/documents'].includes(kind))return;
+ if(!confirm('Удалить запись? Она исчезнет из списков и с сайта. Связанные файлы и история сохранятся.'))return;
+ saving=true;button.disabled=true;
+ try{await api('/api/admin/'+kind+'/'+encodeURIComponent(button.dataset.recordId),{method:'DELETE',body:JSON.stringify({version:Number(button.dataset.version)})});dirty=false;saving=false;await ctx.replace('/admin/'+(kind==='site/documents'?'site-documents':kind));}
+ catch(err){button.disabled=false;feedback(err.message,true);}finally{saving=false;}
+});
 const shellHTML=`<aside class="sidebar" id="sidebar" aria-label="Боковая панель"><button class="btn sidebar__close" id="close-menu" aria-label="Закрыть меню">${icon('x-lg')}</button><a class="brand" href="/admin/dashboard"><img src="/site/img/logo-fed.png" alt="Логотип Федерации"><span>ФЕДЕРАЦИЯ<br>КИКБОКСИНГА<br>ХАКАСИИ</span></a><nav class="navigation" aria-label="Разделы управления">${nav.filter(([id])=>(canGym||id!=='gym')&&(id!=='access'||state.user.role==='OWNER')).map(([id,label,i])=>id?`<a href="/admin/${id}" >${icon(i)}${label}</a>`:`<button disabled>${icon(i)}${label}<small>Позже</small></button>`).join('')}</nav><div class="sidebar__bottom">Управление Федерацией<br>SQLite · защищённый доступ</div></aside><main class="workspace" id="workspace"><header class="topbar"><button class="btn topbar__menu" id="open-menu" aria-label="Открыть меню" aria-controls="sidebar" aria-expanded="false">${icon('list')}</button><span class="topbar__label">Административная панель</span><div class="topbar__right"><time class="topbar__date">${e(new Date(now+'T12:00:00').toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'}))}</time><a href="../">На сайт</a><span>${e(state.user.name)} · ${state.user.role==='OWNER'?'Владелец':state.user.role==='TRAINER'?'Тренер':'Редактор'}</span><button class="btn" type="button" data-admin-logout>Выйти</button></div></header><div id="admin-view-slot"></div></main><dialog id="leave-dialog" aria-labelledby="leave-title"><h2 id="leave-title">Есть несохранённые изменения</h2><p>Покинуть форму и потерять изменения?</p><div class="actions"><button class="btn" id="stay">Остаться</button><button class="btn btn--primary" id="leave">Уйти без сохранения</button></div></dialog>`;
 root.querySelector('#gym-switch')?.addEventListener('change',async event=>{
  const target=event.target.value;
@@ -91,7 +102,7 @@ root.querySelector('#gym-switch')?.addEventListener('change',async event=>{
  // A hard boundary intentionally clears every old gym view, request and closure.
  navigation.hard('/admin/gym');
 });
-function feedback(text,error=false){if(!alive||route.signal.aborted)return;const el=root.querySelector('#form-message')||root.querySelector('#feedback');if(!el)return;el.textContent=text;el.classList.toggle('notice--error',error);if(root.isConnected)el.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
+function feedback(text,error=false){if(!alive||route.signal.aborted)return;const el=root.querySelector('#form-message')||root.querySelector('#feedback');if(!el)return;el.textContent=text;el.classList.add('notice--toast');el.classList.toggle('notice--error',error);}
 async function persist(next) {
     if(saving)return null;
     const collection=['students','payments','news'].find(k=>JSON.stringify(state[k])!==JSON.stringify(next[k]));

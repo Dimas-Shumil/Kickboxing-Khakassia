@@ -107,6 +107,20 @@ const login=await nativeFetch(base+'/api/admin/auth/login',{method:'POST',header
   assert.ok((await db.student.findUnique({where:{id:pupil.id}})).deletedAt);assert.equal(select('#sidebar'),sidebar);
   await navigation.go('/admin/gym');
  });
+ await t.test('Сохранение редактора сохраняет прокрутку; кнопки удаления есть в списках',async()=>{
+  let scrollTarget=null;win.scrollTo=(x,y)=>{scrollTarget=y;win.scrollY=y;};
+  await navigation.go('/admin/news-edit');
+  const form=select('#news-form');form.elements.title.value='Сохранить прокрутку';form.elements.lead.value='Текст';form.elements.text.value='Подробности';
+  form.elements.title.dispatchEvent(new win.Event('input',{bubbles:true}));
+  win.scrollY=640;form.dispatchEvent(new win.Event('submit',{bubbles:true,cancelable:true}));
+  await waitFor(()=>win.location.search.includes('id=')&&!win.document.body.classList.contains('admin--navigating'),'new editor saved');
+  assert.equal(scrollTarget,640);assert.ok(select('[data-content-delete=news]'));
+  win.scrollY=800;select('#news-form').elements.title.value='Повторное сохранение';select('#news-form').dispatchEvent(new win.Event('submit',{bubbles:true,cancelable:true}));
+  await waitFor(()=>select('#news-form')?.elements.title.value==='Повторное сохранение'&&!win.document.body.classList.contains('admin--navigating')&&!select('#news-form button[type=submit]').disabled);
+  await waitFor(()=>scrollTarget===800,'scroll retained');
+  await navigation.go('/admin/news');assert.ok(select('[data-content-delete=news]'));
+  await navigation.go('/admin/gym');win.scrollY=0;
+ });
  await t.test('Смена зала требует отдельной загрузки и не переиспользует старую область',async()=>{
   let destination=null;navigation.hard=href=>{destination=href;};select('#gym-switch').value='school-25';select('#gym-switch').dispatchEvent(new win.Event('change',{bubbles:true}));await waitFor(()=>destination!==null);assert.equal(destination,'/admin/gym');assert.ok(win.document.cookie.includes('fed_gym=school-25'));
  });

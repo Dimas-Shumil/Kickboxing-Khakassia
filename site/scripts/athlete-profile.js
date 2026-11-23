@@ -99,7 +99,7 @@
     }
 
     function open(item) {
-      visible = items.filter(candidate => !candidate.hidden && (candidate.dataset.full || candidate.dataset.videoSrc));
+      visible = items.filter(candidate => (activeFilter === 'all' || candidate.dataset.galleryCategory === activeFilter) && (candidate.dataset.full || candidate.dataset.videoSrc));
       position = visible.indexOf(item);
       if (position < 0) return;
       opener = document.activeElement;

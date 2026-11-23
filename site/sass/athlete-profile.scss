@@ -1,3 +1,4 @@
+@use './components/gallery-layout';
 @use './base/base';
 @use './base/variables' as v;
 @use './components/header';
@@ -209,3 +210,5 @@ body.athlete-lightbox-open { overflow:hidden; }
 @media (prefers-reduced-motion:reduce) {
   .athlete-detail-hero__breadcrumbs a,.athlete-detail-story__toggle,.profile-gallery__filters button,.profile-gallery__item img,.profile-gallery__more { transition:none; }
 }
+
+@include gallery-layout.layout;

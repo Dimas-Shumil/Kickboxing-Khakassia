@@ -58,7 +58,7 @@
       prev.disabled = next.disabled = displayedMedia.length < 2;
     }
     function open(card) {
-      displayedMedia = cards.filter(item => !item.hidden && item.dataset.full);
+      displayedMedia = cards.filter(item => (currentFilter === 'all' || item.dataset.category === currentFilter) && item.dataset.full);
       currentIndex = displayedMedia.indexOf(card);
       if (currentIndex < 0) return;
       opener = document.activeElement;

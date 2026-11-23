@@ -208,3 +208,7 @@ html:has(body.admin) { scrollbar-gutter: stable; }
 .btn--danger {color:#ae1531;border-color:#e8bec6;background:#fff;}
 .btn--danger:hover {background:#fce4e6;border-color:#ae1531;}
 .btn--compact {min-height:32px;padding:6px 10px;font-size:12px;}
+
+.news-image-preview {height:180px;max-height:180px;object-fit:contain;}
+
+.notice.notice--toast:not(:empty) {position:fixed;z-index:8000;bottom:max(20px,env(safe-area-inset-bottom));right:20px;left:auto;width:min(480px,calc(100vw - 40px));max-height:30vh;overflow:auto;box-shadow:0 8px 24px #111d3733;margin:0;}

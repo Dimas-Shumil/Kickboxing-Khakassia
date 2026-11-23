@@ -1,3 +1,4 @@
+@use './components/gallery-layout';
 @use './base/base';
 @use './base/variables' as v;
 @use './components/header';
@@ -221,3 +222,5 @@ body.coach-legend-lightbox-open {overflow:hidden;}
 .coach-path .coach-section-title h2 {font-size:clamp(30px,2.45vw,46px);}
 @media (max-width:1060px) { .coach-achievements .coach-section-title h2,.coach-path .coach-section-title h2 {font-size:clamp(30px,4.4vw,42px);} }
 @media (max-width:767px) { .coach-achievements .coach-section-title h2,.coach-path .coach-section-title h2 {font-size:clamp(28px,8vw,40px);} }
+
+@include gallery-layout.layout;
