@@ -1,0 +1,31 @@
+.header__cart {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 7px;
+  color: #fff;
+  text-decoration: none;
+
+  &:hover { background: rgba(255,255,255,.12); }
+  &:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+  [data-shop-count] {
+    position: absolute;
+    inset: -5px -5px auto auto;
+    min-width: 18px;
+    min-height: 18px;
+    padding-inline: 4px;
+    border-radius: 999px;
+    background: #bd2037;
+    color: #fff;
+    text-align: center;
+    font: 700 10px/18px Inter, sans-serif;
+  }
+}
+@media (max-width: 480px) {
+  .header__cart { flex-basis: 36px; width: 36px; border-color: transparent; }
+}

@@ -18,6 +18,8 @@ export function publicSeo({db,config}){
     let contacts={};
     if(meta){const row=await db.sitePage.findUnique({where:{key:'contacts'}});if(row?.publishedPayload){try{contacts=JSON.parse(row.publishedPayload);}catch{}}}
     const verification=config.seoVerification||{};
+    const shopAssets = '<link rel="stylesheet" href="/site/css/shop-navigation.min.css?v=1"><script type="module" src="/site/scripts/shop.js?v=2"></script>';
+    if (!req.path.startsWith('/admin')) body=body.replace('</head>',shopAssets+'</head>');
     originalSend.call(res,injectSeo(body,meta,{indexable:!!allowed,contacts,verification}));
    }).catch(next);
    return this;

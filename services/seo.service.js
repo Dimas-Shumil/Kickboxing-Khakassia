@@ -34,6 +34,7 @@ export async function publicEntries(db){
  const [news,people,competitions,history,documents,about]=await Promise.all([
   db.news.findMany({where:publishedWhere}),db.person.findMany({where:publishedWhere}),db.competition.findMany({where:publishedWhere}),db.historyMaterial.findMany({where:publishedWhere}),db.federationDocument.findMany({where:publishedWhere}),db.sitePage.findUnique({where:{key:'federation'}})
  ]);
+ const products=await db.shopProduct.findMany({where:{published:true},select:{slug:true,title:true,updatedAt:true}});
  const entries=[{path:'/',title:staticPages['/'].title},{path:'/contacts',title:staticPages['/contacts'].title}];
  if(about?.publishedPayload)entries.push({path:'/federation',title:staticPages['/federation'].title,lastmod:about.publishedOn});
  for(const [rows,base,kind] of [[news,'/news','news'],[competitions,'/competitions','competition'],[history,'/history','history']]){
@@ -46,10 +47,18 @@ export async function publicEntries(db){
  if(validPeople.some(r=>snapshot(r).isCoach))entries.push({path:'/coaches',title:staticPages['/coaches'].title});
  for(const row of validPeople){const p=snapshot(row);for(const role of ['athlete','coach'])if(role==='athlete'?p.isAthlete:p.isCoach)entries.push({path:hrefForPerson(p,row.slug,role),title:p.name,lastmod:row.publishedOn});}
  if(documents.length)entries.push({path:'/documents',title:staticPages['/documents'].title});
+ if(products.length)entries.push({path:'/shop',title:'Каталог'});
+ for(const p of products)entries.push({path:'/shop/'+encodeURIComponent(p.slug),title:p.title,lastmod:p.updatedAt});
  return entries;
 }
 
 export async function pageSeo(db,path){
+ if(path==='/shop')return {path,title:'Каталог экипировки — Федерация кикбоксинга Хакасии',description:'Каталог экипировки и товаров Федерации кикбоксинга Хакасии.',eligible:!!await db.shopProduct.count({where:{published:true}})};
+ if(/^\/shop\/[a-z0-9-]+$/.test(path)){
+  const p=await db.shopProduct.findFirst({where:{slug:path.slice(6),published:true}});
+  if(!p)return null;
+  return {path,title:p.title+' — Каталог Федерации кикбоксинга Хакасии',description:p.description||p.title,eligible:true,image:p.image?'/media/shop/'+p.image+'.webp':null};
+ }
  if(Object.hasOwn(staticPages,path)){
   const meta={...staticPages[path],path,eligible:true};
   if(meta.model==='sitePage')meta.eligible=!!(await db.sitePage.findUnique({where:{key:meta.key}}))?.publishedPayload;

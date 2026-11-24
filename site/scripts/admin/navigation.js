@@ -1,6 +1,6 @@
 // One document, one shell, isolated page lifetimes. Ordinary URLs remain valid.
 const pages=new Map();
-const supported=new Set(['dashboard','activity','gym','students','student','groups','group','trainings','training','attendance','payments','payment','finances','access','news','news-edit','news-preview','people','person-edit','competitions','competition-edit','history','history-edit','site-pages','site-page-edit','site-documents','site-document-edit','site-media']);
+const supported=new Set(['dashboard','activity','gym','students','student','groups','group','trainings','training','attendance','payments','payment','finances','access','news','news-edit','news-preview','people','person-edit','competitions','competition-edit','history','history-edit','site-pages','site-page-edit','site-documents','site-document-edit','site-media','shop']);
 let started=false,renderer,current=null,controller=null,sequence=0,index=0,ignorePop=null,leavePromise=null,resolveLeave=null;
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hrefFor=url=>url.pathname+url.search+url.hash;

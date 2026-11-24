@@ -6,9 +6,9 @@ function createAdminPagesRouter({db,config,requireAuth}){
  const send=(res,file,status=200)=>res.status(status).sendFile(path.join(dir,file+'.html'));
  router.get('/login',(_req,res)=>send(res,'login'));
  router.get('/',requireAuth.page,(_req,res)=>res.redirect(302,'/admin/dashboard'));
- const pages=['finances','access','dashboard','activity','gym','groups','group','trainings','training','attendance','students','student','payments','payment','news','news-edit','news-preview','people','person-edit','competitions','competition-edit','history','history-edit','site-pages','site-page-edit','site-documents','site-document-edit','site-media'];
+ const pages=['finances','access','dashboard','activity','gym','groups','group','trainings','training','attendance','students','student','payments','payment','news','news-edit','news-preview','people','person-edit','competitions','competition-edit','history','history-edit','site-pages','site-page-edit','site-documents','site-document-edit','site-media','shop'];
  for(const page of pages)router.get('/'+page,requireAuth.page,asyncHandler(async(req,res)=>{
-  if(page==='access'&&req.user.role!=='OWNER')return send(res,'forbidden',403);
+  if(['access','shop'].includes(page)&&req.user.role!=='OWNER')return send(res,'forbidden',403);
   if(['finances','gym','groups','group','trainings','training','attendance','students','student','payments','payment'].includes(page)&&!['OWNER','TRAINER'].includes(req.user.role))return send(res,'forbidden',403);
   if(page==='site-page-edit'&&!['home','federation','contacts'].includes(req.query.key))return send(res,'not-found',404);
   if(page==='news-preview'&&(!req.query.id||req.query.id==='working'))return send(res,'not-found',404);

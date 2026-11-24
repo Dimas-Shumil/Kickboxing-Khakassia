@@ -420,8 +420,8 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     // Header и Footer загружаются независимо: медленный Footer не блокирует меню.
-    mount('site-header', '/components/header.html?v=search-fix-3')
-      .then(initHeader);
+    mount('site-header', '/components/header.html?v=shop-1')
+      .then(() => { initHeader(); document.dispatchEvent(new Event('fed:header-ready')); });
     mount('site-footer', '/components/footer.html');
     initCountdown();
     initAchievements();

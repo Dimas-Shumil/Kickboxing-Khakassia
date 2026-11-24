@@ -5,7 +5,7 @@ import {Router} from 'express';
 import {asyncHandler,newsDTO} from '../lib/http.js';
 function createDashboardRouter({db,requireAuth}){const router=Router();router.get('/',requireAuth,asyncHandler(async(req,res)=>{
   const canGym=['OWNER','TRAINER'].includes(req.user.role);
-  const collections={dashboard:[],activity:[],finances:[],access:[],
+  const collections={shop:[],dashboard:[],activity:[],finances:[],access:[],
    news:['news'],'news-edit':['news'],'news-preview':['news'],people:['people'],'person-edit':['people'],
    competitions:['competitions'],'competition-edit':['competitions','people'],
    history:['history'],'history-edit':['history','people','competitions'],

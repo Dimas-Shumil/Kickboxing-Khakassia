@@ -311,3 +311,47 @@ model FinanceEntry {
  updatedAt DateTime @updatedAt
  @@index([gymId, occurredOn])
 }
+
+model ShopProduct {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  category    String
+  description String
+  image       String?
+  variants    String
+  published   Boolean  @default(false)
+  version     Int      @default(1)
+  updatedAt   DateTime @updatedAt
+
+  @@index([published, category])
+  @@index([image])
+}
+
+model ShopRequest {
+  id          String   @id @default(cuid())
+  number      String   @unique
+  key         String   @unique
+  fingerprint String
+  name        String
+  phone       String
+  items       String
+  total       Int
+  status      String   @default("new")
+  consent     String
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+model ShopSettings {
+  id        Int     @id
+  operator  String
+  address   String
+  inn       String
+  contact   String
+  policy    String
+  consent   String
+  enabled   Boolean @default(false)
+  version   Int     @default(1)
+}
