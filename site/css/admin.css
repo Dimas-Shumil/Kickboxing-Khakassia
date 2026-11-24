@@ -838,12 +838,6 @@ input[type=button], input[type=submit], input[type=reset],
   margin-block: 12px;
 }
 
-.admin .news-row-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 16px;
-}
-
 .admin .person-check {
   display: flex;
   align-items: center;
@@ -1376,30 +1370,6 @@ html:has(body.admin) {
   line-height: 1.4;
 }
 
-.row-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.btn--danger {
-  color: #ae1531;
-  border-color: #e8bec6;
-  background: #fff;
-}
-
-.btn--danger:hover {
-  background: #fce4e6;
-  border-color: #ae1531;
-}
-
-.btn--compact {
-  min-height: 32px;
-  padding: 6px 10px;
-  font-size: 12px;
-}
-
 .news-image-preview {
   height: 180px;
   max-height: 180px;
@@ -1417,4 +1387,126 @@ html:has(body.admin) {
   overflow: auto;
   box-shadow: 0 8px 24px rgba(17, 29, 55, 0.2);
   margin: 0;
+}
+
+/* Shared text actions and table action layout. */
+.admin .btn.btn--danger,
+.admin .table-actions > :is(a, button.btn):not(.btn--primary, .btn--danger) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 1 auto;
+  min-height: 36px;
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: none;
+  overflow-wrap: normal;
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+
+/* Ordinary content links retain natural wrapping; navigation and primary buttons are unchanged. */
+.admin .workspace a:not([class]):not(.tabs a):not(.table-actions > a) {
+  color: #293f62;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+
+.admin .table-actions > :is(a, button.btn):not(.btn--primary, .btn--danger) {
+  color: #293f62;
+  white-space: nowrap;
+}
+
+.admin .workspace a:not([class]):not(.tabs a):not(.table-actions > a):hover,
+.admin .table-actions > :is(a, button.btn):not(.btn--primary, .btn--danger):hover:not(:disabled) {
+  color: var(--navy);
+  background: #edf1f6;
+  box-shadow: none;
+}
+
+.admin .workspace a:not([class]):not(.tabs a):not(.table-actions > a):active,
+.admin .table-actions > :is(a, button.btn):not(.btn--primary, .btn--danger):active:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.admin .btn.btn--danger {
+  color: #a23c4a;
+}
+
+.admin .btn.btn--danger:hover:not(:disabled) {
+  color: #8d2436;
+  background: #fbeef0;
+  box-shadow: none;
+}
+
+.admin .btn.btn--danger:active:not(:disabled) {
+  background: #f5dce2;
+}
+
+.admin .btn.btn--danger:focus-visible,
+.admin .workspace a:not([class]):not(.tabs a):not(.table-actions > a):focus-visible,
+.admin .table-actions > :is(a, button.btn):not(.btn--primary, .btn--danger):focus-visible {
+  outline: 2px solid #2975d2;
+  outline-offset: 2px;
+}
+
+.admin .btn.btn--danger:disabled {
+  color: #a23c4a;
+  background: transparent;
+  box-shadow: none;
+}
+
+.admin .table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.admin .table-actions > .btn {
+  flex: 0 1 auto;
+  white-space: nowrap;
+}
+
+.admin .person-status {
+  min-width: 0;
+  overflow-wrap: normal;
+}
+
+.admin .person-status > span {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .admin .btn.btn--danger,
+  .admin .table-actions > :is(a, button.btn):not(.btn--primary, .btn--danger) {
+    min-height: 44px;
+  }
+  .admin .table-actions {
+    justify-content: flex-start;
+  }
+  .admin .table-actions > .btn {
+    white-space: normal;
+  }
+  .admin .form-actions .btn.btn--danger {
+    flex: 0 1 auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .admin .btn.btn--danger,
+  .admin .workspace a:not([class]):not(.tabs a):not(.table-actions > a),
+  .admin .table-actions > :is(a, button.btn):not(.btn--primary, .btn--danger) {
+    transition: none;
+  }
 }

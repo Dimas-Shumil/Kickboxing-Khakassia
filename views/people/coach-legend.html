@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Oswald:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="/site/css/coach-legend.min.css?v=gallery-4" rel="stylesheet"/>
+<link href="/site/css/coach-legend.min.css?v=story-20261124" rel="stylesheet"/>
 <link href="/favicon.ico?v=20261104" rel="icon" sizes="any"/><link href="/site/img/brand/favicon-32.png?v=20261104" rel="icon" sizes="32x32" type="image/png"/><link href="/site/img/brand/favicon-180.png?v=20261104" rel="apple-touch-icon" sizes="180x180"/><link rel="stylesheet" href="/site/css/contact-button.min.css?v=20261112-scroll"><script defer src="/site/scripts/contact-button.js?v=20261112-scroll"></script></head>
 <body data-person-page="true" class="coach-legend-page">
 <div id="site-header"></div>
@@ -49,13 +49,21 @@
 <div class="container"></div>
 <section aria-labelledby="coach-story-title" class="coach-legend-section coach-story" id="coach-legend-story">
 <div class="container coach-story__grid">
-<div class="coach-section-title"><span class="coach-section-title__index">01</span><div><h2 id="coach-story-title">История<br/>легенды</h2><p>Путь, который вдохновляет поколения</p></div></div>
-<div class="coach-story__text">{{BIO}}</div>
-<div class="coach-story__image">{{STORY_IMAGE}}</div>
-</div>
-</section>
-<section aria-labelledby="coach-achievements-title" class="coach-legend-section coach-achievements" id="coach-legend-achievements">
-<div class="container coach-achievements__grid"><div class="coach-section-title"><span class="coach-section-title__index">02</span><div><h2 id="coach-achievements-title">Великие<br/>достижения</h2><p>Личные заслуги и успехи воспитанников — отдельно</p></div></div><div class="coach-achievements__cards">{{AWARDS}}</div></div>
+        <div class="coach-story__image">{{COACH_STORY_IMAGE}}</div>
+        <div class="coach-story__content">
+          <header class="coach-story__header">
+            <div class="coach-section-title">
+              <span class="coach-section-title__index" aria-hidden="true">01</span>
+              <h2 id="coach-story-title">История<br>легенды</h2>
+            </div>
+            <p class="coach-story__lead">{{COACH_STORY_LEAD}}</p>
+          </header>
+          <div class="coach-story__text">{{COACH_STORY_BIO}}</div>
+        </div>
+      </div>
+    </section>
+<section aria-labelledby="coach-achievements-title" class="person-achievements" id="coach-legend-achievements">
+{{AWARDS}}
 </section>
 <section aria-labelledby="coach-students-title" class="coach-legend-section coach-students" id="coach-legend-students">
 <div class="container"><div class="coach-students__top"><div class="coach-section-title"><span class="coach-section-title__index">03</span><div><h2 id="coach-students-title">Воспитанники —<br/>гордость тренера</h2><p>Те, кто продолжает дело наставника</p></div></div><p>{{PUPIL_INTRO}}</p></div><div class="coach-students__grid">{{PUPILS}}</div></div>

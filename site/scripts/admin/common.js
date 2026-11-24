@@ -40,14 +40,14 @@ const sortedPayments=()=>[...state.payments].sort((a,b)=>b.received.localeCompar
 const receiptTotal=()=>state.payments.filter(p=>p.received.slice(0,7)===month).reduce((a,p)=>a+p.amount,0);
 const countBadge = (text,kind='quiet')=>`<span class="badge badge--${kind}">${e(text)}</span>`;
 function table(head,rows,empty='Записей пока нет') {
-    return `<div class="table-wrap"><table class="responsive-table"><thead><tr>${head.map(h=>`<th scope="col">${e(h)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(row=>`<tr>${row.map((cell,i)=>`<td data-label="${e(head[i])}">${cell}</td>`).join('')}</tr>`).join(''):`<tr><td class="empty" colspan="${head.length}">${e(empty)}</td></tr>`}</tbody></table></div>`;
+    return `<div class="table-wrap"><table class="responsive-table"><thead><tr>${head.map(h=>`<th scope="col">${e(h)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(row=>`<tr>${row.map((cell,i)=>`<td data-label="${e(head[i])}">${i===head.length-1&&['Действие','Действия'].includes(head[i])?`<div class="table-actions">${cell}</div>`:cell}</td>`).join('')}</tr>`).join(''):`<tr><td class="empty" colspan="${head.length}">${e(empty)}</td></tr>`}</tbody></table></div>`;
   }
 const paymentBadge=student=>{const status=paymentStatus(student,state.payments,now);return countBadge(status.text,status.kind)+(status.due?`<small class="payment-due">Оплата ${date(status.due)}</small>`:'');};
-const deleteButton=(kind,item)=>`<button type="button" class="btn btn--danger btn--compact" data-delete-kind="${kind}" data-delete-id="${e(item.id)}" data-delete-version="${item.version}">Удалить</button>`;
+const deleteButton=(kind,item)=>`<button type="button" class="btn btn--danger" data-delete-kind="${kind}" data-delete-id="${e(item.id)}" data-delete-version="${item.version}">Удалить</button>`;
 function paymentRows(items,edit=true){return items.map(p=>[
     (state.students.some(s=>s.id===p.student)?`<a href="/admin/student?id=${e(p.student)}">${e(studentName(p.student))}</a>`:e(studentName(p.student))+' <small>'+(p.pupil?.deletedAt?'(ученик удалён)':'')+'</small>') ,
     `<span class="amount">${money(p.amount)}</span>`,date(p.received),e(period(p.period))+`<small class="payment-due">Срок: ${date(p.received)} — ${date(nextPaymentDate(p.received))}</small>`,
-    ...(edit?[`<div class="row-actions"><a href="/admin/payment?id=${e(p.id)}">Изменить</a>${deleteButton('payments',p)}</div>`]:[])
+    ...(edit?[`<a href="/admin/payment?id=${e(p.id)}">Изменить</a>${deleteButton('payments',p)}`]:[])
   ]);}
 function stats(items){return `<div class="stats">${items.map(([name,value,i])=>`<div class="stat"><span class="stat__symbol">${icon(i)}</span><div><p>${e(name)}</p><strong>${e(value)}</strong></div></div>`).join('')}</div>`;}
 const tabs = () => `<nav class="tabs" aria-label="Управление залом">${[['gym','Обзор'],['students','Ученики'],['groups','Группы'],['trainings','Тренировки'],['payments','Оплаты'],['finances','Доходы и расходы']].map(([id,title])=>`<a href="/admin/${id}?month=${month}" ${page===id?'aria-current="page"':''}>${title}</a>`).join('')}</nav>`;
@@ -67,7 +67,7 @@ const addChange=(next,text)=>{next.changes.push({text,at:new Date().toLocaleStri
 const readForm=()=>Object.fromEntries(new FormData(form));
 const cents=x=>{const n=Number(x);return Number.isFinite(n)&&n>=0&&n<=1000000?Math.round(n*100):NaN;};
 let form=null;
-const contentDeleteButton=(kind,item)=>canPublish||!item.hasPublished?`<button class="btn btn--danger btn--compact" type="button" data-content-delete="${kind}" data-record-id="${e(item.id)}" data-version="${item.version}">Удалить</button>`:'';
+const contentDeleteButton=(kind,item)=>canPublish||!item.hasPublished?`<button class="btn btn--danger" type="button" data-content-delete="${kind}" data-record-id="${e(item.id)}" data-version="${item.version}">Удалить</button>`:'';
 const ctx={root,contentDeleteButton,deleteButton,paymentBadge,nextPaymentDate,replace:(href)=>alive&&!route.signal.aborted?navigation.go(href,{replace:true,preserveScroll:page.endsWith('-edit')&&!href.includes('-preview')}):Promise.resolve(false),navigate:(href,options)=>alive&&!route.signal.aborted?navigation.go(href,options):Promise.resolve(false),KEY,uid,params,now,month,e,money,date,period,icon,btn,api,state,bufferKey,canGym,canPublish,statuses,newsStatuses,studentName,sortedPayments,receiptTotal,countBadge,table,paymentRows,stats,tabs,monthInput,gymToolbar,field,area,select,formMessage,saveActions,notFound,feedback,persist,clone,addChange,readForm,cents,get form(){return root.querySelector('form[id$="-form"]');},setDirty(value){dirty=value;}};
 const pageModule=createPage(ctx);
 root.innerHTML=`<div class="page-head"><h1>${title}</h1><span class="badge badge--green">Рабочая панель</span></div>${storageProblem?`<div class="notice notice--error" role="alert">${e(storageProblem)}</div>`:''}<div id="feedback" class="notice" role="status"></div>${canGym?`<div class="toolbar"><label>Зал ${state.user.role==='OWNER'?`<select id="gym-switch"><option value="unassigned" ${state.gymId===null?'selected':''}>Нераспределённые записи</option>${state.gyms.map(g=>`<option value="${e(g.id)}" ${state.gymId===g.id?'selected':''}>${e(g.name)}</option>`).join('')}</select>`:`<strong>${e(state.gyms[0]?.name||'Зал не назначен')}</strong>`}</label></div>`:''}${pageModule.render()}`;

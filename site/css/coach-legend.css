@@ -1143,6 +1143,124 @@ body.site-search-open {
     font-size: clamp(28px, 7.4vw, 36px);
   }
 }
+.person-achievements {
+  padding-block: clamp(40px, 5vw, 80px);
+  background: #f8f7f4;
+  color: #101e35;
+  scroll-margin-top: 100px;
+}
+.person-achievements__layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(0, 3.45fr);
+  gap: clamp(24px, 3.1vw, 52px);
+  align-items: start;
+}
+.person-achievements__heading {
+  padding-top: 16px;
+}
+.person-achievements__heading h2 {
+  margin: 12px 0 0;
+  color: inherit;
+  font: 700 clamp(30px, 3.15vw, 48px)/1.04 "Oswald", sans-serif;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.person-achievements__heading h2::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 15px;
+  background: #bc202b;
+}
+.person-achievements__heading p {
+  margin: 15px 0 0;
+  color: #576579;
+  font-size: 13px;
+}
+.person-achievements__eyebrow {
+  color: #846425;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.person-achievements__table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font: 600 clamp(18px, 1.65vw, 24px)/1.25 "Oswald", sans-serif;
+  text-align: left;
+  text-transform: uppercase;
+}
+.person-achievements__table th, .person-achievements__table td {
+  padding: 12px clamp(8px, 1.25vw, 19px);
+  border-bottom: 1px solid #dadcde;
+  overflow-wrap: anywhere;
+  text-align: left;
+  font-weight: inherit;
+}
+.person-achievements__table th:first-child {
+  width: clamp(76px, 9vw, 130px);
+}
+.person-achievements__table th:last-child {
+  width: clamp(118px, 12vw, 174px);
+}
+.person-achievements__world {
+  background: #f2ede2;
+}
+.person-achievements__result {
+  display: grid;
+  grid-template-columns: 1.25em minmax(0, 1fr);
+  align-items: start;
+  gap: 0.55em;
+}
+.person-achievements__medal {
+  font: 1.22em/1.05 sans-serif;
+}
+.person-achievements__notes {
+  display: block;
+  margin-top: 4px;
+  color: #576579;
+  font: 400 13px/1.45 system-ui, sans-serif;
+  text-transform: none;
+  white-space: pre-line;
+}
+.person-achievements .person-empty {
+  color: #576579;
+}
+@media (max-width: 920px) {
+  .person-achievements__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .person-achievements__heading {
+    padding-top: 0;
+  }
+}
+@media (max-width: 600px) {
+  .person-achievements {
+    scroll-margin-top: 72px;
+  }
+  .person-achievements__table {
+    font-size: clamp(13px, 3.6vw, 18px);
+  }
+  .person-achievements__table th, .person-achievements__table td {
+    padding: 10px 5px;
+  }
+  .person-achievements__table th:first-child {
+    width: 15%;
+  }
+  .person-achievements__table th:last-child {
+    width: 25%;
+  }
+  .person-achievements__result {
+    gap: 0.25em;
+  }
+  .person-achievements__notes {
+    font-size: 12px;
+  }
+}
+
 /* Independent page layer: coach-legend.scss (shared base/header/footer are imported above). */
 .coach-legend-page {
   color: #f7f4ed;
@@ -1463,24 +1581,94 @@ body.site-search-open {
   text-transform: uppercase;
 }
 
-.coach-story__grid {
+.coach-story {
+  padding-block: clamp(44px, 5.2vw, 92px);
+  background: #07121c;
+}
+.coach-story .coach-story__grid {
+  max-width: 1392px;
+  padding-inline: clamp(22px, 4vw, 64px);
   display: grid;
-  grid-template-columns: minmax(215px, 0.79fr) minmax(245px, 0.79fr) minmax(280px, 1.17fr);
-  gap: 30px;
-  align-items: center;
+  grid-template-columns: minmax(0, 36fr) minmax(0, 64fr);
+  align-items: start;
+  gap: clamp(24px, 3vw, 46px);
+}
+.coach-story .coach-story__grid:has(.coach-story__image:empty) {
+  grid-template-columns: minmax(0, 780px);
+}
+.coach-story .coach-section-title {
+  gap: clamp(14px, 1.7vw, 25px);
+}
+.coach-story .coach-section-title__index,
+.coach-story .coach-section-title h2 {
+  font-size: clamp(38px, 4.6vw, 70px);
+  line-height: 0.95;
+}
+
+.coach-story__image {
+  aspect-ratio: 5/8;
+  overflow: hidden;
+}
+.coach-story__image:empty {
+  display: none;
+}
+.coach-story__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+  filter: grayscale(1);
+}
+
+.coach-story__content {
+  min-width: 0;
+}
+
+.coach-story__header {
+  padding-bottom: clamp(15px, 1.7vw, 24px);
+  margin-bottom: clamp(17px, 1.8vw, 26px);
+  border-bottom: 2px solid #c2995f;
+}
+
+.coach-story__lead {
+  margin: clamp(12px, 1.5vw, 20px) 0 0;
+  color: #f8f6f0;
+  font-size: clamp(17px, 1.6vw, 24px);
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .coach-story__text {
-  max-width: 470px;
+  color: #e1e6ec;
+  font-size: clamp(16px, 1.35vw, 20px);
+  line-height: 1.55;
+}
+.coach-story__text p {
+  margin: 0 0 1em;
+}
+.coach-story__text p:last-child {
+  margin-bottom: 0;
 }
 
-.coach-story__text p, .coach-school__text p {
-  color: #c4ced5;
-  font-size: 15px;
-  line-height: 1.75;
-  margin-bottom: 17px;
+@media (max-width: 760px) {
+  .coach-story .coach-story__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .coach-story__content {
+    display: contents;
+  }
+  .coach-story__header {
+    order: -1;
+    margin-bottom: 0;
+  }
+  .coach-story__image {
+    width: min(100%, 380px);
+    aspect-ratio: 4/5;
+  }
 }
-
 .coach-link {
   display: inline-flex;
   align-items: center;
@@ -1495,27 +1683,6 @@ body.site-search-open {
 
 .coach-link:hover {
   background: rgba(209, 168, 110, 0.1);
-}
-
-.coach-story__image {
-  height: 280px;
-  overflow: hidden;
-  border-radius: 6px;
-  position: relative;
-}
-
-.coach-story__image::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, #07121c, transparent 16%), linear-gradient(0deg, #07121c, transparent 25%);
-}
-
-.coach-story__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(0.9);
 }
 
 .coach-achievements__grid {
@@ -2044,10 +2211,6 @@ body.coach-legend-lightbox-open {
   .coach-award h3 {
     font-size: 15px;
   }
-  .coach-story__grid {
-    grid-template-columns: 220px 1fr 1fr;
-    gap: 23px;
-  }
 }
 @media (max-width: 1060px) {
   .coach-legend-hero {
@@ -2086,12 +2249,6 @@ body.coach-legend-lightbox-open {
   }
   .coach-section-title h2 {
     font-size: clamp(27px, 3.5vw, 41px);
-  }
-  .coach-story__grid {
-    grid-template-columns: 1fr 1.2fr;
-  }
-  .coach-story__grid .coach-section-title {
-    grid-column: 1/-1;
   }
   .coach-achievements__grid, .coach-path__grid {
     grid-template-columns: 1fr;
@@ -2181,18 +2338,8 @@ body.coach-legend-lightbox-open {
   .coach-section-title p {
     font-size: 10px;
   }
-  .coach-story__grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  .coach-story__grid .coach-section-title {
-    grid-column: auto;
-  }
-  .coach-story__text p, .coach-school__text p {
+  .coach-school__text p {
     font-size: 14px;
-  }
-  .coach-story__image {
-    height: 240px;
   }
   .coach-achievements__cards {
     grid-template-columns: repeat(2, minmax(0, 1fr));

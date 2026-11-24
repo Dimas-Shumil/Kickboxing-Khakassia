@@ -4,6 +4,7 @@
 @use './components/header';
 @use './components/footer';
 @use './components/person-content';
+@use './components/person-achievements';
 
 /* Самостоятельная страница обычного спортсмена. Легенда athlete.scss не импортируется. */
 .athlete-detail-page {

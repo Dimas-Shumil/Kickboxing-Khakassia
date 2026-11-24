@@ -27,7 +27,12 @@ export function validatePerson(b,publishing=false){
  for(const key of ['portrait','coachPortrait','storyImage','hallHoverPhoto'])d[key]=image(b[key]);
  const list=(key,max,fn)=>{if(!Array.isArray(b[key])||b[key].length>max)fail('Проверьте список '+key+' (максимум '+max+').');return b[key].map(x=>{if(!x||typeof x!=='object'||Array.isArray(x))fail('Проверьте строку списка.');return fn(x);});};
  const award=x=>({date:text(x.date,'Дата или период',100),title:text(x.title,'Заголовок',240,true),text:text(x.text,'Описание',3000),place:text(x.place,'Место',100)});
- d.athleteAwards=list('athleteAwards',40,award);d.coachAwards=list('coachAwards',40,award);
+ const achievement=x=>{
+  const level=text(x.level,'Уровень достижения',100);
+  if(level&&!['Мир','Европа','Международный','Россия','СФО','Регион','Город'].includes(level))fail('Проверьте уровень достижения.');
+  return {...award(x),...(level?{level}:{})};
+ };
+ d.athleteAwards=list('athleteAwards',40,achievement);d.coachAwards=list('coachAwards',40,achievement);
  d.methods=list('methods',12,x=>({title:text(x.title,'Принцип',240,true),text:text(x.text,'Описание',3000)}));
  d.timeline=list('timeline',40,x=>{if(!['all','athlete','coach'].includes(x.role))fail('Проверьте роль этапа пути.');return {...award(x),role:x.role};});
  d.publicPupils=list('publicPupils',30,x=>({personId:text(x.personId,'Публичный профиль воспитанника',100,true),description:text(x.description,'Достижения воспитанника',2000)}));

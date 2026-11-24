@@ -4,6 +4,7 @@
 @use './components/header';
 @use './components/footer';
 @use './components/person-content';
+@use './components/person-achievements';
 
 /* Независимый профиль обычного тренера. Никаких импортов стилей легенды. */
 .coach-profile-page { background:#081729;color:#eef3f9; }

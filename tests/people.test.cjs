@@ -157,3 +157,46 @@ test('08.5: люди, четыре шаблона, права, версии, м�
  });
 
 });
+
+test('Во всех профилях достижения выводятся одной таблицей с исходными данными', async () => {
+ const {validatePerson} = await import('../services/people.service.js');
+ const {renderPerson} = await import('../services/people-render.service.js');
+ const {JSDOM} = require('jsdom');
+ const contest = {date:'15–17 марта 2024',title:'Бронзовый призёр чемпионата мира',text:'До 71 кг <script>',place:'3'};
+ const local = {date:'2025',title:'Итоги чемпионата России',level:'Город'};
+ const info = {title:'Почётное звание',text:'Описание'};
+ const data = {
+  name:'Профиль',slug:'profile',isAthlete:true,isCoach:true,primaryRole:'athlete',
+  athleteLegend:false,coachLegend:false,athleteAwards:[contest,local,info],coachAwards:[contest,local,info],
+  timeline:[],methods:[],publicPupils:[],gallery:[],
+ };
+ assert.throws(() => validatePerson({...data,athleteAwards:[{...contest,level:'Неверный уровень'}]}), /уровень достижения/);
+ const normalized = validatePerson(data);
+ assert.equal(normalized.athleteAwards[1].level,'Город');
+ assert.equal(normalized.athleteAwards[0].level,undefined);
+
+ for (const role of ['athlete','coach']) {
+  for (const legend of [false,true]) {
+   const person = {...normalized,slug:data.slug,athleteLegend:legend,coachLegend:legend};
+   const html = await renderPerson({ROOT:path.resolve(__dirname,'..')},person,role,[]);
+   const doc = JSDOM.fragment(html);
+   const table = doc.querySelector('.person-achievements table');
+   const titleId = table.getAttribute('aria-labelledby');
+   assert.equal(doc.querySelectorAll('#'+titleId).length,1);
+   assert.deepEqual([...table.querySelectorAll('thead th')].map(col=>col.textContent),['Год','Достижение','Уровень']);
+
+   const rows = table.querySelectorAll('tbody tr');
+   assert.equal(rows.length,3);
+   assert.equal(rows[0].cells[0].textContent,'2024');
+   assert.equal(rows[0].cells[2].textContent,'Мир');
+   assert.equal(rows[0].className,'person-achievements__world');
+   assert.equal(rows[0].querySelector('.person-achievements__medal').textContent,'🥉');
+   assert.equal(rows[0].querySelector('.person-achievements__notes').textContent,'15–17 марта 2024 · До 71 кг <script> · 3 место');
+   assert.equal(rows[0].querySelector('script'),null);
+   assert.equal(rows[1].cells[2].textContent,'Город');
+   assert.equal(rows[2].cells[0].textContent,'—');
+   assert.equal(rows[2].cells[2].textContent,'—');
+   assert.equal(rows[2].querySelector('.person-achievements__medal').textContent,'');
+  }
+ }
+});
