@@ -9,7 +9,7 @@ const empty='<p class="person-empty">Материалы пока не добав
 const paras=value=>value?String(value).split(/\n\s*\n/).map(t=>`<p class="person-content-text">${e(t)}</p>`).join(''):empty;
 const img=(src,alt='',credit='')=>src?`<img src="${e(src)}" alt="${e(alt)}" loading="lazy">${credit?`<figcaption>${e(credit)}</figcaption>`:''}`:'';
 const fill=(html,data)=>html.replace(/\{\{([A-Z_]+)\}\}/g,(_m,key)=>data[key]??'');
-const read=(config,name)=>readFile(path.join(config.ROOT,'views/people',name+'.html'),'utf8');
+const read=(config,name)=>readFile(path.join(config.ROOT,'public',name+'.html'),'utf8');
 export async function renderPerson(config,p,role,people,preview=false){
  const type=profileType(p,role),coach=role==='coach',awards=coach?p.coachAwards:p.athleteAwards;
  const quote=(coach?p.coachQuote:p.athleteQuote)||p.quote;

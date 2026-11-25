@@ -8,7 +8,7 @@ const script=fs.readFileSync(path.join(root,'site/scripts/photo-gallery.js'),'ut
 
 const pages=[
  'public/athlete.html','public/athlete-profile.html','public/coach-profile.html','public/coach-legend.html',
- 'public/history.html','views/history/detail.html','public/news-item.html','public/competition.html',
+ 'public/history.html','public/history-item.html','public/news-item.html','public/competition.html',
 ];
 
 for(const file of pages)test(file+' · единый просмотр галереи',()=>{
@@ -66,6 +66,9 @@ test('Быстрое листание сохраняет показанный к
  const dom=new JSDOM(fs.readFileSync(path.join(root,pages[0]),'utf8'),{url:'http://localhost/',runScripts:'outside-only'});
  const {window:w}=dom, {document:d}=w;
  try{
+  // Use explicit test photos instead of the removed static demo content.
+  const grid=d.querySelector('[data-gallery-grid]');
+  grid.replaceChildren(...Array.from({length:3},(_,i)=>{const item=d.createElement('button');item.dataset.mediaType='image';item.dataset.galleryCategory='all';item.dataset.full='/photo-'+i+'.webp';grid.append(item);return item;}));
   const finish=new Map();
   w.HTMLImageElement.prototype.decode=function(){return new Promise(resolve=>finish.set(this.src,resolve));};
   w.eval(script);

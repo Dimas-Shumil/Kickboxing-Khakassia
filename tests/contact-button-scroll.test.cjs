@@ -20,5 +20,5 @@ test('Кнопка: порог 120 px, динамический футер, во
 
 test('Все публичные шаблоны с кнопкой подключают ровно один контроллер',()=>{
  const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
- for(const file of [...walk(path.join(root,'public')),...walk(path.join(root,'views'))].filter(p=>p.endsWith('.html'))){const text=fs.readFileSync(file,'utf8');if(!text.includes('class="site-call"'))continue;const dom=new JSDOM(text);assert.equal(dom.window.document.querySelectorAll('script[src^="/site/scripts/contact-button.js"]').length,1,file);dom.window.close();}
+ for(const file of walk(path.join(root,'public')).filter(p=>p.endsWith('.html'))){const text=fs.readFileSync(file,'utf8');if(!text.includes('class="site-call"'))continue;const dom=new JSDOM(text);assert.equal(dom.window.document.querySelectorAll('script[src^="/site/scripts/contact-button.js"]').length,1,file);dom.window.close();}
 });

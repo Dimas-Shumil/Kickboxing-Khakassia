@@ -41,7 +41,7 @@ export async function renderHistoryIndex(config,rows){
  return html;
 }
 export async function renderHistoryDetail(config,p,relations,preview=false){
- let html=await readFile(path.join(config.ROOT,'views/history/detail.html'),'utf8');
+ let html=await readFile(path.join(config.ROOT,'public/history-item.html'),'utf8');
  const l=links(p,relations),cover=p.cover?`<figure class="history-item-cover">${image(p.cover,p.coverAlt||p.title)}<figcaption>${e([p.coverCaption,p.coverCredit].filter(Boolean).join(' · '))}</figcaption></figure>`:'';
  const gallery=p.gallery.length?`<section class="history-item-gallery"><h2>Фотоархив</h2><div class="history-gallery" data-gallery-grid>${p.gallery.map(g=>galleryButton(g,p.section)).join('')}</div><div class="profile-gallery__more-wrap"><button class="history-item-back" type="button" data-gallery-more>Показать ещё</button></div></section>`:'';
  const body=String(p.body||'').split(/\n\s*\n/).map(s=>`<p>${escLines(s)}</p>`).join('');

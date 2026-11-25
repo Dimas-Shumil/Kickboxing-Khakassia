@@ -1,177 +1,98 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#09182d">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="Демонстрационная страница обычного спортсмена Федерации кикбоксинга Республики Хакасия.">
-  <title>Профиль спортсмена — Федерация кикбоксинга Республики Хакасия</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/site/css/athlete-profile.min.css?v=gallery-4">
-<link rel="icon" href="/favicon.ico?v=20261104" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="/site/img/brand/favicon-32.png?v=20261104"><link rel="apple-touch-icon" sizes="180x180" href="/site/img/brand/favicon-180.png?v=20261104"><link rel="stylesheet" href="/site/css/contact-button.min.css?v=20261112-scroll"><script defer src="/site/scripts/contact-button.js?v=20261112-scroll"></script></head>
-<body class="athlete-detail-page">
-  <div id="site-header"></div>
-  <main class="main">
-    <section class="athlete-detail-hero" aria-labelledby="athlete-detail-title">
-      <div class="athlete-detail-hero__background" aria-hidden="true"></div>
-      <div class="container athlete-detail-hero__inner">
-        <nav class="athlete-detail-hero__breadcrumbs" aria-label="Навигационная цепочка">
-          <a href="/">Главная</a><span aria-hidden="true">/</span>
-          <a href="/hall-of-fame#athletes">Спортсмены</a><span aria-hidden="true">/</span>
-          <span aria-current="page">Иванов Артём</span>
-        </nav>
-        <p class="athlete-detail-demo">Демонстрационный профиль — имя, достижения и фото используются для макета</p>
-        <div class="athlete-detail-hero__grid">
-          <div class="athlete-detail-hero__copy">
-            <p class="athlete-detail-eyebrow">Спортсмен Федерации</p>
-            <h1 id="athlete-detail-title" class="athlete-detail-hero__name"><span>Иванов</span><span>Артём</span></h1>
-            <blockquote class="athlete-detail-hero__quote">Кикбоксинг научил меня не сдаваться. Каждый поединок — это шаг к более сильной версии себя.</blockquote>
-          </div>
-          <div class="athlete-detail-hero__portrait">
-            <img src="/site/img/athlete-profile-hero.webp" width="710" height="734" alt="Демонстрационный портрет кикбоксёра в синих перчатках" fetchpriority="high">
-          </div>
-          <aside class="athlete-detail-hero__about" aria-label="Информация о спортсмене">
-            <dl>
-              <div><dt>Статус</dt><dd>Действующий спортсмен</dd></div>
-              <div><dt>Дисциплина</dt><dd>Кикбоксинг (лоу-кик)</dd></div>
-              <div><dt>Клуб</dt><dd>СК «Хакасия»</dd></div>
-              <div><dt>Тренер</dt><dd>Петров Сергей Александрович</dd></div>
-              <div><dt>Город</dt><dd>Абакан, Республика Хакасия</dd></div>
-            </dl>
-          </aside>
-        </div>
-        <div class="athlete-detail-highlights" aria-label="Кратко о результатах">
-          <article class="athlete-detail-highlight"><span aria-hidden="true" class="athlete-detail-highlight__icon">🏆</span><strong>1</strong><div><span>Победитель</span><small>Первенство СФО 2024</small></div></article>
-          <article class="athlete-detail-highlight"><span aria-hidden="true" class="athlete-detail-highlight__icon">🥈</span><strong>2</strong><div><span>Призёр</span><small>Чемпионат России 2023</small></div></article>
-          <article class="athlete-detail-highlight"><span aria-hidden="true" class="athlete-detail-highlight__icon">🥉</span><strong>3</strong><div><span>Призёр</span><small>Кубок России 2024</small></div></article>
-          <article class="athlete-detail-highlight"><span aria-hidden="true" class="athlete-detail-highlight__icon">✹</span><strong>15</strong><div><span>Побед</span><small>В официальных поединках</small></div></article>
-        </div>
-      </div>
-    </section>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#09182d" name="theme-color"/>
+<meta content="noindex, nofollow" name="robots"/>
+<meta content="{{DESCRIPTION}}" name="description"/>
+<title>{{PAGE_TITLE}}</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Oswald:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="/site/css/athlete-profile.min.css?v=gallery-4" rel="stylesheet"/>
+<link href="/favicon.ico?v=20261104" rel="icon" sizes="any"/><link href="/site/img/brand/favicon-32.png?v=20261104" rel="icon" sizes="32x32" type="image/png"/><link href="/site/img/brand/favicon-180.png?v=20261104" rel="apple-touch-icon" sizes="180x180"/><link rel="stylesheet" href="/site/css/contact-button.min.css?v=20261112-scroll"><script defer src="/site/scripts/contact-button.js?v=20261112-scroll"></script></head>
+<body data-person-page="true" class="athlete-detail-page">
+<div id="site-header"></div>
+<main class="main">
+<section aria-labelledby="athlete-detail-title" class="athlete-detail-hero">
+<div aria-hidden="true" class="athlete-detail-hero__background"></div>
+<div class="container athlete-detail-hero__inner">
+<nav aria-label="Навигационная цепочка" class="athlete-detail-hero__breadcrumbs">
+<a href="/">Главная</a><span aria-hidden="true">/</span>
+<a href="/hall-of-fame#athletes">Спортсмены</a><span aria-hidden="true">/</span>
+<span aria-current="page">{{NAME}}</span>
+</nav>
 
-    <section id="athlete-story" class="athlete-detail-story" aria-labelledby="athlete-detail-story-title">
-      <div class="container">
-        <div class="athlete-detail-heading"><h2 id="athlete-detail-story-title"><span>Моя</span> история</h2></div>
-        <div class="athlete-detail-story__layout">
-          <div class="athlete-detail-story__text">
-            <p>Я начал заниматься кикбоксингом в 10 лет. Сначала это было просто увлечение и способ стать сильнее. Со временем тренировки стали важной частью моей жизни — они научили меня дисциплине, уважению и вере в себя.</p>
-            <p>Для меня кикбоксинг — это не только спорт, но и люди, которые всегда рядом: мой тренер, команда, семья. Именно они помогают мне двигаться вперёд и ставить новые цели.</p>
-            <div id="athlete-detail-story-more" hidden>
-              <p>Спортивный путь состоит не только из побед. Именно во время сложных тренировок и после неудачных поединков я учусь терпению, ответственности и умению двигаться дальше.</p>
-              <p>Я благодарен тем, кто верит в меня и помогает развиваться. Впереди новые соревнования, новые встречи и новые цели.</p>
-            </div>
-            <button class="athlete-detail-story__toggle" type="button" data-story-toggle aria-controls="athlete-detail-story-more" aria-expanded="false">Читать полностью <span aria-hidden="true">+</span></button>
-          </div>
-          <figure class="athlete-detail-story__figure">
-            <img src="/site/img/athlete-profile-training.webp" width="580" height="498" loading="lazy" decoding="async" alt="Демонстрационный кадр подготовки спортсмена к тренировке">
-            <figcaption>Главное — не бояться трудностей. Они делают нас сильнее.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <section id="athlete-results" class="person-achievements" aria-labelledby="athlete-detail-results-title">
-<div class="container person-achievements__layout">
-  <div class="person-achievements__heading">
-   <span class="person-achievements__eyebrow">Путь к вершинам</span>
-   <h2 id="athlete-detail-results-title">Главные<br>достижения</h2>
-   <p>Демонстрационные данные</p>
-  </div>
-  <table class="person-achievements__table" aria-labelledby="athlete-detail-results-title">
-   <thead><tr><th scope="col">Год</th><th scope="col">Достижение</th><th scope="col">Уровень</th></tr></thead>
-   <tbody><tr>
-   <td>2024</td>
-   <th scope="row"><div class="person-achievements__result">
-    <span class="person-achievements__medal" aria-hidden="true">🥇</span>
-    <div><span class="person-achievements__name">Первенство СФО по кикбоксингу</span><small class="person-achievements__notes">15–17 марта 2024 · Красноярск · Лоу-кик · До 71 кг · 1 место</small></div>
-   </div></th>
-   <td>СФО</td>
-  </tr><tr>
-   <td>2023</td>
-   <th scope="row"><div class="person-achievements__result">
-    <span class="person-achievements__medal" aria-hidden="true">🥈</span>
-    <div><span class="person-achievements__name">Чемпионат России по кикбоксингу</span><small class="person-achievements__notes">10–14 ноября 2023 · Казань · Лоу-кик · До 71 кг · 2 место</small></div>
-   </div></th>
-   <td>Россия</td>
-  </tr><tr>
-   <td>2024</td>
-   <th scope="row"><div class="person-achievements__result">
-    <span class="person-achievements__medal" aria-hidden="true">🥉</span>
-    <div><span class="person-achievements__name">Кубок России</span><small class="person-achievements__notes">5–8 мая 2024 · Москва · Лоу-кик · До 71 кг · 3 место</small></div>
-   </div></th>
-   <td>Россия</td>
-  </tr><tr>
-   <td>2023</td>
-   <th scope="row"><div class="person-achievements__result">
-    <span class="person-achievements__medal" aria-hidden="true">🥇</span>
-    <div><span class="person-achievements__name">Первенство Республики Хакасия</span><small class="person-achievements__notes">12–14 апреля 2023 · Абакан · Лоу-кик · До 71 кг · 1 место</small></div>
-   </div></th>
-   <td>—</td>
-  </tr></tbody>
-  </table>
- </div>
+<div class="athlete-detail-hero__grid">
+<div class="athlete-detail-hero__copy">
+<p class="athlete-detail-eyebrow">Спортсмен Федерации</p>
+<h1 class="athlete-detail-hero__name" id="athlete-detail-title">{{NAME_SPANS}}</h1>
+<blockquote class="athlete-detail-hero__quote">{{QUOTE_LINKS}}</blockquote>
+</div>
+<div class="athlete-detail-hero__portrait">{{PORTRAIT}}</div>
+<aside aria-label="Информация о спортсмене" class="athlete-detail-hero__about">
+<dl>{{ATHLETE_FACTS}}</dl>
+</aside>
+</div>
+<div aria-label="Кратко о результатах" class="athlete-detail-highlights">{{HIGHLIGHTS}}</div>
+</div>
 </section>
+<section aria-labelledby="athlete-detail-story-title" class="athlete-detail-story" id="athlete-story">
+<div class="container">
+<div class="athlete-detail-heading"><h2 id="athlete-detail-story-title"><span>Моя</span> история</h2></div>
+<div class="athlete-detail-story__layout">
+<div class="athlete-detail-story__text">{{BIO}}</div>
+<figure class="athlete-detail-story__figure">{{STORY_FIGURE}}</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="athlete-detail-results-title" class="person-achievements" id="athlete-results">
+{{AWARDS}}
+</section>
+<section aria-labelledby="athlete-detail-journey-title" class="athlete-detail-journey">
+<div class="container">
+<div class="athlete-detail-heading"><h2 id="athlete-detail-journey-title"><span>Спортивный</span> путь</h2></div>
+<ol class="athlete-detail-journey__list">{{TIMELINE}}</ol>
+</div>
+</section>
+<section aria-labelledby="athlete-detail-gallery-title" class="profile-gallery athlete-detail-gallery" id="athlete-gallery">
+<div class="container">
+<div class="athlete-detail-gallery__head">
+<div class="athlete-detail-heading"><h2 id="athlete-detail-gallery-title"><span>Фото</span>галерея</h2></div>
+<p>Открой фотографию, чтобы посмотреть её крупнее</p>
+</div>
+<div aria-label="Фильтр фотогалереи" class="profile-gallery__filters" role="group">
+<button aria-pressed="true" class="is-active" data-gallery-filter="all" type="button">Все</button>
+<button aria-pressed="false" data-gallery-filter="competition" type="button">Соревнования</button>
+<button aria-pressed="false" data-gallery-filter="training" type="button">Тренировки</button>
+<button aria-pressed="false" data-gallery-filter="awards" type="button">Награждения</button>
+<button aria-pressed="false" data-gallery-filter="video" type="button">Видео</button>
+</div>
+<div class="profile-gallery__grid" data-gallery-grid="">{{GALLERY}}</div>
+<p class="profile-gallery__empty" data-gallery-empty="" hidden="">В этой категории пока нет фотографий.</p>
+<div class="profile-gallery__more-wrap"><button class="profile-gallery__more" data-gallery-more="" type="button">Показать ещё фото <span aria-hidden="true">+</span></button></div>
 
-    <section class="athlete-detail-journey" aria-labelledby="athlete-detail-journey-title">
-      <div class="container">
-        <div class="athlete-detail-heading"><h2 id="athlete-detail-journey-title"><span>Спортивный</span> путь</h2></div>
-        <ol class="athlete-detail-journey__list">
-          <li><span class="athlete-detail-journey__year">2014</span><h3>Первые тренировки</h3><p>Начало занятий кикбоксингом в родном городе.</p></li>
-          <li><span class="athlete-detail-journey__year">2018</span><h3>Первые соревнования</h3><p>Первый опыт участия в региональных турнирах.</p></li>
-          <li><span class="athlete-detail-journey__year">2021</span><h3>Сборная Хакасии</h3><p>Первые выезды на турниры Сибирского округа.</p></li>
-          <li><span class="athlete-detail-journey__year">2023</span><h3>Призёр чемпионата</h3><p>Важный этап спортивной карьеры.</p></li>
-          <li><span class="athlete-detail-journey__year">2024</span><h3>Новая вершина</h3><p>Победа на первенстве округа и следующие цели.</p></li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="profile-gallery athlete-detail-gallery" id="athlete-gallery" aria-labelledby="athlete-detail-gallery-title">
-      <div class="container">
-        <div class="athlete-detail-gallery__head">
-          <div class="athlete-detail-heading"><h2 id="athlete-detail-gallery-title"><span>Фото</span>галерея</h2></div>
-          <p>Открой фотографию, чтобы посмотреть её крупнее</p>
-        </div>
-        <div class="profile-gallery__filters" role="group" aria-label="Фильтр фотогалереи">
-          <button type="button" data-gallery-filter="all" aria-pressed="true" class="is-active">Все</button>
-          <button type="button" data-gallery-filter="competition" aria-pressed="false">Соревнования</button>
-          <button type="button" data-gallery-filter="training" aria-pressed="false">Тренировки</button>
-          <button type="button" data-gallery-filter="awards" aria-pressed="false">Награждения</button>
-          <button type="button" data-gallery-filter="video" aria-pressed="false">Видео</button>
-        </div>
-        <div class="profile-gallery__grid" data-gallery-grid>
-          <button type="button" class="profile-gallery__item profile-gallery__item--wide" data-media-type="image" data-gallery-category="competition" data-full="/site/img/athlete-profile-gallery-01.webp" data-caption="Поединок на соревнованиях · демонстрационное изображение" aria-label="Открыть фото поединка"><img src="/site/img/athlete-profile-gallery-01.webp" alt="Демонстрационный кадр поединка кикбоксёров" width="183" height="125" loading="eager"><span class="profile-gallery__item-label">Соревнования</span><span class="profile-gallery__zoom" aria-hidden="true">+</span></button>
-          <button type="button" class="profile-gallery__item" data-media-type="image" data-gallery-category="training" data-full="/site/img/athlete-profile-gallery-02.webp" data-caption="Спортсмен на тренировке · демонстрационное изображение" aria-label="Открыть тренировочное фото"><img src="/site/img/athlete-profile-gallery-02.webp" alt="Портрет спортсмена в тренировочном зале" width="189" height="125" loading="eager"><span class="profile-gallery__item-label">Тренировки</span><span class="profile-gallery__zoom" aria-hidden="true">+</span></button>
-          <button type="button" class="profile-gallery__item profile-gallery__item--wide" data-media-type="image" data-gallery-category="awards" data-full="/site/img/athlete-profile-gallery-03.webp" data-caption="Награждение на турнире · демонстрационное изображение" aria-label="Открыть фото награждения"><img src="/site/img/athlete-profile-gallery-03.webp" alt="Победителю поднимают руку на турнире" width="170" height="125" loading="eager"><span class="profile-gallery__item-label">Награждения</span><span class="profile-gallery__zoom" aria-hidden="true">+</span></button>
-          <button type="button" class="profile-gallery__item" data-media-type="image" data-gallery-category="training" data-full="/site/img/athlete-profile-gallery-04.webp" data-caption="Работа у мешка · демонстрационное изображение" aria-label="Открыть фото тренировки"><img src="/site/img/athlete-profile-gallery-04.webp" alt="Спортсмен тренирует удар по мешку" width="169" height="125" loading="eager"><span class="profile-gallery__item-label">Тренировки</span><span class="profile-gallery__zoom" aria-hidden="true">+</span></button>
-          <button type="button" class="profile-gallery__item" data-media-type="image" data-gallery-category="awards" data-full="/site/img/athlete-profile-gallery-05.webp" data-caption="Медаль и награда · демонстрационное изображение" aria-label="Открыть фото с медалью"><img src="/site/img/athlete-profile-gallery-05.webp" alt="Спортсмен с медалью и наградными материалами" width="171" height="125" loading="eager"><span class="profile-gallery__item-label">Награждения</span><span class="profile-gallery__zoom" aria-hidden="true">+</span></button>
-          <button type="button" class="profile-gallery__item profile-gallery__item--extra" data-media-type="image" data-gallery-category="training" data-full="/site/img/athlete-profile-training.webp" data-caption="Подготовка к тренировке · демонстрационное изображение" aria-label="Открыть фото подготовки"><img src="/site/img/athlete-profile-training.webp" alt="Спортсмен подготавливает экипировку" width="580" height="498" loading="eager"><span class="profile-gallery__item-label">Тренировки</span><span class="profile-gallery__zoom" aria-hidden="true">+</span></button>
-          <button type="button" class="profile-gallery__item profile-gallery__item--extra" data-media-type="image" data-gallery-category="competition" data-full="/site/img/athlete-profile-hero.webp" data-caption="Портрет спортсмена · демонстрационное изображение" aria-label="Открыть портрет"><img src="/site/img/athlete-profile-hero.webp" alt="Спортсмен в синих перчатках" width="710" height="734" loading="eager"><span class="profile-gallery__item-label">Спортсмен</span><span class="profile-gallery__zoom" aria-hidden="true">+</span></button>
-        </div>
-        <p class="profile-gallery__empty" data-gallery-empty hidden>Видеоматериалы пока не добавлены.</p>
-        <div class="profile-gallery__more-wrap"><button type="button" class="profile-gallery__more" data-gallery-more>Показать ещё фото <span aria-hidden="true">+</span></button></div>
-        <p class="athlete-detail-gallery__note">Демонстрационный макет: изображения созданы для иллюстрации дизайна, а имена, даты и результаты пока не подтверждены Федерацией. Перед публикацией заменим их реальными материалами.</p>
-      </div>
-    </section>
-  </main>
-  <div id="site-footer"></div>
-  <div class="profile-lightbox" data-lightbox role="dialog" aria-modal="true" aria-label="Полноэкранный просмотр фотографий" aria-hidden="true" hidden>
-    <div class="profile-lightbox__backdrop" data-lightbox-close></div>
-    <div class="profile-lightbox__dialog">
-      <div class="profile-lightbox__top"><span data-lightbox-counter aria-live="polite">01 / 01</span><button type="button" class="profile-lightbox__close" data-lightbox-close aria-label="Закрыть просмотр">✕</button></div>
-      <div class="profile-lightbox__stage" data-lightbox-stage>
-        <button type="button" class="profile-lightbox__nav profile-lightbox__nav--prev" data-lightbox-prev aria-label="Предыдущее фото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7" /></svg></button>
-        <div class="profile-lightbox__media" data-lightbox-media></div>
-        <button type="button" class="profile-lightbox__nav profile-lightbox__nav--next" data-lightbox-next aria-label="Следующее фото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" /></svg></button>
-      </div>
-      <p class="profile-lightbox__caption" data-lightbox-caption></p><span class="profile-lightbox__hint">Свайп, стрелки клавиатуры или кнопки для перелистывания</span>
-    </div>
-  </div>
-  <script src="/site/scripts/main.js?v=athlete-profile-1"></script>
-  <script src="/site/scripts/site-search.js?v=athlete-profile-1"></script>
-  <script src="/site/scripts/athlete-profile.js"></script><script src="/site/scripts/photo-gallery.js?v=1"></script>
+</div>
+</section>
+</main>
+<div id="site-footer"></div>
+<div aria-hidden="true" aria-label="Полноэкранный просмотр фотографий" aria-modal="true" class="profile-lightbox" data-lightbox="" hidden="" role="dialog">
+<div class="profile-lightbox__backdrop" data-lightbox-close=""></div>
+<div class="profile-lightbox__dialog">
+<div class="profile-lightbox__top"><span aria-live="polite" data-lightbox-counter="">01 / 01</span><button aria-label="Закрыть просмотр" class="profile-lightbox__close" data-lightbox-close="" type="button">✕</button></div>
+<div class="profile-lightbox__stage" data-lightbox-stage="">
+<button aria-label="Предыдущее фото" class="profile-lightbox__nav profile-lightbox__nav--prev" data-lightbox-prev="" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m15 5-7 7 7 7"></path></svg></button>
+<div class="profile-lightbox__media" data-lightbox-media=""></div>
+<button aria-label="Следующее фото" class="profile-lightbox__nav profile-lightbox__nav--next" data-lightbox-next="" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m9 5 7 7-7 7"></path></svg></button>
+</div>
+<p class="profile-lightbox__caption" data-lightbox-caption=""></p><span class="profile-lightbox__hint">Свайп, стрелки клавиатуры или кнопки для перелистывания</span>
+</div>
+</div>
+<script src="/site/scripts/main.js?v=athlete-profile-1"></script>
+<script src="/site/scripts/site-search.js?v=athlete-profile-1"></script>
+<script src="/site/scripts/athlete-profile.js"></script><script src="/site/scripts/photo-gallery.js?v=1"></script>
 <!-- federation-call:start -->
 <a class="site-call" href="tel:+79835910000" aria-label="Позвонить в Федерацию: +7 983 591-00-00" title="Позвонить: +7 983 591-00-00">
   <svg class="site-call__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.2 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.91.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
