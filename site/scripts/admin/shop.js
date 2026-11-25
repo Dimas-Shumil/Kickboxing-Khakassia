@@ -37,17 +37,15 @@ mount('shop', (ctx) => {
     danger('Удалить', `data-product-delete="${e(product.id)}" data-version="${e(product.version)}"`);
   const save = (label) =>
     `<button class="btn btn--primary" type="submit">${label}</button>`;
-  function syncPhoto(form, id = '') {
-    const preview = form.querySelector('[data-shop-photo-preview]');
-    form.dataset.image = id;
-    form.querySelector('[data-shop-photo-remove]').hidden = !id;
-    form.querySelector('[data-shop-photo-label]').textContent = id
-      ? 'Заменить фото'
-      : 'Загрузить фото';
-    preview.hidden = !id;
-    if (id) preview.src = rootPath + '/images/' + id + '.webp';
-    else preview.removeAttribute('src');
-    form.elements.photo.value = '';
+  function photoList(form) { return JSON.parse(form.dataset.photos || '[]'); }
+  function photoMarkup(photos) {
+    return photos.map((id,i)=>`<div class="shop-admin-photo-item"><img class="shop-admin-photo" src="${rootPath}/images/${e(id)}.webp" alt="Фото ${i+1}"><small>${i===0?'Обложка':'Фото '+(i+1)}</small>${i?btn('На обложку', 'data-shop-photo-main="'+i+'"'):''}${danger('Удалить', 'data-shop-photo-remove="'+i+'"')}</div>`).join('');
+  }
+  function syncPhoto(form, photos) {
+    form.dataset.photos=JSON.stringify(photos);
+    form.querySelector('[data-shop-photo-preview]').innerHTML=photoMarkup(photos);
+    form.querySelector('[data-shop-photo-label]').textContent='Добавить фото ('+photos.length+'/12)';
+    form.elements.photo.value='';
     ctx.setDirty(true);
   }
   const send = (url, method, body) =>
@@ -63,7 +61,7 @@ mount('shop', (ctx) => {
    ${input('label', 'Размер / цвет', item.label, true)}
    <label>Цена, ₽<input name="price" type="number" step=".01" min=".01" max="1000000" value="${item.price ? item.price / 100 : ''}" required></label>
    ${check('available', 'Доступен для заявки', item.available)}
-   ${btn('Убрать вариант', 'data-variant-remove')}
+   ${danger('Удалить вариант', 'data-variant-remove')}
   </div>`;
   }
   function productEditor(current) {
@@ -75,21 +73,22 @@ mount('shop', (ctx) => {
       published: false,
     };
     const variants = JSON.parse(product.variants);
+    const photos=JSON.parse(product.photos||'[]');
+    if(!photos.length&&product.image)photos.push(product.image);
     view.querySelector('[data-product-editor]').innerHTML =
-      `<form id="shop-product-form" data-id="${e(product.id)}" data-version="${product.version || 0}" data-image="${e(product.image)}">
+      `<form id="shop-product-form" data-id="${e(product.id)}" data-version="${product.version || 0}" data-photos="${e(JSON.stringify(photos))}">
    <h2>${product.id ? 'Изменить товар' : 'Новый товар'}</h2>
    <div class="form-grid">${input('title', 'Название', product.title, true)}${input('slug', 'Адрес (латиница, цифры, дефисы)', product.slug, true)}${input('category', 'Категория', product.category, true)}</div>
    ${area('description', 'Описание, характеристики и размеры', product.description)}
    <fieldset class="shop-admin-photo-field"><legend>Фото товара</legend>
-    <img data-shop-photo-preview alt="Фото товара" class="shop-admin-photo"${product.image ? ` src="${rootPath}/images/${e(product.image)}.webp"` : ' hidden'}>
+    <div class="shop-admin-photo-grid" data-shop-photo-preview>${photoMarkup(photos)}</div>
     <div class="shop-admin-photo-actions">
-     <label class="shop-admin-photo-upload"><span class="btn" data-shop-photo-label>${product.image ? 'Заменить фото' : 'Загрузить фото'}</span>
-      <input type="file" name="photo" accept="image/jpeg,image/png,image/webp"></label>
-     ${btn('Убрать фото', `data-shop-photo-remove${product.image ? '' : ' hidden'}`)}
-     <small class="form-note">JPEG, PNG или WebP до 6 МБ</small>
+     <label class="shop-admin-photo-upload"><span class="btn" data-shop-photo-label>Добавить фото (${photos.length}/12)</span>
+      <input type="file" name="photo" multiple accept="image/jpeg,image/png,image/webp"></label>
+     <small class="form-note">До 12 фото, JPEG, PNG или WebP до 6 МБ каждое</small>
     </div>
    </fieldset>
-   <h3>Варианты</h3><p class="form-note">У каждого размера или цвета свой код и цена. Код сохраняет связь с корзиной.</p>
+   <h3>Варианты</h3><p class="form-note">У каждого размера или цвета свой код и цена. Код сохраняет связь с корзиной. При изменении размера или цвета задайте новый уникальный код.</p>
    <div data-shop-variants>${variants.length ? variants.map(variant).join('') : variant()}</div>
    <div class="actions">${btn('Добавить вариант', 'data-variant-add')}${check('published', 'Показать в каталоге', product.published)}</div>
    <div class="actions">${save('Сохранить товар')}${btn('Закрыть редактор', 'data-product-close')}${product.id ? productDelete(product) : ''}</div>
@@ -104,9 +103,7 @@ mount('shop', (ctx) => {
        e(p.title),
        e(p.category),
        p.published ? 'Опубликован' : 'Черновик',
-       btn('Изменить', `data-product-id="${e(p.id)}"`) +
-         ' ' +
-         productDelete(p),
+       '<div class="table-actions">' + btn('Изменить', `data-product-id="${e(p.id)}"`) + productDelete(p) + '</div>',
      ]),
      'Товаров пока нет.',
    )}</div><div data-product-editor></div>`;
@@ -162,8 +159,9 @@ mount('shop', (ctx) => {
   async function run(work, success) {
     if (busy) return;
     busy = true;
+    ctx.setSaving(true);
     view.setAttribute('aria-busy', 'true');
-    const buttons = [...view.querySelectorAll('button:enabled')];
+    const buttons = [...view.querySelectorAll('button:enabled,input:enabled,select:enabled,textarea:enabled')];
     buttons.forEach((button) => (button.disabled = true));
     try {
       await work();
@@ -172,6 +170,7 @@ mount('shop', (ctx) => {
       feedback(error.message, true);
     } finally {
       busy = false;
+      ctx.setSaving(false);
       view.removeAttribute('aria-busy');
       buttons.forEach((button) => (button.disabled = false));
     }
@@ -190,21 +189,17 @@ mount('shop', (ctx) => {
         if (event.target.closest('form')) ctx.setDirty(true);
       });
       view.addEventListener('change', (event) => {
-        const file = event.target.files?.[0];
-        if (busy || event.target.name !== 'photo' || !file) return;
+        const files = [...(event.target.files||[])];
+        if (busy || event.target.name !== 'photo' || !files.length) return;
         const form = event.target.form;
+        const photos=photoList(form);
+        if(photos.length+files.length>12){feedback('Максимум 12 фотографий.',true);event.target.value='';return;}
         void run(async () => {
-          if (
-            !['image/jpeg', 'image/png', 'image/webp'].includes(file.type) ||
-            file.size > 6 * 1024 * 1024
-          )
-            throw Error('Выберите JPEG, PNG или WebP до 6 МБ.');
-          const { id } = await api(rootPath + '/images', {
-            method: 'POST',
-            headers: { 'Content-Type': file.type },
-            body: file,
-          });
-          syncPhoto(form, id);
+          for(const file of files) if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>6*1024*1024) throw Error('Выберите JPEG, PNG или WebP до 6 МБ.');
+          for(const file of files){
+            const {id}=await api(rootPath+'/images',{method:'POST',headers:{'Content-Type':file.type},body:file});
+            photos.push(id);syncPhoto(form,photos);
+          }
         });
       });
       view.addEventListener('click', (event) => {
@@ -260,11 +255,17 @@ mount('shop', (ctx) => {
           ctx.setDirty(true);
         }
         if (button.hasAttribute('data-variant-remove')) {
+          if (form.querySelectorAll('.shop-admin-variant').length <= 1) {feedback('У товара должен остаться хотя бы один вариант.', true);return;}
+          if (!confirm('Удалить этот вариант товара?')) return;
           button.closest('.shop-admin-variant').remove();
           ctx.setDirty(true);
         }
+        if (button.hasAttribute('data-shop-photo-main')) {
+          const photos=photoList(form);photos.unshift(...photos.splice(Number(button.dataset.shopPhotoMain),1));syncPhoto(form,photos);
+        }
         if (button.hasAttribute('data-shop-photo-remove')) {
-          syncPhoto(form);
+          if (!confirm('Убрать фотографию товара?')) return;
+          const photos=photoList(form);photos.splice(Number(button.dataset.shopPhotoRemove),1);syncPhoto(form,photos);
           form.elements.photo.focus();
         }
         if (
@@ -284,6 +285,7 @@ mount('shop', (ctx) => {
       });
       view.addEventListener('submit', (event) => {
         event.preventDefault();
+        if (busy) return;
         const form = event.target;
         const data = new FormData(form);
         if (form.id === 'shop-settings-form')
@@ -320,7 +322,7 @@ mount('shop', (ctx) => {
                 category,
                 description,
                 published: data.has('published'),
-                image: form.dataset.image,
+                photos: photoList(form),
                 version: Number(form.dataset.version),
                 variants,
               },

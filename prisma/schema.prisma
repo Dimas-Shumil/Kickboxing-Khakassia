@@ -319,6 +319,8 @@ model ShopProduct {
   category    String
   description String
   image       String?
+  photos      String   @default("[]")
+  variantHistory String @default("{}")
   variants    String
   published   Boolean  @default(false)
   version     Int      @default(1)

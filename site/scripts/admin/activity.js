@@ -5,7 +5,8 @@ function createPage(ctx){
  const contentScopes=[['news','Новости'],['people','Люди'],['competitions','Соревнования'],['history','История'],['site-page','Страницы'],['site-document','Документы'],['site-media','Медиатека']];
  const privateScopes=[['students','Ученики'],['payments','Оплаты'],['gym-groups','Группы'],['gym-sessions','Тренировки'],['gym-attendance','Посещаемость'],['gym-finances','Доходы и расходы']];
  const actions=[['create','Создание'],['save','Сохранение'],['update','Изменение'],['publish','Публикация'],['unpublish','Снятие публикации'],['archive','Архив'],['restore','Восстановление'],['delete','Удаление'],['delete-file','Удаление файла'],['delete-photo','Удаление фото']];
- const scopes=[...contentScopes,...(canGym?privateScopes:[])];
+ const shopScopes=[['shop-products','Товары магазина'],['shop-requests','Заявки магазина'],['shop-settings','Реквизиты магазина'],['shop-images','Фотографии товаров']];
+ const scopes=[...contentScopes,...(canGym?privateScopes:[]),...(ctx.state.user.role==='OWNER'?shopScopes:[])];
  const scope=scopes.some(([k])=>k===params.get('scope'))?params.get('scope'):'all';
  const action=actions.some(([k])=>k===params.get('action'))?params.get('action'):'all';
  const page=/^(?:0|[1-9]\d{0,2})$/.test(params.get('page')||'0')?Math.min(100,Number(params.get('page')||0)):0;

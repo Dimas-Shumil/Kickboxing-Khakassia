@@ -23,8 +23,11 @@ export default function({db,config}){
  }));
  router.get('/llms.txt',asyncHandler(async(_req,res)=>{
   const entries=await publicEntries(db),line=s=>String(s||'').replace(/[\r\n\[\]]/g,' ').trim();
-  const list=entries.slice(0,250).map(r=>`- [${line(r.title)}](${SITE_ORIGIN+r.path})`).join('\n');
-  res.set({'Cache-Control':'no-store','X-Robots-Tag':'noindex'}).type('text/plain').send(`# ${SITE_NAME}\n\n> Публичный сайт о кикбоксинге в Республике Хакасия.\n\nОсновной адрес: ${SITE_ORIGIN}/\nРегион: Республика Хакасия, Россия.\nТелефон: ${SITE_PHONE}.\n\n## Публичные материалы\n${list}\n\n## Машиночитаемые источники\n- Sitemap: ${SITE_ORIGIN}/sitemap.xml\n- RSS новостей: ${SITE_ORIGIN}/feed.xml\n\nСведения о соревнованиях и людях следует сверять с конкретной опубликованной страницей и указанными на ней источниками.\n`);
+  const list=rows=>rows.map(r=>`- [${line(r.title)}](${SITE_ORIGIN+r.path})`).join('\n');
+  const editorial=list(entries.filter(r=>!['shop','product'].includes(r.kind)).slice(0,250));
+  const shop=list(entries.filter(r=>['shop','product'].includes(r.kind)).slice(0,250));
+  const shopSection=shop?`\n\n## Магазин экипировки\n${shop}\nЦены в каталоге информационные. Наличие, итоговая стоимость и получение уточняются после заявки. Актуальные сведения находятся на странице конкретного товара.`:'';
+  res.set({'Cache-Control':'no-store','X-Robots-Tag':'noindex'}).type('text/plain').send(`# ${SITE_NAME}\n\n> Публичный сайт о кикбоксинге в Республике Хакасия.\n\nОсновной адрес: ${SITE_ORIGIN}/\nРегион: Республика Хакасия, Россия.\nТелефон: ${SITE_PHONE}.\n\n## Публичные материалы\n${editorial}${shopSection}\n\n## Машиночитаемые источники\n- Sitemap: ${SITE_ORIGIN}/sitemap.xml\n- RSS новостей: ${SITE_ORIGIN}/feed.xml\n\nСведения о соревнованиях и людях следует сверять с конкретной опубликованной страницей и указанными на ней источниками.\n`);
  }));
  return router;
 }

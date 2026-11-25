@@ -38,8 +38,9 @@ export async function saveSettings(db, body) {
 }
 
 export function shopProduct(row) {
- const {image,...product} = row;
- return {...product,image:image ? '/media/shop/'+image+'.webp' : '',variants:JSON.parse(row.variants)};
+ const {image,photos,variantHistory,...product} = row;
+ const gallery=JSON.parse(photos||'[]');
+ return {...product,image:image ? '/media/shop/'+image+'.webp' : '',photos:(gallery.length?gallery:(image?[image]:[])).map(id=>'/media/shop/'+id+'.webp'),variants:JSON.parse(row.variants)};
 }
 
 export async function catalog(db) {
@@ -49,7 +50,12 @@ export async function catalog(db) {
 
 export async function saveProduct(db, body, id, imageExists) {
  const slug = text(body.slug,'Адрес товара',100,true);
- const image = text(body.image,'Фото',100);
+ const previous=id?await db.shopProduct.findUnique({where:{id}}):null;
+ const legacy=text(body.image,'Фото',100);
+ const photos=body.photos!==undefined?body.photos:(previous && legacy===previous.image?JSON.parse(previous.photos||'[]'):legacy?[legacy]:[]);
+ if(!Array.isArray(photos)||photos.length>12||new Set(photos).size!==photos.length) fail(422,'Допустимо до 12 разных фотографий.');
+ for(const photo of photos) if(typeof photo!=='string'||!imageId.test(photo)||!await imageExists(photo)) fail(422,'Загрузите фотографию товара.');
+ const image=photos[0]||'';
  if (!slugPattern.test(slug)) fail(422,'Адрес товара должен состоять из латинских букв, цифр и дефисов.');
  if (image && (!imageId.test(image) || !await imageExists(image))) fail(422,'Загрузите фотографию товара.');
  if (!Array.isArray(body.variants) || !body.variants.length || body.variants.length > 30) fail(422,'Добавьте от 1 до 30 вариантов.');
@@ -58,7 +64,13 @@ export async function saveProduct(db, body, id, imageExists) {
   return {code:item.code,label:text(item.label,'Размер / цвет',100,true),price:item.price,available:item.available===true};
  });
  if (new Set(variants.map(item => item.code)).size !== variants.length) fail(422,'Коды вариантов должны различаться.');
- const data = {slug,image:image||null,variants:JSON.stringify(variants),published:body.published===true,
+ const history = new Map(Object.entries(JSON.parse(previous?.variantHistory||'{}')));
+ for (const variant of JSON.parse(previous?.variants||'[]')) history.set(variant.code,variant.label);
+ for (const variant of variants) {
+  if (history.has(variant.code) && history.get(variant.code)!==variant.label) fail(422,'Код уже связан с другим размером или цветом. Создайте вариант с новым кодом.');
+  history.set(variant.code,variant.label);
+ }
+ const data = {slug,image:image||null,photos:JSON.stringify(photos),variantHistory:JSON.stringify(Object.fromEntries(history)),variants:JSON.stringify(variants),published:body.published===true,
   title:text(body.title,'Название',160,true),category:text(body.category,'Категория',80,true),
   description:text(body.description,'Описание',6000)};
  try {
@@ -104,8 +116,9 @@ export async function createShopRequest(db, body) {
    const items = lines.map(line => {
     const product = products.get(line.id);
     const variant = product?.variants.find(item=>item.code===line.code);
-    if (!variant?.available || variant.price!==line.price) fail(409,'Наличие или цена изменились. Обновите корзину.');
-    return {...line,title:product.title,label:variant.label};
+    if (variant?.available !== true || !price(variant.price) || variant.price !== line.price) fail(409,'Наличие или цена изменились. Обновите корзину.');
+    // Цена клиента нужна только для сверки. Снимок заявки строится из БД.
+    return {id:product.id,code:variant.code,quantity:line.quantity,price:variant.price,title:product.title,label:variant.label};
    });
    const total = items.reduce((sum,line)=>sum+line.price*line.quantity,0);
    if (total > 2147483647) fail(422,'Слишком большая сумма заявки.');

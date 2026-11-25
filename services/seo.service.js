@@ -1,5 +1,6 @@
 import {e} from './news-render.service.js';
 import {profileType} from './people.service.js';
+import {catalog,getShopSettings,shopProduct,imageId} from './shop.service.js';
 export const SITE_ORIGIN='https://kickboxing19.ru';
 export const SITE_NAME='Федерация кикбоксинга Республики Хакасия';
 export const SITE_PHONE='+79835910000';
@@ -47,17 +48,34 @@ export async function publicEntries(db){
  if(validPeople.some(r=>snapshot(r).isCoach))entries.push({path:'/coaches',title:staticPages['/coaches'].title});
  for(const row of validPeople){const p=snapshot(row);for(const role of ['athlete','coach'])if(role==='athlete'?p.isAthlete:p.isCoach)entries.push({path:hrefForPerson(p,row.slug,role),title:p.name,lastmod:row.publishedOn});}
  if(documents.length)entries.push({path:'/documents',title:staticPages['/documents'].title});
- if(products.length)entries.push({path:'/shop',title:'Каталог'});
- for(const p of products)entries.push({path:'/shop/'+encodeURIComponent(p.slug),title:p.title,lastmod:p.updatedAt});
+ const visibleProducts=products.filter(p=>validSlug(p.slug));
+ if(visibleProducts.length)entries.push({path:'/shop',title:'Магазин экипировки',kind:'shop'});
+ for(const p of visibleProducts)entries.push({path:'/shop/'+encodeURIComponent(p.slug),title:p.title,lastmod:p.updatedAt,kind:'product'});
  return entries;
 }
 
-export async function pageSeo(db,path){
- if(path==='/shop')return {path,title:'Каталог экипировки — Федерация кикбоксинга Хакасии',description:'Каталог экипировки и товаров Федерации кикбоксинга Хакасии.',eligible:!!await db.shopProduct.count({where:{published:true}})};
+// Use the same published snapshot as SSR: no client prices or private fields.
+const shopImage=src=>typeof src==='string'&&src.startsWith('/media/shop/')&&src.endsWith('.webp')&&imageId.test(src.slice(12,-5));
+export const isFilteredShop=query=>['category','q','min','max','sort'].some(key=>Object.hasOwn(query||{},key));
+export function shopSeoMeta({path,query={},products=[],product=null,settings={}}){
+ if(path==='/shop'){
+  const filtered=isFilteredShop(query);
+  return {path,title:'Каталог экипировки — Федерация кикбоксинга Хакасии',description:'Каталог экипировки и товаров Федерации кикбоксинга Хакасии.',eligible:products.length>0&&!filtered,type:'CollectionPage',shopCatalog:filtered?null:products};
+ }
+ if(!product||!product.published)return null;
+ const photos=[...new Set([product.image,...product.photos].filter(shopImage))].slice(0,12);
+ const selected=product.variants.find(v=>v.available===true);
+ // The first selectable variant is the price visible in the initial HTML.
+ // Catalog prices are indicative; do not claim stock, reviews or merchant checkout.
+ const offer=settings.enabled===true&&selected&&Number.isSafeInteger(selected.price)&&selected.price>0&&selected.price<=100000000?{'@type':'Offer',priceCurrency:'RUB',price:(selected.price/100).toFixed(2),url:SITE_ORIGIN+path}:undefined;
+ return {path,title:product.title+' — Каталог Федерации кикбоксинга Хакасии',description:description(product.description,product.title),eligible:true,type:'ItemPage',image:photos[0]||null,shopItem:{name:product.title,description:plain(product.description),category:product.category,photos,offer}};
+}
+export async function pageSeo(db,path,query={}){
+ if(path==='/shop')return shopSeoMeta({path,query,products:await catalog(db)});
  if(/^\/shop\/[a-z0-9-]+$/.test(path)){
   const p=await db.shopProduct.findFirst({where:{slug:path.slice(6),published:true}});
   if(!p)return null;
-  return {path,title:p.title+' — Каталог Федерации кикбоксинга Хакасии',description:p.description||p.title,eligible:true,image:p.image?'/media/shop/'+p.image+'.webp':null};
+  return shopSeoMeta({path,product:shopProduct(p),settings:await getShopSettings(db)});
  }
  if(Object.hasOwn(staticPages,path)){
   const meta={...staticPages[path],path,eligible:true};
@@ -96,11 +114,20 @@ export function graphFor(meta,contacts={}){
  const page={'@type':meta.type||'WebPage','@id':pageId,url,name:meta.title,description:meta.description,inLanguage:'ru-RU',isPartOf:{'@id':siteId},about:{'@id':orgId}};
  const graph=[org,web,page];
  if(meta.path!=='/'){
-  const base=meta.kind?meta.kind==='news'?'/news':meta.kind==='competitions'?'/competitions':meta.kind==='history'?'/history':meta.role==='coach'?'/coaches':'/hall-of-fame':null;
-  const crumbs=[{name:'Главная',url:SITE_ORIGIN+'/'}];if(base)crumbs.push({name:staticPages[base].title,url:SITE_ORIGIN+base});crumbs.push({name:meta.payload?.name||meta.payload?.title||meta.title,url});
+  const base=meta.shopItem?'/shop':meta.kind?meta.kind==='news'?'/news':meta.kind==='competitions'?'/competitions':meta.kind==='history'?'/history':meta.role==='coach'?'/coaches':'/hall-of-fame':null;
+  const crumbs=[{name:'Главная',url:SITE_ORIGIN+'/'}];if(base)crumbs.push({name:base==='/shop'?'Магазин':staticPages[base].title,url:SITE_ORIGIN+base});crumbs.push({name:meta.shopItem?.name||(meta.path==='/shop'?'Магазин':meta.payload?.name||meta.payload?.title||meta.title),url});
   graph.push({'@type':'BreadcrumbList','@id':url+'#breadcrumbs',itemListElement:crumbs.map((c,i)=>({'@type':'ListItem',position:i+1,name:c.name,item:c.url}))});page.breadcrumb={'@id':url+'#breadcrumbs'};
  }
  if(meta.path==='/')graph.push({'@type':'FAQPage','@id':SITE_ORIGIN+'/#answers',mainEntity:faqs.map(q=>({'@type':'Question',name:q.question,acceptedAnswer:{'@type':'Answer',text:q.answer}}))});
+ if(meta.shopItem){
+  const item=meta.shopItem;
+  const product=clean({'@type':'Product','@id':url+'#product',url,name:item.name,description:item.description,category:item.category,image:item.photos.length?item.photos.map(absolute):undefined,offers:item.offer,mainEntityOfPage:{'@id':pageId}});
+  graph.push(product);page.mainEntity={'@id':product['@id']};
+ }
+ if(meta.shopCatalog?.length){
+  const list={'@type':'ItemList','@id':url+'#items',numberOfItems:meta.shopCatalog.length,itemListElement:meta.shopCatalog.map((item,i)=>({'@type':'ListItem',position:i+1,name:item.title,url:SITE_ORIGIN+'/shop/'+encodeURIComponent(item.slug)}))};
+  graph.push(list);page.mainEntity={'@id':list['@id']};
+ }
  const p=meta.payload;if(!p)return {'@context':'https://schema.org','@graph':graph};
  const image=publicImage(meta.image),published=meta.row.publishedOn?.toISOString?.();
  if(meta.type==='ProfilePage'){
@@ -121,7 +148,7 @@ export function injectSeo(html,meta,{indexable=false,contacts={},verification={}
  if(meta){
   const title=meta.title,desc=description(meta.description,staticPages['/'].description),image=publicImage(meta.image);
   html=html.replace(/<title>[\s\S]*?<\/title>/i,()=>'<title>'+e(title)+'</title>');
-  head+=`<meta name="description" content="${e(desc)}"><link rel="canonical" href="${e(canonical)}"><meta property="og:locale" content="ru_RU"><meta property="og:site_name" content="${e(SITE_NAME)}"><meta property="og:type" content="${meta.type==='Article'?'article':'website'}"><meta property="og:title" content="${e(title)}"><meta property="og:description" content="${e(desc)}"><meta property="og:url" content="${e(canonical)}"><meta property="og:image" content="${e(image)}"><meta property="og:image:alt" content="${e(meta.payload?.name||meta.payload?.title||SITE_NAME)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${e(title)}"><meta name="twitter:description" content="${e(desc)}"><meta name="twitter:image" content="${e(image)}"><link rel="alternate" type="application/rss+xml" title="Новости Федерации кикбоксинга Хакасии" href="${SITE_ORIGIN}/feed.xml">`;
+  head+=`<meta name="description" content="${e(desc)}"><link rel="canonical" href="${e(canonical)}"><meta property="og:locale" content="ru_RU"><meta property="og:site_name" content="${e(SITE_NAME)}"><meta property="og:type" content="${meta.shopItem?'product':meta.type==='Article'?'article':'website'}"><meta property="og:title" content="${e(title)}"><meta property="og:description" content="${e(desc)}"><meta property="og:url" content="${e(canonical)}"><meta property="og:image" content="${e(image)}"><meta property="og:image:alt" content="${e(meta.shopItem?.name||meta.payload?.name||meta.payload?.title||SITE_NAME)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${e(title)}"><meta name="twitter:description" content="${e(desc)}"><meta name="twitter:image" content="${e(image)}"><link rel="alternate" type="application/rss+xml" title="Новости Федерации кикбоксинга Хакасии" href="${SITE_ORIGIN}/feed.xml">`;
   if(!meta.image)head+='<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">';
   for(const [name,value]of Object.entries(verification))if(value)head+=`<meta name="${e(name)}" content="${e(value)}">`;
   const json=JSON.stringify(graphFor({...meta,description:desc},contacts)).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');head+=`<script type="application/ld+json">${json}</script>`;

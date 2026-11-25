@@ -74,7 +74,7 @@ export const navigation={
   try{
    const [response]=await Promise.all([
     fetch(hrefFor(target.url),{credentials:'same-origin',cache:'no-store',signal:nextController.signal}),
-    pages.has(target.name)?Promise.resolve():import('./'+target.name+'.js')
+    pages.has(target.name)?Promise.resolve():import('./'+target.name+'.js'+(['shop','activity'].includes(target.name)?'?v=20261125-4':''))
    ]);
    if(response.redirected){if(ticket===sequence){if(current&&new URL(response.url).pathname==='/admin/login'){busy(false);moveIndicator(current.active,true);current.feedback('Сессия завершилась. Войдите заново в другой вкладке; введённые данные остались в форме.',true);}else this.hard(response.url);}return false;}
    if(!response.ok)throw new Error(response.status===403?'Этот раздел недоступен вашей учётной записи.':response.status===404?'Запись или раздел не найдены.':'Не удалось открыть раздел.');

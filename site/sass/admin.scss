@@ -328,3 +328,21 @@ html:has(body.admin) { scrollbar-gutter: stable; }
     text-align: center;
   }
 }
+
+.admin .shop-admin-photo-grid { display:flex; flex-wrap:wrap; gap:12px; width:100%; }
+.admin .shop-admin-photo-item { display:flex; flex-direction:column; gap:5px; align-items:center; }
+.admin .shop-admin-photo-item .btn { min-height:34px; padding:6px 10px; }
+
+
+/* The native triangle is replaced by the same small chevron used on the public site. */
+.admin #person-form details > summary { display:flex; align-items:center; justify-content:space-between; gap:12px; list-style:none; -webkit-tap-highlight-color:transparent; }
+.admin #person-form details > summary::-webkit-details-marker { display:none; }
+.admin #person-form details > summary::marker { content:""; }
+.admin #person-form details > summary::after { content:""; flex:0 0 8px; width:8px; height:8px; margin-inline-end:3px; border-right:1.7px solid currentColor; border-bottom:1.7px solid currentColor; transform:translateY(-2px) rotate(45deg); transition:transform 220ms cubic-bezier(.22,.61,.36,1); }
+.admin #person-form details[open] > summary::after { transform:translateY(2px) rotate(225deg); }
+@media(prefers-reduced-motion:reduce) { .admin #person-form details > summary::after { transition:none; } }
+
+
+.admin select:not([multiple]):not([size]), .admin select:not([multiple])[size="1"] { appearance:none; -webkit-appearance:none; border:1px solid #cdd3de; outline:none; padding-inline-end:36px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%2317243c' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 13px center; background-size:12px 8px; }
+.admin select:not([multiple]):focus-visible { outline:3px solid #2975d2; outline-offset:3px; }
+@media(forced-colors:active) { .admin select:not([multiple]):not([size]), .admin select:not([multiple])[size="1"] { appearance:auto; -webkit-appearance:auto; background-image:none; } }

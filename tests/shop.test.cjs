@@ -84,7 +84,7 @@ test('Магазин: публичная витрина, согласие, за�
   const dom=new JSDOM(await detail.text()).window.document;
   assert.equal(dom.querySelector('h1').textContent,values.title);
   assert.equal(dom.querySelector('h1 b'),null);
-  assert.equal(dom.querySelector('option[value=l]').disabled,true);
+  assert.equal(dom.querySelector('input[value=l]').disabled,true);
   assert.match(await (await guest.request('/shop?q=перчатки')).text(),/gloves/);
   assert.match(await (await guest.request('/shop?q=другое')).text(),/ничего не найдено/);
   const header=await (await guest.request('/components/header.html')).text();
@@ -153,10 +153,10 @@ test('Магазин: публичная витрина, согласие, за�
  });
 });
 
-test('Каталог фильтрует цены и быстрый просмотр добавляет выбранный вариант',async()=>{
+test('Каталог фильтрует цены и выбор на карточке добавляет выбранный вариант',async()=>{
  const {readFileSync}=require('node:fs');
  const {renderShop}=await import('../services/shop-render.service.js');
- const template=readFileSync(path.resolve(__dirname,'../views/shop.html'),'utf8');
+ const template=readFileSync(path.resolve(__dirname,'../public/shop.html'),'utf8');
  const script=readFileSync(path.resolve(__dirname,'../site/scripts/shop.js'),'utf8');
  const variants=[{code:'standard',label:'Стандарт',price:65000,available:true}];
  const gloves={id:'g',slug:'gloves',title:'Перчатки',category:'Экипировка',variants:[
@@ -172,12 +172,12 @@ test('Каталог фильтрует цены и быстрый просмо�
  window.eval(script);
  const cards=document.querySelectorAll('[data-shop-card]');
  assert.deepEqual([...cards].map(node=>node.querySelector('h2').textContent),['Бинты','Перчатки']);
- cards[1].querySelector('[data-quick-open]').click();
- const panel=document.querySelector('[data-quick-panel]');
- assert.equal(panel.querySelector('h2').textContent,'Перчатки');
- panel.querySelector('[value="12oz"]').click();
- assert.match(panel.querySelector('[data-quick-price]').textContent,/4\s*800/);
- panel.querySelector('[data-shop-add]').click();
+ assert.equal(cards[1].querySelector('[data-quick-open]'),null);
+ cards[1].querySelector('[data-shop-choose]').click();
+ const panel=cards[1].querySelector('[data-shop-picker]');
+ assert.equal(panel.hidden,false);
+ assert.match(panel.querySelector('[data-shop-pick="12oz"]').textContent,/4\s*800/);
+ panel.querySelector('[data-shop-pick="12oz"]').click();
  assert.deepEqual(JSON.parse(window.localStorage.getItem('fed-shop-cart-v1')),[{id:'g',code:'12oz',quantity:1}]);
  window.close();
 });
@@ -185,7 +185,7 @@ test('Каталог фильтрует цены и быстрый просмо�
 test('Корзина сохраняется при ошибке и показывает номер после подтверждения',async()=>{
  const {readFileSync}=require('node:fs');
  const {renderShop}=await import('../services/shop-render.service.js');
- const template=readFileSync(path.resolve(__dirname,'../views/shop.html'),'utf8');
+ const template=readFileSync(path.resolve(__dirname,'../public/cart.html'),'utf8');
  const script=readFileSync(path.resolve(__dirname,'../site/scripts/shop.js'),'utf8');
  const product={id:'gloves',slug:'gloves',title:'Перчатки',variants:[{code:'m',label:'M',price:430000,available:true}]};
  const html=renderShop(template,{path:'/cart',settings:{enabled:true}});

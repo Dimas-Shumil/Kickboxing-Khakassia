@@ -12,13 +12,13 @@ export function publicSeo({db,config}){
    if(!isHtml||res.statusCode>=300&&res.statusCode<400)return originalSend.call(this,body);
    const status=res.statusCode;
    Promise.resolve().then(async()=>{
-    const meta=status===200?await pageSeo(db,req.path):null;
+    const meta=status===200?(Object.hasOwn(res.locals,'publicSeoMeta')?res.locals.publicSeoMeta:await pageSeo(db,req.path,req.query)):null;
     const allowed=status===200&&meta?.eligible&&indexAllowed(config,req);
     res.set('X-Robots-Tag',allowed?'index, follow':'noindex, follow');
     let contacts={};
     if(meta){const row=await db.sitePage.findUnique({where:{key:'contacts'}});if(row?.publishedPayload){try{contacts=JSON.parse(row.publishedPayload);}catch{}}}
     const verification=config.seoVerification||{};
-    const shopAssets = '<link rel="stylesheet" href="/site/css/shop-navigation.min.css?v=1"><script type="module" src="/site/scripts/shop.js?v=2"></script>';
+    const shopAssets = '<link rel="stylesheet" href="/site/css/shop-navigation.min.css?v=1"><script type="module" src="/site/scripts/shop.js?v=20261125-5"></script>';
     if (!req.path.startsWith('/admin')) body=body.replace('</head>',shopAssets+'</head>');
     originalSend.call(res,injectSeo(body,meta,{indexable:!!allowed,contacts,verification}));
    }).catch(next);

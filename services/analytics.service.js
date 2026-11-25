@@ -4,14 +4,15 @@ import {HttpError,period} from '../lib/validation.js';
 
 export const contentScopes=['news','people','competitions','history','site-page','site-document','site-media'];
 export const gymScopes=['students','payments','gym-groups','gym-sessions','gym-attendance','gym-finances'];
+export const shopScopes=['shop-products','shop-requests','shop-settings','shop-images'];
 export const scopeLabels={news:'Новости',people:'Люди',competitions:'Соревнования',history:'История',
- 'site-page':'Страницы Федерации','site-document':'Документы','site-media':'Медиатека',
+ 'site-page':'Страницы Федерации','site-document':'Документы','site-media':'Медиатека','shop-products':'Товары магазина','shop-requests':'Заявки магазина','shop-settings':'Реквизиты магазина','shop-images':'Фотографии товаров',
  students:'Ученики',payments:'Платежи','gym-groups':'Группы',
  'gym-sessions':'Тренировки','gym-attendance':'Посещаемость','gym-finances':'Доходы и расходы'};
 export const actionLabels={create:'Создание',save:'Сохранение правок',update:'Изменение',publish:'Публикация',
  unpublish:'Снятие публикации',archive:'В архив',restore:'Восстановление',delete:'Удаление',
  'delete-file':'Удаление файла','delete-photo':'Удаление фото'};
-export const allowedScopes=role=>['OWNER','TRAINER'].includes(role)?[...contentScopes,...gymScopes]:[...contentScopes];
+export const allowedScopes=role=>['OWNER','TRAINER'].includes(role)?[...contentScopes,...gymScopes,...(role==='OWNER'?shopScopes:[])]:[...contentScopes];
 export const allowedActions=['all','create','save','update','publish','unpublish','archive','restore','delete','delete-file','delete-photo'];
 export function monthWindow(month){
  period(month);
@@ -88,11 +89,13 @@ const linkFor=(scope,id)=>{
   'gym-groups':'/admin/group?id=','gym-sessions':'/admin/training?id=','gym-attendance':'/admin/attendance?id=','gym-finances':'/admin/finances?id='};
  if(scope==='site-page')return ['home','contacts','federation'].includes(id)?'/admin/site-page-edit?key='+id:null;
  if(scope==='site-media')return '/admin/site-media';
+ if(shopScopes.includes(scope))return '/admin/shop?tab='+({'shop-requests':'requests','shop-settings':'settings'}[scope]||'products');
  return root[scope]?root[scope]+encodeURIComponent(id):null;
 };
 export function parseActivityFilter(query,role){
  const month=period(query.month),scope=query.scope||'all',action=query.action||'all';
  if(typeof scope!=='string')throw new HttpError(422,'Недопустимый раздел журнала.');
+ if(shopScopes.includes(scope)&&role!=='OWNER')throw new HttpError(403,'Магазин доступен владельцу.');
  if(gymScopes.includes(scope)&&!['OWNER','TRAINER'].includes(role))throw new HttpError(403,'Учёт зала доступен владельцу и назначенному тренеру.');
  if(!['all',...allowedScopes(role)].includes(scope))throw new HttpError(422,'Недопустимый раздел журнала.');
  if(typeof action!=='string'||!allowedActions.includes(action))throw new HttpError(422,'Недопустимое действие журнала.');

@@ -9,6 +9,7 @@
     "watch:css": "sass --watch site/sass/main.scss:site/css/main.min.css --no-source-map --style=compressed",
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
+    "build:shop": "sass site/sass/shop.scss site/css/shop.css --no-source-map --style=expanded && sass site/sass/shop.scss site/css/shop.min.css --no-source-map --style=compressed",
     "build:admin": "sass site/sass/admin.scss site/css/admin.css --no-source-map --style=expanded && sass site/sass/admin.scss site/css/admin.min.css --no-source-map --style=compressed",
     "test": "node --test tests/*.test.cjs",
     "user:create": "node prisma/create-admin.js",

@@ -59,6 +59,23 @@ test('SEO/AEO/GEO: публичные снимки, SSR, Schema.org, canonical, 
   config.seoIndexable=false;assert.equal(await(await request('/robots.txt')).text(),'User-agent: *\nDisallow: /\n');assert.ok(!(await(await request('/sitemap.xml')).text()).includes('<loc>'));config.seoIndexable=true;
   config.production=false;assert.equal(await(await request('/robots.txt')).text(),'User-agent: *\nDisallow: /\n');config.production=true;
  });
+ await t.test('Магазин: HTTP, Product, Offer, sitemap, фильтры и снятие публикации',async()=>{
+  const image='a'.repeat(48),variants=JSON.stringify([{code:'m',label:'M',price:350050,available:true},{code:'l',label:'L',price:450000,available:true}]);
+  const data={category:'Экипировка',description:'Тестовое описание',variants,image,photos:JSON.stringify([image])};
+  const product=await db.shopProduct.create({data:{...data,title:'Тестовые перчатки',slug:'seo-gloves',published:true}});
+  await db.shopProduct.create({data:{...data,title:'PRIVATE-SHOP-DRAFT',slug:'seo-draft',published:false}});
+  await db.shopSettings.create({data:{id:1,enabled:true,operator:'Тест',address:'Тест',inn:'1234567890',contact:'Тест',policy:'Тест',consent:'Тест'}});
+  const detail=await html('/shop/seo-gloves');assert.equal(detail.response.headers.get('x-robots-tag'),'index, follow');
+  const p=parse(detail.text),item=p.graph.find(g=>g['@type']==='Product');
+  assert.equal(item.name,'Тестовые перчатки');assert.equal(item.offers.price,'3500.50');assert.equal(item.offers.priceCurrency,'RUB');assert.equal(item.image[0],'https://kickboxing19.ru/media/shop/'+image+'.webp');
+  assert.equal(p.doc.querySelector('link[rel=canonical]').href,'https://kickboxing19.ru/shop/seo-gloves');p.close();
+  const catalog=parse((await html('/shop')).text);assert.equal(catalog.graph.find(g=>g['@type']==='ItemList').numberOfItems,1);catalog.close();
+  const filtered=await html('/shop?sort=name');assert.equal(filtered.response.headers.get('x-robots-tag'),'noindex, follow');const f=parse(filtered.text);assert.equal(f.doc.querySelector('link[rel=canonical]').href,'https://kickboxing19.ru/shop');assert.ok(!f.graph.some(g=>g['@type']==='ItemList'));f.close();
+  assert.equal((await html('/cart')).response.headers.get('x-robots-tag'),'noindex, follow');
+  assert.equal((await request('/shop/seo-draft')).status,404);
+  const sitemap=await(await request('/sitemap.xml')).text(),llms=await(await request('/llms.txt')).text();assert.ok(sitemap.includes('/shop/seo-gloves'));assert.ok(!sitemap.includes('/shop/seo-draft'));assert.ok(llms.includes('## Магазин экипировки'));assert.ok(llms.includes('/shop/seo-gloves'));assert.ok(!llms.includes('PRIVATE-SHOP-DRAFT'));
+  await db.shopProduct.update({where:{id:product.id},data:{published:false}});assert.equal((await request('/shop/seo-gloves')).status,404);assert.ok(!(await(await request('/sitemap.xml')).text()).includes('/shop/seo-gloves'));
+ });
  await t.test('RSS и llms.txt не раскрывают черновики и учеников; снятие публикации обновляет sitemap',async()=>{
   for(const route of ['/feed.xml','/llms.txt']){const r=await request(route);assert.equal(r.status,200);const text=await r.text();assert.ok(text.includes('public-news'));assert.ok(!text.includes('DRAFT-'));assert.ok(!text.includes('PRIVATE-'));}
   await db.news.update({where:{id:n.id},data:{status:'draft',publishedPayload:null}});assert.ok(!(await(await request('/sitemap.xml')).text()).includes('/news/public-news'));assert.equal((await request('/news/public-news')).status,404);

@@ -1,0 +1,124 @@
+.shop-cart {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.shop-line {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 10px;
+  overflow-wrap: anywhere;
+}
+
+.shop-line h2, .shop-summary h2 {
+  font-size: 22px;
+}
+
+.shop-line p {
+  margin: 5px 0;
+}
+
+.shop-line img, .shop-line__placeholder {
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+  background: #f0f1f3;
+  border-radius: 4px;
+}
+
+.shop-cart__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+}
+
+.shop-cart__actions button {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 4px;
+  border: 1px solid var(--shop-border);
+  background: #f5f6f8;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.shop-cart__actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shop-cart__actions .shop-remove {
+  color: var(--shop-accent);
+  padding: 0 10px;
+}
+
+.shop-summary {
+  align-self: start;
+  display: grid;
+  gap: 12px;
+}
+
+.shop-summary strong {
+  font: 700 32px/1.2 "Oswald", "Arial Narrow", Arial, sans-serif;
+}
+
+.shop-summary form {
+  display: grid;
+  gap: 12px;
+}
+
+.shop-summary .shop-checkbox {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.shop-checkbox input {
+  margin-top: 4px;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.shop-receipt {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+  max-width: 620px;
+  padding: clamp(20px, 4vw, 42px);
+  background: var(--shop-paper);
+  border: 1px solid #b5d1be;
+  border-radius: 4px;
+}
+
+.shop-receipt h2 {
+  color: #237343;
+  font-size: 32px;
+}
+
+.shop-message[data-state=error] {
+  padding: 10px 12px;
+  background: #fcecee;
+  color: #9e1722;
+  border-radius: 4px;
+}
+
+@media (max-width: 767px) {
+  .shop-cart {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .shop-line {
+    grid-template-columns: 65px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .shop-line img, .shop-line__placeholder {
+    width: 65px;
+    height: 65px;
+  }
+}
